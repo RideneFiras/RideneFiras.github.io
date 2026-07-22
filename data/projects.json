@@ -1,122 +1,164 @@
 [
   {
     "id": "vocaflow",
-    "featured": true,
-    "domain": "voice AI · SaaS",
     "title": "VocaFlow",
-    "subtitle": "Voice AI agents businesses deploy themselves",
+    "domain": "voice AI · SaaS",
+    "tags": ["agents", "voice", "sales"],
     "oneliner": "Multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp.",
-    "description": "A multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp. Agents answer with knowledge retrieval, collect structured data mid-conversation, and hand off to a human when it matters — at sub-second latency, around the clock.",
-    "pipeline": ["call in", "understand", "retrieve", "respond", "hand off"],
-    "metrics": ["sub-second responses", "phone · chat · WhatsApp", "multi-tenant"],
+    "bullets": [
+      "Designed a multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp.",
+      "Built real-time voice agents with knowledge retrieval, data collection, and human handoff at sub-second latency.",
+      "Enabled businesses to offer 24/7 customer engagement without added headcount, handling inquiries, bookings, and support."
+    ],
     "stack": "React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure",
     "github": "",
     "demo": ""
   },
   {
     "id": "claude-code-team",
-    "featured": true,
-    "domain": "AI-assisted development",
     "title": "8-Agent Dev Team",
-    "subtitle": "A full software team, staffed by Claude Code",
-    "oneliner": "Eight specialized Claude Code agents running complete sprint workflows, coordinated through Notion and GitHub.",
-    "description": "Eight specialized Claude Code agents — PM, frontend, backend, AI, DevOps, QA, test, docs — coordinated through Notion and GitHub. I ran complete sprint workflows solo: backlog planning, implementation, PR review, merge. Four weeks in, the team had shipped 170+ issues and 726 automated tests across a ~40,000-line codebase.",
-    "pipeline": ["plan", "build", "review", "test", "merge"],
-    "metrics": ["170+ issues shipped", "726 automated tests", "~40k LOC in 4 weeks"],
+    "domain": "AI-assisted development",
+    "tags": ["agents", "ops"],
+    "oneliner": "A full software team staffed by Claude Code agents, running complete sprint workflows solo.",
+    "bullets": [
+      "Built a team of 8 specialized Claude Code agents (PM, Frontend, Backend, AI, DevOps, QA, Test, Docs) coordinated through Notion and GitHub.",
+      "Ran full sprint workflows solo, from backlog planning to PR review and merge.",
+      "Shipped 170+ GitHub issues and 726 automated tests across a ~40,000 line codebase in about 4 weeks."
+    ],
     "stack": "Claude Code, Notion MCP, GitHub CLI, Playwright MCP",
     "github": "",
     "demo": ""
   },
   {
     "id": "prospecting-system",
-    "featured": true,
+    "title": "Multi-Agent Prospecting System",
     "domain": "multi-agent automation",
-    "title": "AI Prospecting System",
-    "subtitle": "Agents that research, qualify, and write",
-    "oneliner": "Multi-agent system that researches prospects, qualifies opportunities, and drafts personalized outreach.",
-    "description": "A multi-agent system that researches prospects, qualifies opportunities, analyzes competitors, and drafts personalized outreach — then delivers strategic reports straight into the CRM. It cut manual prospecting time by roughly 80% at Agile4ux.",
-    "pipeline": ["research", "qualify", "analyze", "outreach", "report"],
-    "metrics": ["~80% less manual prospecting", "automatic CRM sync", "strategic reports"],
+    "tags": ["agents", "sales"],
+    "oneliner": "Agents that research, qualify, and analyze prospects, then write the outreach and the reports.",
+    "bullets": [
+      "Designed a multi-agent system to research, qualify, and analyze prospects, generating strategic reports.",
+      "Built specialized agents for opportunity analysis, competitor research, and personalized outreach generation.",
+      "Reduced manual prospecting time by ~80% and automated report delivery and CRM integration."
+    ],
     "stack": "CrewAI, LangChain, FastAPI, Latenode",
     "github": "",
     "demo": ""
   },
   {
-    "id": "airline-assistant",
-    "featured": false,
-    "domain": "conversational AI",
-    "title": "Airline Customer Service Assistant",
-    "oneliner": "GenAI capstone (Kaggle × Google): structured-dialogue assistant with RAG over a dedicated knowledge base.",
-    "stack": "Python, LangChain, ChromaDB, RAG, Gradio, Gemini",
-    "github": "https://github.com/RideneFiras/KagglexGoogle",
-    "demo": ""
-  },
-  {
     "id": "content-automation",
-    "featured": false,
-    "domain": "agent orchestration",
     "title": "Content Creation Automation",
-    "oneliner": "Specialized agents per source research, generate, and publish Facebook content — with email validation and automated comment moderation.",
+    "domain": "agent orchestration",
+    "tags": ["agents", "marketing"],
+    "oneliner": "Automated research, generation, and publication of Facebook content, with a human checkpoint before anything ships.",
+    "bullets": [
+      "Built a platform automating research, generation, and publication of Facebook content across objectives.",
+      "Orchestrated specialized agents per source (news, websites, documents) with email validation before publishing.",
+      "Implemented automated comment moderation and intelligent responses based on a knowledge base."
+    ],
     "stack": "Python, n8n, MCP, Meta Developer, Tavily, ChromaDB",
     "github": "",
     "demo": ""
   },
   {
     "id": "recruitment-automation",
-    "featured": false,
-    "domain": "automation",
     "title": "Recruitment Automation System",
-    "oneliner": "Four interconnected pipelines: candidate intake, AI scoring, ATS sync, and lead generation — extracted job requirements once, reused everywhere.",
-    "stack": "n8n, Make, REST APIs, Webhooks, Notion",
+    "domain": "automation",
+    "tags": ["hr", "ops"],
+    "oneliner": "Four interconnected pipelines covering candidate intake, AI scoring, ATS sync, and lead generation.",
+    "bullets": [
+      "Built four interconnected pipelines covering candidate intake, AI scoring, ATS synchronization, and lead generation.",
+      "Scored candidates against job requirements using weighted signals, generating clear reasoning behind every shortlist decision and triggering automated shortlist emails and Telegram alerts.",
+      "Synced candidate data automatically across the ATS, kanban board, and public job board, keeping every system up to date in real time."
+    ],
+    "stack": "n8n, Make, REST APIs, Webhooks, Telegram, Notion",
     "github": "",
     "demo": ""
   },
   {
+    "id": "airline-assistant",
+    "title": "Airline Customer Service Assistant",
+    "domain": "conversational AI",
+    "tags": ["agents", "ops"],
+    "oneliner": "GenAI capstone (Kaggle × Google): structured-dialogue assistant with RAG over a dedicated knowledge base.",
+    "bullets": [
+      "Designed a conversational assistant that collects customer information through structured dialogue.",
+      "Reduced repetitive customer support tasks by automating the handling of frequent inquiries.",
+      "Integrated an intelligent search engine to provide contextualized responses from a dedicated knowledge base."
+    ],
+    "stack": "Python, LangChain, ChromaDB, RAG, Gradio, Gemini",
+    "github": "https://github.com/RideneFiras/KagglexGoogle",
+    "demo": ""
+  },
+  {
     "id": "pedagogia",
-    "featured": false,
-    "domain": "EdTech · GenAI",
     "title": "Pedagog'IA",
-    "oneliner": "Social platform for Tunisian teachers with AI generation of fiches, quizzes, and exercises — plus credits system and admin panel.",
-    "stack": "Next.js, FastAPI, Supabase, pgvector, GitHub Models",
+    "domain": "EdTech · GenAI",
+    "tags": ["agents"],
+    "oneliner": "Social platform for Tunisian teachers with AI generation of fiches, quizzes, and exercises.",
+    "bullets": [
+      "Built a social platform for Tunisian teachers to share resources, combined with an AI feature generating fiches, quizzes, and exercises.",
+      "Implemented an AI credits system, admin panel, and full social feed feature set.",
+      "Designed the AI generation flow around subject, level, and chapter inputs for fast lesson prep."
+    ],
+    "stack": "Next.js, FastAPI, Supabase, pgvector, GitHub Models (gpt-4o-mini)",
     "github": "https://github.com/RideneFiras/PedagogIA",
     "demo": ""
   },
   {
+    "id": "tt-assistant",
+    "title": "TT Assistant",
+    "domain": "conversational AI",
+    "tags": ["agents", "voice"],
+    "oneliner": "Multilingual voice + text chatbot for Tunisie Telecom. 3rd place at the AI for CSR Hackathon.",
+    "bullets": [
+      "Built an inclusive multilingual chatbot for Tunisie Telecom supporting Arabic, French, English, and Tunisian dialect.",
+      "Enabled both voice and text interaction using Whisper for speech and GPT-4o for responses.",
+      "Won 3rd place at the AI for CSR Hackathon."
+    ],
+    "stack": "GPT-4o, Whisper, LangChain, FastAPI, n8n, Telegram",
+    "github": "https://github.com/RideneFiras/ChatbotTT",
+    "demo": ""
+  },
+  {
     "id": "5g-throughput",
-    "featured": false,
-    "domain": "MLOps",
     "title": "5G Throughput Prediction",
-    "oneliner": "Full MLOps pipeline comparing 300+ models on Azure ML, explainable via SHAP + GPT-4o, monitored with Elasticsearch and Kibana.",
+    "domain": "MLOps",
+    "tags": ["ml"],
+    "oneliner": "Full MLOps pipeline comparing 300+ models on Azure ML, explainable and monitored in production.",
+    "bullets": [
+      "Built a full MLOps pipeline predicting 5G network throughput, comparing 300+ models via Azure ML.",
+      "Added explainability with SHAP and GPT-4o to make model decisions interpretable for non-technical stakeholders.",
+      "Deployed the pipeline in Docker with monitoring through Elasticsearch and Kibana."
+    ],
     "stack": "Azure ML, FastAPI, Docker, Elasticsearch, Kibana, SHAP, MLflow, GitHub Actions",
     "github": "https://github.com/RideneFiras/QosMLOPS",
     "demo": ""
   },
   {
     "id": "anomaly-detection",
-    "featured": false,
-    "domain": "computer vision",
     "title": "Industrial Anomaly Detection",
-    "oneliner": "CNN autoencoder trained only on defect-free screws flags defects by reconstruction error — real-time, −70% manual inspection time.",
+    "domain": "computer vision",
+    "tags": ["ml"],
+    "oneliner": "CNN autoencoder trained only on defect-free screws flags visual defects by reconstruction error.",
+    "bullets": [
+      "Built a CNN autoencoder trained only on defect-free images to flag visual defects through reconstruction error.",
+      "Delivered real-time inspection with confidence scoring for production line use.",
+      "Reduced manual inspection time by 70%."
+    ],
     "stack": "TensorFlow, FastAPI, OpenCV, TailwindCSS",
     "github": "https://github.com/RideneFiras/Anomaly_detection",
     "demo": ""
   },
   {
-    "id": "tt-assistant",
-    "featured": false,
-    "domain": "conversational AI",
-    "title": "TT Assistant",
-    "oneliner": "Multilingual voice + text chatbot for Tunisie Telecom (Arabic, French, English, Tunisian dialect) — 3rd place, AI for CSR Hackathon.",
-    "stack": "GPT-4o, Whisper, LangChain, FastAPI, n8n, Telegram",
-    "github": "https://github.com/RideneFiras/ChatbotTT",
-    "demo": ""
-  },
-  {
     "id": "odoo-integrations",
-    "featured": false,
-    "domain": "integrations",
     "title": "Odoo Integrations",
+    "domain": "integrations",
+    "tags": ["ops", "sales"],
     "oneliner": "Odoo CRM wired into a multi-agent prospecting system, plus a facial-recognition attendance module.",
+    "bullets": [
+      "Integrated Odoo CRM into a multi-agent AI prospecting system for automated lead and pipeline updates.",
+      "Built a facial recognition attendance system integrated with Odoo's attendance module."
+    ],
     "stack": "Odoo, Python, OpenCV",
     "github": "",
     "demo": ""

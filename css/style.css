@@ -1,5 +1,5 @@
 /* ================================================================
-   firasridene.tech — design tokens
+   firasridene.tech · design tokens
    Whitewash & Sidi Bou Said blue; agent graphs drawn like door studs.
    ================================================================ */
 
@@ -109,7 +109,7 @@ a:hover { color: var(--blue-deep); }
 }
 
 /* ================================================================
-   Left rail — nod to the resume dashboard
+   Left rail · nod to the resume dashboard
    ================================================================ */
 .rail {
   position: fixed;
@@ -326,121 +326,90 @@ h2 .sec-label { display: block; margin-bottom: 0.55rem; }
   @keyframes edgeDraw { to { stroke-dashoffset: 0; } }
 }
 
-/* ---- case files ---- */
+/* ---- filters ---- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.6rem;
+}
+.fchip {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.34rem 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.fchip:hover { border-color: var(--blue); color: var(--blue); }
+.fchip.on {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--paper);
+}
+
+/* ---- project cards ---- */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+  gap: 1.2rem;
+  align-items: start;
+}
 .case {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: clamp(1.4rem, 3vw, 2.2rem);
-  margin-bottom: 1.4rem;
+  padding: clamp(1.3rem, 2.4vw, 1.8rem);
 }
+.case.hide { display: none; }
 .case h3 {
   font-family: var(--display);
-  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  font-size: 1.35rem;
   font-weight: 620;
   letter-spacing: -0.015em;
-  margin: 0.5rem 0 0.2rem;
+  margin: 0.45rem 0 0.35rem;
 }
-.case .sub {
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  margin-bottom: 0.9rem;
+.case p.desc { color: var(--ink-soft); font-size: 0.94rem; text-wrap: pretty; }
+.case .points {
+  margin: 0.7rem 0 0.4rem 1.05rem;
+  font-size: 0.9rem;
 }
-.case p.desc { max-width: var(--measure); text-wrap: pretty; }
-
-.case .metrics {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--blue-deep);
-  margin: 1.1rem 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.6rem;
-}
-.case .metrics span::before {
-  content: "◆";
-  font-size: 0.55rem;
-  margin-right: 0.5rem;
-  vertical-align: 1px;
-  color: var(--brass);
-}
-
-/* pipeline diagram */
-.pipe {
-  display: flex;
-  align-items: flex-start;
-  margin: 1.3rem 0 1.1rem;
-  max-width: 560px;
-}
-.pipe .node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: var(--ink-soft);
-  white-space: nowrap;
-}
-.pipe .node i {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--blue);
-}
-.pipe .link {
-  flex: 1;
-  height: 2px;
-  min-width: 18px;
-  margin-top: 5px;
-  background: repeating-linear-gradient(90deg, var(--blue) 0 4px, transparent 4px 9px);
-  opacity: 0.45;
-}
-
-.case .stack,
-.row .stack {
-  font-family: var(--mono);
-  font-size: 0.76rem;
-  color: var(--ink-soft);
-}
-.case .stack b, .row .stack b { font-weight: 500; color: var(--ink); }
+.case .points li { margin-bottom: 0.3rem; text-wrap: pretty; }
 
 .case .links { margin-top: 0.9rem; display: flex; gap: 1.2rem; }
 .case .links a { font-family: var(--mono); font-size: 0.8rem; }
 
-/* ---- project index ---- */
-.index-title {
+/* ---- tech chips with icons ---- */
+.stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
   font-family: var(--mono);
-  font-size: 0.76rem;
-  font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  font-size: 0.72rem;
   color: var(--ink-soft);
-  margin: 2.6rem 0 0.4rem;
+  background: var(--haze);
+  border-radius: 6px;
+  padding: 0.26rem 0.6rem;
+  white-space: nowrap;
 }
-.row {
-  display: grid;
-  grid-template-columns: minmax(150px, 0.8fr) 2fr auto;
-  gap: 0.4rem 1.4rem;
-  align-items: baseline;
-  padding: 0.95rem 0;
-  border-top: 1px solid var(--line);
+.tico {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  background: var(--ink-soft);
+  -webkit-mask: var(--i) no-repeat center / contain;
+  mask: var(--i) no-repeat center / contain;
 }
-.row:last-child { border-bottom: 1px solid var(--line); }
-.row h4 { font-family: var(--body); font-weight: 600; font-size: 0.98rem; }
-.row .meta { color: var(--ink-soft); font-size: 0.92rem; max-width: 62ch; }
-.row .meta .domain {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--blue);
-  display: block;
-  margin-bottom: 0.15rem;
-}
-.row .links { font-family: var(--mono); font-size: 0.78rem; white-space: nowrap; }
 
 /* ---- experience ---- */
 .xp {
@@ -461,6 +430,7 @@ h2 .sec-label { display: block; margin-bottom: 0.55rem; }
 .xp .org { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 0.6rem; }
 .xp ul { margin: 0.4rem 0 0.7rem 1.1rem; max-width: var(--measure); }
 .xp li { margin-bottom: 0.3rem; text-wrap: pretty; }
+.xp .stack-chips { margin-top: 0.7rem; }
 
 .skills-grid {
   display: grid;
@@ -557,16 +527,9 @@ footer {
   .hero-graph { order: 2; }
   .hero-graph svg { max-width: 400px; }
 
-  .row { grid-template-columns: 1fr; gap: 0.2rem; }
-  .row .links { margin-top: 0.2rem; }
-
   .xp { grid-template-columns: 1fr; gap: 0.3rem; }
 
   .about-grid { grid-template-columns: 1fr; }
   .certs ul { columns: 1; }
 }
 
-@media (max-width: 560px) {
-  .pipe { flex-wrap: wrap; gap: 0.5rem 0; }
-  .pipe .link { min-width: 12px; }
-}

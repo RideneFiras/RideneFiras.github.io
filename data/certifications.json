@@ -1,13 +1,27 @@
 {
   "total": 22,
-  "highlights": [
-    { "name": "Building RAG Agents with LLMs", "issuer": "NVIDIA" },
-    { "name": "Building AI Agents with Multimodal Models", "issuer": "NVIDIA" },
-    { "name": "Machine Learning in Production", "issuer": "DeepLearning.AI" },
-    { "name": "Multi AI Agent Systems with crewAI", "issuer": "CrewAI" },
-    { "name": "Azure AI Essentials Professional Certificate", "issuer": "Microsoft" },
-    { "name": "Building Generative AI-Powered Applications with Python", "issuer": "IBM" },
+  "list": [
     { "name": "AI Security & GenAI Red Teaming", "issuer": "ESPRIT" },
-    { "name": "AWS Academy Graduate — Cloud Foundations", "issuer": "AWS" }
+    { "name": "Attendance Hashgraph Developer", "issuer": "Hedera" },
+    { "name": "AWS Academy Graduate: Cloud Foundations", "issuer": "Amazon Web Services" },
+    { "name": "Applications of AI for Anomaly Detection", "issuer": "NVIDIA" },
+    { "name": "Building Generative AI-Powered Applications with Python", "issuer": "IBM" },
+    { "name": "Multi AI Agent Systems with crewAI", "issuer": "CrewAI" },
+    { "name": "Microsoft Azure AI Essentials Professional Certificate", "issuer": "Microsoft" },
+    { "name": "Building AI Agents with Multimodal Models", "issuer": "NVIDIA" },
+    { "name": "Generative AI with Diffusion Models", "issuer": "NVIDIA" },
+    { "name": "Machine Learning in Production", "issuer": "DeepLearning.AI" },
+    { "name": "Building LLM Applications With Prompt Engineering", "issuer": "NVIDIA" },
+    { "name": "Introduction to Transformer-Based Natural Language Processing", "issuer": "NVIDIA" },
+    { "name": "5-Day Gen AI Intensive", "issuer": "Kaggle" },
+    { "name": "Building RAG Agents with LLMs", "issuer": "NVIDIA" },
+    { "name": "Machine Learning Explainability", "issuer": "Kaggle" },
+    { "name": "Fundamentals of Deep Learning", "issuer": "NVIDIA" },
+    { "name": "GitHub Foundations", "issuer": "GitHub" },
+    { "name": "CCNA: Switching, Routing, and Wireless Essentials", "issuer": "Cisco" },
+    { "name": "Hands-on with Explainable AI Tools & Techniques", "issuer": "ESPRIT" },
+    { "name": "Artificial Intelligence Fundamentals with Capstone Project", "issuer": "IBM" },
+    { "name": "Agentic AI for Enterprise", "issuer": "ESPRIT" },
+    { "name": "Data Engineering & MLOps", "issuer": "ESPRIT" }
   ]
 }

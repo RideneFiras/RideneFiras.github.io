@@ -2,7 +2,7 @@
   {
     "id": "exp1",
     "title": "Freelance Software Engineer",
-    "org": "B2B SaaS startup, Paris — remote",
+    "org": "B2B SaaS startup, Paris (remote)",
     "dateRange": "Mar 2026 – present",
     "bullets": [
       "Contributing to a multi-tenant AI sales-outreach platform, shipping backend, AI, and frontend features end-to-end.",
@@ -13,6 +13,18 @@
   },
   {
     "id": "exp2",
+    "title": "End-of-Studies Intern",
+    "org": "Agile4UX",
+    "dateRange": "Feb – Jul 2026",
+    "bullets": [
+      "Designed a multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp.",
+      "Built real-time voice agents with knowledge retrieval, data collection, and human handoff at sub-second latency.",
+      "Enabled businesses to offer 24/7 customer engagement without added headcount, handling inquiries, bookings, and support."
+    ],
+    "stack": "React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure"
+  },
+  {
+    "id": "exp3",
     "title": "AI Automation Intern",
     "org": "Agile4ux",
     "dateRange": "2025",
@@ -24,7 +36,7 @@
     "stack": "Python, FastAPI, OpenAI, CrewAI, Latenode, Presenton"
   },
   {
-    "id": "exp3",
+    "id": "exp4",
     "title": "Data Platform Development Intern",
     "org": "Designet",
     "dateRange": "2024",

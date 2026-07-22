@@ -5,7 +5,6 @@
   "location": "Tunis, Tunisia",
   "timezone": "Africa/Tunis",
   "status": {
-    "current": "Freelance — B2B SaaS, Paris (remote)",
     "availability": "Open to opportunities"
   },
   "links": {
@@ -13,5 +12,6 @@
     "linkedin": "https://www.linkedin.com/in/firas-ridene",
     "email": "firasuv@gmail.com"
   },
-  "languages": ["Arabic — native", "English — fluent", "French — fluent"]
+  "resume": "assets/Firas-Ridene-Resume.pdf",
+  "languages": ["Arabic (native)", "English (fluent)", "French (fluent)"]
 }
