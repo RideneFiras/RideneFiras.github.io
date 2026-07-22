@@ -1,0 +1,13 @@
+{
+  "total": 22,
+  "highlights": [
+    { "name": "Building RAG Agents with LLMs", "issuer": "NVIDIA" },
+    { "name": "Building AI Agents with Multimodal Models", "issuer": "NVIDIA" },
+    { "name": "Machine Learning in Production", "issuer": "DeepLearning.AI" },
+    { "name": "Multi AI Agent Systems with crewAI", "issuer": "CrewAI" },
+    { "name": "Azure AI Essentials Professional Certificate", "issuer": "Microsoft" },
+    { "name": "Building Generative AI-Powered Applications with Python", "issuer": "IBM" },
+    { "name": "AI Security & GenAI Red Teaming", "issuer": "ESPRIT" },
+    { "name": "AWS Academy Graduate — Cloud Foundations", "issuer": "AWS" }
+  ]
+}

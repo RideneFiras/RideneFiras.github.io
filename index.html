@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Firas Ridene — AI Engineer</title>
+  <meta name="description" content="AI engineer in Tunis building multi-agent systems, voice agents, and automations that do real work. Currently freelancing for a Paris B2B SaaS.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Firas Ridene — AI Engineer">
+  <meta property="og:description" content="I build agent systems that do real work. Multi-agent platforms, voice agents, and automation — from Tunis.">
+  <meta property="og:url" content="https://firasridene.tech">
+  <meta property="og:image" content="https://firasridene.tech/assets/firas.jpg">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232553C4'/%3E%3Ccircle cx='32' cy='24' r='4' fill='%23F5F4EF'/%3E%3Ccircle cx='20' cy='34' r='4' fill='%23F5F4EF'/%3E%3Ccircle cx='44' cy='34' r='4' fill='%23F5F4EF'/%3E%3Ccircle cx='26' cy='46' r='4' fill='%23F5F4EF'/%3E%3Ccircle cx='38' cy='46' r='4' fill='%23F5F4EF'/%3E%3C/svg%3E">
+
+  <link rel="preload" href="assets/fonts/bricolage-vf.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#work">Skip to content</a>
+
+  <aside class="rail">
+    <div class="rail-top">
+      <a class="brand" href="#top">Firas Ridene</a>
+      <span class="brand-sub">AI engineer — agents &amp; automation</span>
+    </div>
+    <nav class="rail-nav" aria-label="Sections">
+      <a href="#work">work</a>
+      <a href="#experience">experience</a>
+      <a href="#about">about</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <div class="rail-status" id="railStatus"></div>
+    <div class="rail-links" id="railLinks"></div>
+  </aside>
+
+  <header class="mob-bar">
+    <a class="brand" href="#top">Firas Ridene</a>
+    <nav aria-label="Sections">
+      <a href="#work">work</a>
+      <a href="#experience">experience</a>
+      <a href="#about">about</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow" id="heroEyebrow"></p>
+        <h1 id="heroHeadline"></h1>
+        <p class="hero-sub" id="heroSub"></p>
+        <div class="hero-cta">
+          <a class="btn" href="#work">See the work</a>
+          <a class="btn ghost" id="ctaMail" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <figure class="hero-graph">
+        <div id="agentGraph"></div>
+        <figcaption>a prospecting run, as it actually happens</figcaption>
+      </figure>
+    </section>
+
+    <section id="work">
+      <h2><span class="sec-label">selected work</span>Case files</h2>
+      <div id="featured"></div>
+      <p class="index-title">Everything else</p>
+      <div id="projectIndex"></div>
+    </section>
+
+    <section id="experience">
+      <h2><span class="sec-label">experience</span>Where I've shipped</h2>
+      <div id="expList"></div>
+      <div class="skills-grid" id="skills"></div>
+    </section>
+
+    <section id="about">
+      <h2><span class="sec-label">about</span>Behind the agents</h2>
+      <div class="about-grid">
+        <img class="about-photo" src="assets/firas.jpg" alt="Firas Ridene" width="168" height="168">
+        <div class="about-text" id="aboutText"></div>
+      </div>
+      <details class="certs" id="certs"></details>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2><span class="sec-label">contact</span></h2>
+      <p class="big">Have something worth automating? <a href="mailto:firasuv@gmail.com">Email me.</a></p>
+      <p class="stack">Or find me on <a href="https://github.com/RideneFiras">GitHub</a> and
+        <a href="https://www.linkedin.com/in/firas-ridene">LinkedIn</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> Firas Ridene</span>
+    <span>built by hand (and a few agents)</span>
+    <span>no frameworks · no trackers · <a href="https://github.com/RideneFiras/RideneFiras.github.io">view source</a></span>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

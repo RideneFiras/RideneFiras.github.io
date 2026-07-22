@@ -1,0 +1,6 @@
+[
+  { "category": "Generative AI & Agents", "items": "LLMs, RAG, LangChain, CrewAI, MCP, Claude Code, Transformers" },
+  { "category": "ML & MLOps", "items": "PyTorch, TensorFlow, Scikit-learn, MLflow, Azure ML Studio, SHAP, GitHub Actions" },
+  { "category": "Development & Data", "items": "Python, JS (Node.js), Java (Spring Boot), FastAPI, REST APIs, Pandas, SQL, NoSQL" },
+  { "category": "Infra & Automation", "items": "Docker, Render, Git/GitHub, Elasticsearch, Kibana, n8n, Latenode" }
+]

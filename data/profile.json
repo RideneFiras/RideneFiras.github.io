@@ -1,0 +1,12 @@
+{
+  "hero": {
+    "eyebrow": "Firas Ridene — AI engineer, Tunis",
+    "headline": "I build agent systems that do real work.",
+    "sub": "Voice agents that answer phones. An agent team that ships code. Pipelines that cut manual prospecting by 80%. I design multi-agent systems end-to-end, and I pick the stack per problem — not per habit."
+  },
+  "about": [
+    "I'm an AI engineering student at Esprit in Tunis, and a freelance software engineer for a Paris B2B SaaS, where I ship backend, AI, and frontend features across a multi-tenant sales-outreach platform.",
+    "My work centers on multi-agent systems: give each agent one narrow job, wire them together, then measure whether the whole thing actually saves someone time. The numbers I care about are boring on purpose — hours not spent, tickets not touched, reports nobody had to write.",
+    "Away from the keyboard: scout leader with the Tunisian Scouts, JCI member. Arabic, French, English — pick one."
+  ]
+}

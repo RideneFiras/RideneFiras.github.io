@@ -1,0 +1,37 @@
+[
+  {
+    "id": "exp1",
+    "title": "Freelance Software Engineer",
+    "org": "B2B SaaS startup, Paris — remote",
+    "dateRange": "Mar 2026 – present",
+    "bullets": [
+      "Contributing to a multi-tenant AI sales-outreach platform, shipping backend, AI, and frontend features end-to-end.",
+      "Built an AI agent system that autonomously qualifies prospects and generates personalized outreach at scale.",
+      "Handling deployments and stabilizing the production pipeline: scoring, enrichment, and webhook fixes."
+    ],
+    "stack": "Python, FastAPI, Next.js, TypeScript, PostgreSQL, Anthropic Claude, QStash, Unipile, Stripe, Railway, Vercel"
+  },
+  {
+    "id": "exp2",
+    "title": "AI Automation Intern",
+    "org": "Agile4ux",
+    "dateRange": "2025",
+    "bullets": [
+      "Analyzed marketing and sales processes to find repetitive tasks worth automating.",
+      "Designed a multi-agent system to research, qualify, and analyze prospects, generating strategic reports.",
+      "Cut manual prospecting time by ~80%; automated report delivery and CRM integration."
+    ],
+    "stack": "Python, FastAPI, OpenAI, CrewAI, Latenode, Presenton"
+  },
+  {
+    "id": "exp3",
+    "title": "Data Platform Development Intern",
+    "org": "Designet",
+    "dateRange": "2024",
+    "bullets": [
+      "Built a platform generating leads from Google Maps with filterable criteria and CSV export.",
+      "Reduced research time and improved prospect quality through automated extraction and filtering."
+    ],
+    "stack": "Google Maps API, SerperAPI, FastAPI, Next.js, Docker"
+  }
+]
