@@ -73,84 +73,148 @@ function renderHero(profile, site) {
   r.href = site.resume;
 }
 
-/* The hero graph: an agent pipeline inside a horseshoe arch of studs,
-   like the door patterns of Sidi Bou Said. */
-function buildAgentGraph() {
-  const NS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(NS, "svg");
-  svg.setAttribute("viewBox", "0 0 560 560");
-  svg.setAttribute("role", "img");
-  svg.setAttribute("aria-label", "Diagram: an orchestrator agent passing messages to research, qualify, analyze, and outreach agents, framed by an arch of door studs");
+/* The door. A horseshoe arch of studs drawn on canvas, alive:
+   studs breathe, brass messages travel the arch like agents talking,
+   and the ones near your cursor wake up. Sidi Bou Said, at work. */
+function initDoor() {
+  const canvas = $("#doorCanvas");
+  if (!canvas || canvas.clientWidth === 0) return;
+  const ctx = canvas.getContext("2d");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const el = (name, attrs, parent = svg) => {
-    const n = document.createElementNS(NS, name);
-    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
-    parent.appendChild(n);
-    return n;
-  };
+  const BRASS = [232, 180, 92];
+  const CHALK = [245, 244, 239];
 
-  const cx = 280, archR = 200, top = 250, bottom = 540, step = 27;
-  for (let y = bottom; y > top; y -= step) {
-    el("circle", { class: "g-stud", cx: cx - archR, cy: y, r: 2.6 });
-    el("circle", { class: "g-stud", cx: cx + archR, cy: y, r: 2.6 });
+  let W, H, studs, arch, sparks = [], raf = null, visible = true;
+  const mouse = { x: -1e4, y: -1e4 };
+
+  function build() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    studs = [];
+    arch = [];
+    const cx = W / 2, cy = H * 0.5;
+    const R = Math.min(W * 0.42, H * 0.42, 480);
+
+    /* two concentric stud rows tracing a horseshoe arch */
+    const rows = [
+      { r: R, size: 3.1, tone: BRASS, main: true },
+      { r: R + 30, size: 2.2, tone: CHALK, main: false },
+    ];
+    const a0 = Math.PI * 0.94, a1 = Math.PI * 2.06;
+    for (const row of rows) {
+      const n = Math.max(16, Math.floor(((a1 - a0) * row.r) / 27));
+      for (let i = 0; i <= n; i++) {
+        const a = a0 + ((a1 - a0) * i) / n;
+        const s = {
+          x: cx + row.r * Math.cos(a),
+          y: cy + row.r * Math.sin(a),
+          r: row.size,
+          tone: row.tone,
+          glow: 0,
+          phase: Math.random() * Math.PI * 2,
+        };
+        studs.push(s);
+        if (row.main) arch.push(s);
+      }
+      /* columns dropping from the arch's widest points to the floor */
+      for (const sx of [cx - row.r, cx + row.r]) {
+        for (let y = cy + row.r * 0.28; y < H - 18; y += 27) {
+          studs.push({ x: sx, y, r: row.size * 0.85, tone: row.tone, glow: 0, phase: Math.random() * Math.PI * 2 });
+        }
+      }
+    }
   }
-  for (let a = 180; a <= 360; a += 180 / 14) {
-    const rad = (a * Math.PI) / 180;
-    el("circle", { class: "g-stud", cx: cx + archR * Math.cos(rad), cy: top + archR * Math.sin(rad), r: 2.6 });
+
+  function spawnSpark() {
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    const start = Math.floor(Math.random() * arch.length);
+    sparks.push({ p: start, dir, left: 6 + Math.floor(Math.random() * 8), speed: 0.12 + Math.random() * 0.08 });
   }
 
-  const hub = { x: 280, y: 330, label: "orchestrator" };
-  const agents = [
-    { x: 158, y: 208, label: "research" },
-    { x: 402, y: 208, label: "qualify" },
-    { x: 158, y: 452, label: "analyze" },
-    { x: 402, y: 452, label: "outreach" },
-  ];
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
 
-  const paths = agents.map((a, i) => {
-    const mx = (hub.x + a.x) / 2 + (a.x < hub.x ? -24 : 24);
-    const my = (hub.y + a.y) / 2 + (a.y < hub.y ? 10 : -10);
-    const d = `M ${hub.x} ${hub.y} Q ${mx} ${my} ${a.x} ${a.y}`;
-    const p = el("path", { class: "g-edge", d });
-    p.style.animationDelay = `${0.55 + i * 0.12}s`;
-    return d;
+    for (const s of studs) {
+      const d = Math.hypot(s.x - mouse.x, s.y - mouse.y);
+      const wake = Math.max(0, 1 - d / 150);
+      const breathe = reduced ? 0 : Math.sin(t / 1500 + s.phase) * 0.5 + 0.5;
+      const [r, g, b] = s.tone;
+      const alpha = Math.min(1, 0.34 + breathe * 0.18 + wake * 0.55 + s.glow * 0.6);
+      const radius = s.r * (1 + wake * 0.8 + s.glow * 0.5);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, radius, 0, 7);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx.fill();
+      s.glow *= 0.93;
+    }
+
+    if (!reduced) {
+      for (const k of sparks) {
+        k.p += k.dir * k.speed;
+        k.left -= k.speed;
+        const i = Math.floor(k.p);
+        const a = arch[(i % arch.length + arch.length) % arch.length];
+        const b = arch[((i + 1) % arch.length + arch.length) % arch.length];
+        if (!a || !b) continue;
+        const f = k.p - i;
+        const x = a.x + (b.x - a.x) * f;
+        const y = a.y + (b.y - a.y) * f;
+        a.glow = 1;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.6, 0, 7);
+        ctx.fillStyle = "rgba(255,232,178,0.95)";
+        ctx.shadowColor = "rgba(232,180,92,0.9)";
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      sparks = sparks.filter((k) => k.left > 0);
+      if (Math.random() < 0.012 && sparks.length < 4) spawnSpark();
+    }
+  }
+
+  function loop(t) {
+    draw(t);
+    raf = visible && !reduced ? requestAnimationFrame(loop) : null;
+  }
+
+  build();
+  if (reduced) {
+    draw(0);
+  } else {
+    raf = requestAnimationFrame(loop);
+  }
+
+  new IntersectionObserver(([en]) => {
+    visible = en.isIntersecting && !document.hidden;
+    if (visible && raf === null && !reduced) raf = requestAnimationFrame(loop);
+  }).observe(canvas);
+  document.addEventListener("visibilitychange", () => {
+    visible = !document.hidden;
+    if (visible && raf === null && !reduced) raf = requestAnimationFrame(loop);
   });
 
-  const node = (n, i, extra = "") => {
-    const g = el("g", { class: `g-node ${extra}` });
-    g.style.transformOrigin = `${n.x}px ${n.y}px`;
-    g.style.animationDelay = `${0.1 + i * 0.11}s`;
-    el("circle", { cx: n.x, cy: n.y, r: extra ? 36 : 27 }, g);
-    const t = el("text", { x: n.x, y: n.y + (extra ? 60 : 49) }, g);
-    t.textContent = n.label;
-    const title = document.createElementNS(NS, "title");
-    title.textContent = n.label;
-    g.appendChild(title);
-    return g;
-  };
-  agents.forEach((a, i) => node(a, i + 1));
-  const hubG = node(hub, 0, "hub");
+  canvas.parentElement.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  canvas.parentElement.addEventListener("mouseleave", () => {
+    mouse.x = -1e4;
+    mouse.y = -1e4;
+  });
 
-  [[0, 0], [-11, -11], [11, -11], [-11, 11], [11, 11]].forEach(([dx, dy]) =>
-    el("circle", { class: "stud", cx: hub.x + dx, cy: hub.y + dy, r: 3.2 }, hubG)
-  );
-
-  if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-    paths.forEach((d, i) => {
-      const dot = el("circle", { class: "g-pulse", r: 5 });
-      el("animateMotion", {
-        dur: "3.2s",
-        begin: `${1.6 + i * 0.8}s`,
-        repeatCount: "indefinite",
-        keyPoints: "0;1;0",
-        keyTimes: "0;0.5;1",
-        calcMode: "linear",
-        path: d,
-      }, dot);
-    });
-  }
-
-  $("#agentGraph").appendChild(svg);
+  let rT;
+  window.addEventListener("resize", () => {
+    clearTimeout(rT);
+    rT = setTimeout(() => { build(); if (reduced) draw(0); }, 150);
+  });
 }
 
 /* ---------------- work: all projects + filters ---------------- */
@@ -274,7 +338,7 @@ function observe() {
 
     renderRail(site);
     renderHero(profile, site);
-    buildAgentGraph();
+    initDoor();
     renderWork(projects);
     renderExperience(experience, skills);
     renderAbout(profile, site, education, certs);
@@ -286,7 +350,7 @@ function observe() {
       "%cYou read source. Respect.",
       "font-family:monospace;font-size:14px;color:#2553c4;font-weight:bold"
     );
-    console.log("This site is hand-built: HTML + CSS + vanilla JS, content fed from JSON.\n→ https://github.com/RideneFiras/RideneFiras.github.io\n→ firasuv@gmail.com");
+    console.log("This site is hand-built: HTML + CSS + vanilla JS, content fed from JSON.\n→ https://github.com/RideneFiras/RideneFiras.github.io\n→ firas.ridene@outlook.com");
   } catch (err) {
     console.error(err);
     document.body.insertAdjacentHTML(
