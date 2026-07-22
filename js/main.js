@@ -258,7 +258,7 @@ function initNav() {
 
     $("#year").textContent = new Date().getFullYear();
 
-    console.log("%cYou read source. Respect.", "font-family:monospace;font-size:14px;color:#ffb454;font-weight:bold");
+    console.log("%cYou read source. Respect.", "font-family:monospace;font-size:14px;color:#2553c4;font-weight:bold");
     console.log("Hand-built: HTML + CSS + vanilla JS, content fed from JSON.\n→ https://github.com/RideneFiras/RideneFiras.github.io\n→ firas.ridene@outlook.com");
   } catch (err) {
     console.error(err);

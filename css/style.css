@@ -1,7 +1,8 @@
 /* ================================================================
-   firasridene.tech · v3 "graphite"
-   Deep graphite, amber + periwinkle accents, expanded Archivo caps,
-   cursor spotlight over a dot grid. Modern, engineered, alive.
+   firasridene.tech · v3 "whitewash"
+   The graphite layout wearing Sidi Bou Said colors: whitewash field,
+   ink type, Sidi Bou blue accents, a touch of brass. Expanded Archivo
+   caps, cursor spotlight over a dot grid. Modern, engineered, alive.
    ================================================================ */
 
 @font-face {
@@ -31,14 +32,15 @@
 }
 
 :root {
-  --bg: #0f1014;
-  --bg-elev: #16171d;
-  --card: #17181f;
-  --text: #f4f3ef;
-  --muted: #a4a3ad;
-  --line: rgba(244, 243, 239, 0.09);
-  --amber: #ffb454;
-  --peri: #a8b8ff;
+  --bg: #f5f4ef;
+  --bg-elev: #eceef5;
+  --card: #fdfcf9;
+  --text: #111b2b;
+  --muted: #46536a;
+  --line: rgba(17, 27, 43, 0.14);
+  --blue: #2553c4;
+  --blue-deep: #1c3e95;
+  --brass: #b7802f;
 
   --display: "Archivo", "Arial Black", sans-serif;
   --body: "Instrument Sans", system-ui, sans-serif;
@@ -61,18 +63,18 @@ body {
   line-height: 1.65;
   color: var(--text);
   background:
-    radial-gradient(rgba(244, 243, 239, 0.05) 1px, transparent 1.4px) 0 0 / 30px 30px,
+    radial-gradient(rgba(17, 27, 43, 0.07) 1px, transparent 1.4px) 0 0 / 30px 30px,
     var(--bg);
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: var(--amber); color: var(--bg); }
+::selection { background: var(--blue); color: var(--card); }
 
-a { color: var(--peri); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-a:hover { color: var(--text); }
+a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--blue-deep); }
 
 :focus-visible {
-  outline: 2px solid var(--amber);
+  outline: 2px solid var(--blue);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -81,8 +83,8 @@ a:hover { color: var(--text); }
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--amber);
-  color: var(--bg);
+  background: var(--blue);
+  color: var(--card);
   padding: 0.6rem 1rem;
   z-index: 99;
 }
@@ -96,7 +98,7 @@ a:hover { color: var(--text); }
   z-index: 0;
   background: radial-gradient(
     560px circle at var(--mx, 50vw) var(--my, 30vh),
-    rgba(168, 184, 255, 0.07),
+    rgba(37, 83, 196, 0.07),
     transparent 70%
   );
 }
@@ -111,7 +113,7 @@ a:hover { color: var(--text); }
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--amber);
+  color: var(--blue);
 }
 
 /* ================================================================
@@ -127,7 +129,7 @@ a:hover { color: var(--text); }
   align-items: center;
   gap: 2rem;
   padding: 0.8rem var(--pad);
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  background: color-mix(in srgb, var(--bg) 75%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
@@ -142,7 +144,7 @@ a:hover { color: var(--text); }
   color: var(--text);
   text-decoration: none;
 }
-.logo span { color: var(--amber); }
+.logo span { color: var(--brass); }
 
 .bar-nav { display: flex; gap: 1.4rem; }
 .bar-nav a {
@@ -154,7 +156,7 @@ a:hover { color: var(--text); }
   border-bottom: 1px solid transparent;
 }
 .bar-nav a:hover { color: var(--text); }
-.bar-nav a[aria-current="true"] { color: var(--amber); border-bottom-color: var(--amber); }
+.bar-nav a[aria-current="true"] { color: var(--blue); border-bottom-color: var(--blue); }
 
 .bar-status {
   margin-left: auto;
@@ -167,21 +169,22 @@ a:hover { color: var(--text); }
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.35rem 0.9rem;
+  background: color-mix(in srgb, var(--card) 60%, transparent);
   white-space: nowrap;
 }
 .bar-status .live {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--amber);
+  background: var(--brass);
   flex: none;
 }
 @media (prefers-reduced-motion: no-preference) {
   .bar-status .live { animation: pulse 2.4s ease-in-out infinite; }
 }
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 180, 84, 0.45); }
-  50% { box-shadow: 0 0 0 6px rgba(255, 180, 84, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(183, 128, 47, 0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(183, 128, 47, 0); }
 }
 
 /* ================================================================
@@ -235,7 +238,7 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
 
 .outline {
   color: transparent;
-  -webkit-text-stroke: 2px var(--text);
+  -webkit-text-stroke: 2px var(--blue);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -267,14 +270,14 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   text-decoration: none;
   padding: 0.75rem 1.4rem;
   border-radius: 10px;
-  background: var(--amber);
-  color: var(--bg);
-  border: 1px solid var(--amber);
+  background: var(--blue);
+  color: var(--card);
+  border: 1px solid var(--blue);
   transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-.btn:hover { background: #ffc476; border-color: #ffc476; color: var(--bg); transform: translateY(-1px); }
+.btn:hover { background: var(--blue-deep); border-color: var(--blue-deep); color: var(--card); transform: translateY(-1px); }
 .btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }
-.btn.ghost:hover { border-color: var(--muted); color: var(--text); background: var(--bg-elev); }
+.btn.ghost:hover { border-color: var(--blue); color: var(--blue); background: var(--card); }
 
 .hero-hint {
   position: absolute;
@@ -342,8 +345,8 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   cursor: pointer;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
-.fchip:hover { color: var(--text); border-color: var(--muted); }
-.fchip.on { background: var(--amber); border-color: var(--amber); color: var(--bg); }
+.fchip:hover { color: var(--blue); border-color: var(--blue); }
+.fchip.on { background: var(--blue); border-color: var(--blue); color: var(--card); }
 
 .work-grid {
   display: grid;
@@ -359,12 +362,15 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   border-radius: 16px;
   padding: 1.5rem;
   overflow: hidden;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .case.wide { grid-column: span 3; }
-.case:hover { border-color: rgba(168, 184, 255, 0.35); }
+.case:hover { border-color: rgba(37, 83, 196, 0.5); }
 @media (prefers-reduced-motion: no-preference) {
-  .case:hover { transform: translateY(-2px); }
+  .case:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -20px rgba(28, 62, 149, 0.35);
+  }
 }
 .case::before {
   content: "";
@@ -375,7 +381,7 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   transition: opacity 0.25s ease;
   background: radial-gradient(
     480px circle at var(--cx, 50%) var(--cy, 50%),
-    rgba(168, 184, 255, 0.09),
+    rgba(37, 83, 196, 0.07),
     transparent 55%
   );
 }
@@ -393,7 +399,7 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
 .case .desc { color: var(--muted); font-size: 0.94rem; text-wrap: pretty; }
 .case .points { margin: 0.7rem 0 0.4rem 1.05rem; font-size: 0.9rem; color: var(--muted); }
 .case .points li { margin-bottom: 0.3rem; text-wrap: pretty; }
-.case .points li::marker { color: var(--amber); }
+.case .points li::marker { color: var(--blue); }
 .case .links { margin-top: 0.9rem; display: flex; gap: 1.2rem; position: relative; }
 .case .links a { font-family: var(--mono); font-size: 0.8rem; }
 
@@ -406,7 +412,7 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   font-family: var(--mono);
   font-size: 0.72rem;
   color: var(--muted);
-  background: rgba(244, 243, 239, 0.05);
+  background: rgba(17, 27, 43, 0.045);
   border: 1px solid var(--line);
   border-radius: 7px;
   padding: 0.24rem 0.6rem;
@@ -435,7 +441,6 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   border-radius: 16px;
   border: 1px solid var(--line);
   display: block;
-  filter: saturate(0.85);
 }
 .about-text p { max-width: 66ch; margin-bottom: 1rem; color: var(--muted); text-wrap: pretty; }
 .about-text p:first-child { color: var(--text); }
@@ -446,10 +451,10 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   line-height: 2.1;
   margin-top: 1.2rem;
 }
-.about-facts .k { color: var(--amber); }
+.about-facts .k { color: var(--blue); }
 
 .certs { margin-top: 2.4rem; max-width: 66ch; }
-.certs summary { cursor: pointer; font-family: var(--mono); font-size: 0.85rem; color: var(--peri); }
+.certs summary { cursor: pointer; font-family: var(--mono); font-size: 0.85rem; color: var(--blue); }
 .certs ul { margin: 0.9rem 0 0 1.1rem; columns: 2; column-gap: 2.4rem; }
 .certs li { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.35rem; break-inside: avoid; }
 .certs li b { color: var(--text); font-weight: 500; }
@@ -468,15 +473,15 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--amber);
-  box-shadow: 0 0 0 4px rgba(255, 180, 84, 0.15);
+  background: var(--blue);
+  box-shadow: 0 0 0 4px rgba(37, 83, 196, 0.14);
 }
-.xp .when { font-family: var(--mono); font-size: 0.76rem; color: var(--amber); margin-bottom: 0.2rem; }
+.xp .when { font-family: var(--mono); font-size: 0.76rem; color: var(--blue); margin-bottom: 0.2rem; }
 .xp h3 { font-size: 1.08rem; font-weight: 600; }
 .xp .org { color: var(--muted); font-size: 0.92rem; margin-bottom: 0.55rem; }
 .xp ul { margin: 0.4rem 0 0.6rem 1.1rem; max-width: 68ch; color: var(--muted); }
 .xp li { margin-bottom: 0.3rem; text-wrap: pretty; }
-.xp li::marker { color: var(--amber); }
+.xp li::marker { color: var(--blue); }
 .xp .stack-chips { margin-top: 0.6rem; }
 
 .skills-grid {
@@ -498,7 +503,7 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  color: var(--amber);
+  color: var(--blue-deep);
   margin-bottom: 0.4rem;
 }
 .skill-cell span { font-size: 0.9rem; color: var(--muted); }
