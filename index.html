@@ -10,9 +10,32 @@
   <meta property="og:title" content="Firas Ridene · AI Engineer">
   <meta property="og:description" content="I build agent systems that do real work. Multi-agent platforms, voice agents, and automation, from Tunis.">
   <meta property="og:url" content="https://firasridene.tech">
-  <meta property="og:image" content="https://firasridene.tech/assets/firas.jpg">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://firasridene.tech/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5f4ef">
+  <link rel="canonical" href="https://firasridene.tech/">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Firas Ridene",
+    "url": "https://firasridene.tech",
+    "image": "https://firasridene.tech/assets/firas.jpg",
+    "jobTitle": "AI Engineer",
+    "description": "AI engineer specialized in generative AI and multi-agent systems, building intelligent assistants and automation systems.",
+    "email": "mailto:firas.ridene@outlook.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Tunis", "addressCountry": "TN" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Esprit: School of Engineering" },
+    "sameAs": [
+      "https://github.com/RideneFiras",
+      "https://www.linkedin.com/in/firas-ridene"
+    ],
+    "knowsLanguage": ["ar", "en", "fr"]
+  }
+  </script>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232553C4'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23B7802F'/%3E%3Cpath d='M18 46V18h14' stroke='%23F5F4EF' stroke-width='6' fill='none'/%3E%3Cpath d='M18 32h11' stroke='%23F5F4EF' stroke-width='6'/%3E%3C/svg%3E">
 
@@ -23,7 +46,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <a class="skip" href="#work">Skip to content</a>
+  <a class="skip" href="#about">Skip to content</a>
   <div class="spot" aria-hidden="true"></div>
 
   <aside class="rail">
@@ -38,8 +61,8 @@
       </button>
     </div>
     <nav class="rail-nav" aria-label="Sections">
-      <a href="#work">work</a>
       <a href="#about">about</a>
+      <a href="#work">work</a>
       <a href="#experience">experience</a>
       <a href="#contact">contact</a>
     </nav>
@@ -50,8 +73,8 @@
   <header class="bar">
     <a class="logo" href="#top">FR<span>·</span></a>
     <nav class="bar-nav" aria-label="Sections">
-      <a href="#work">work</a>
       <a href="#about">about</a>
+      <a href="#work">work</a>
       <a href="#experience">experience</a>
       <a href="#contact">contact</a>
     </nav>
@@ -80,19 +103,19 @@
 
     <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
 
-    <section id="work">
-      <h2><span class="sec-label">01 / work</span>Everything I've shipped</h2>
-      <div class="filters" id="filters" role="group" aria-label="Filter projects"></div>
-      <div class="work-grid" id="workGrid"></div>
-    </section>
-
     <section id="about">
-      <h2><span class="sec-label">02 / about</span>Behind the agents</h2>
+      <h2><span class="sec-label">01 / about</span>Behind the agents</h2>
       <div class="about-grid">
         <img class="about-photo" src="assets/firas.jpg" alt="Firas Ridene" width="200" height="200">
         <div class="about-text" id="aboutText"></div>
       </div>
       <details class="certs" id="certs"></details>
+    </section>
+
+    <section id="work">
+      <h2><span class="sec-label">02 / work</span>Everything I've shipped</h2>
+      <div class="filters" id="filters" role="group" aria-label="Filter projects"></div>
+      <div class="work-grid" id="workGrid"></div>
     </section>
 
     <section id="experience">

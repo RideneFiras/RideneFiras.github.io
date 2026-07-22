@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>FR · admin</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111B2B'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23B7802F'/%3E%3Cpath d='M18 46V18h14' stroke='%23F5F4EF' stroke-width='6' fill='none'/%3E%3Cpath d='M18 32h11' stroke='%23F5F4EF' stroke-width='6'/%3E%3C/svg%3E">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #f5f4ef; --card: #fdfcf9; --text: #111b2b; --muted: #46536a;
+      --line: rgba(17, 27, 43, 0.14); --blue: #2553c4; --blue-deep: #1c3e95;
+      --brass: #b7802f; --ok: #1d7a4f; --err: #b3382f;
+      --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/plex-mono-400.woff2") format("woff2");
+      font-weight: 400;
+      font-display: swap;
+    }
+    body {
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.2rem 1.2rem 4rem;
+    }
+    h1 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+    h1 span { color: var(--blue); }
+    .sub { color: var(--muted); font-size: 0.78rem; margin-bottom: 2rem; }
+    a { color: var(--blue); }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+    label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+    input[type="password"], textarea {
+      width: 100%;
+      font-family: var(--mono);
+      font-size: 0.84rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+    }
+    textarea { min-height: 420px; resize: vertical; line-height: 1.55; tab-size: 2; }
+    textarea:focus, input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+    button {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      background: var(--blue);
+      color: var(--card);
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      padding: 0.55rem 1.1rem;
+      cursor: pointer;
+    }
+    button:hover { background: var(--blue-deep); border-color: var(--blue-deep); }
+    button.ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+    button.ghost:hover { color: var(--blue); border-color: var(--blue); background: transparent; }
+    button:disabled { opacity: 0.5; cursor: wait; }
+    .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 0.9rem; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .tab {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 0.32rem 0.9rem; cursor: pointer; font-size: 0.78rem;
+    }
+    .tab:hover { color: var(--blue); border-color: var(--blue); background: transparent; }
+    .tab.on { background: var(--blue); color: var(--card); border-color: var(--blue); }
+    .msg { font-size: 0.78rem; margin-top: 0.7rem; min-height: 1.2em; }
+    .msg.ok { color: var(--ok); }
+    .msg.err { color: var(--err); }
+    .hint { font-size: 0.76rem; color: var(--muted); margin-top: 0.8rem; }
+    .hint code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 0.3rem; }
+    .hidden { display: none; }
+    ol { margin: 0.6rem 0 0.6rem 1.2rem; font-size: 0.78rem; color: var(--muted); }
+    ol li { margin-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+  <h1>FR<span>·</span> admin</h1>
+  <p class="sub">Edits commit straight to <a href="https://github.com/RideneFiras/RideneFiras.github.io" target="_blank" rel="noopener">RideneFiras.github.io</a> and go live in about a minute. Token never leaves this browser.</p>
+
+  <!-- token setup -->
+  <div class="panel" id="authPanel">
+    <label for="tokenInput">GitHub fine-grained personal access token</label>
+    <input type="password" id="tokenInput" placeholder="github_pat_...">
+    <ol>
+      <li>GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token</li>
+      <li>Repository access: only <strong>RideneFiras.github.io</strong></li>
+      <li>Permissions → Repository → <strong>Contents: Read and write</strong>, everything else: none</li>
+      <li>Paste it here. It is stored in this browser's localStorage only.</li>
+    </ol>
+    <div class="row">
+      <button id="saveToken">Save token</button>
+    </div>
+    <p class="msg" id="authMsg"></p>
+  </div>
+
+  <!-- editor -->
+  <div class="panel hidden" id="editorPanel">
+    <div class="tabs" id="tabs"></div>
+    <label id="fileLabel"></label>
+    <textarea id="editor" spellcheck="false"></textarea>
+    <div class="row">
+      <button id="save">Commit &amp; publish</button>
+      <button class="ghost" id="reload">Reload from repo</button>
+      <button class="ghost" id="logout">Forget token</button>
+    </div>
+    <p class="msg" id="msg"></p>
+    <p class="hint">Tip: content is plain JSON, the same files as <code>data/*.json</code>. Invalid JSON is refused before it ever reaches the repo.</p>
+  </div>
+
+<script>
+(function () {
+  var REPO = "RideneFiras/RideneFiras.github.io";
+  var FILES = ["site", "profile", "projects", "experience", "skills", "education", "certifications"];
+  var $ = function (s) { return document.querySelector(s); };
+
+  var state = { file: "projects", sha: null, busy: false };
+
+  function token() { try { return localStorage.getItem("gh_token") || ""; } catch (e) { return ""; } }
+  function headers() {
+    return {
+      "Authorization": "Bearer " + token(),
+      "Accept": "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+  }
+  function apiPath(file) { return "https://api.github.com/repos/" + REPO + "/contents/data/" + file + ".json"; }
+
+  /* unicode-safe base64 */
+  function b64decode(b64) {
+    var bin = atob(b64.replace(/\n/g, ""));
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+  function b64encode(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  function msg(el, text, cls) {
+    el.textContent = text;
+    el.className = "msg" + (cls ? " " + cls : "");
+  }
+
+  function setBusy(b) {
+    state.busy = b;
+    $("#save").disabled = b;
+    $("#reload").disabled = b;
+  }
+
+  function renderTabs() {
+    $("#tabs").innerHTML = FILES.map(function (f) {
+      return '<button class="tab' + (f === state.file ? " on" : "") + '" data-f="' + f + '">' + f + "</button>";
+    }).join("");
+  }
+
+  function load(file) {
+    state.file = file;
+    renderTabs();
+    $("#fileLabel").textContent = "data/" + file + ".json";
+    msg($("#msg"), "Loading...", "");
+    setBusy(true);
+    fetch(apiPath(file), { headers: headers() })
+      .then(function (r) {
+        if (r.status === 401 || r.status === 403) throw new Error("Token rejected (HTTP " + r.status + "). Check its permissions.");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        state.sha = data.sha;
+        var text = b64decode(data.content);
+        try { text = JSON.stringify(JSON.parse(text), null, 2); } catch (e) { /* show as-is */ }
+        $("#editor").value = text;
+        msg($("#msg"), "Loaded (" + text.length + " chars).", "ok");
+      })
+      .catch(function (e) { msg($("#msg"), String(e.message || e), "err"); })
+      .finally(function () { setBusy(false); });
+  }
+
+  function save() {
+    var text = $("#editor").value;
+    var parsed;
+    try { parsed = JSON.parse(text); } catch (e) {
+      msg($("#msg"), "Invalid JSON: " + e.message, "err");
+      return;
+    }
+    var pretty = JSON.stringify(parsed, null, 2) + "\n";
+    setBusy(true);
+    msg($("#msg"), "Committing...", "");
+    fetch(apiPath(state.file), {
+      method: "PUT",
+      headers: headers(),
+      body: JSON.stringify({
+        message: "content: update " + state.file + ".json via admin",
+        content: b64encode(pretty),
+        sha: state.sha
+      })
+    })
+      .then(function (r) {
+        if (r.status === 409) throw new Error("Conflict: the file changed on GitHub. Hit Reload, re-apply your edit, save again.");
+        if (r.status === 401 || r.status === 403) throw new Error("Token rejected (HTTP " + r.status + ").");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        state.sha = data.content.sha;
+        $("#editor").value = pretty.trimEnd();
+        msg($("#msg"), "Committed " + data.commit.sha.slice(0, 7) + ". Live in about a minute.", "ok");
+      })
+      .catch(function (e) { msg($("#msg"), String(e.message || e), "err"); })
+      .finally(function () { setBusy(false); });
+  }
+
+  function showEditor() {
+    $("#authPanel").classList.add("hidden");
+    $("#editorPanel").classList.remove("hidden");
+    load(state.file);
+  }
+
+  $("#saveToken").addEventListener("click", function () {
+    var t = $("#tokenInput").value.trim();
+    if (!t) { msg($("#authMsg"), "Paste a token first.", "err"); return; }
+    msg($("#authMsg"), "Checking token...", "");
+    fetch(apiPath("site"), { headers: { "Authorization": "Bearer " + t, "Accept": "application/vnd.github+json" } })
+      .then(function (r) {
+        if (!r.ok) throw new Error("Token rejected (HTTP " + r.status + "). Check repo access and Contents permission.");
+        try { localStorage.setItem("gh_token", t); } catch (e) {}
+        showEditor();
+      })
+      .catch(function (e) { msg($("#authMsg"), String(e.message || e), "err"); });
+  });
+
+  $("#tabs").addEventListener("click", function (e) {
+    var b = e.target.closest(".tab");
+    if (b && !state.busy) load(b.dataset.f);
+  });
+  $("#save").addEventListener("click", save);
+  $("#reload").addEventListener("click", function () { load(state.file); });
+  $("#logout").addEventListener("click", function () {
+    try { localStorage.removeItem("gh_token"); } catch (e) {}
+    $("#editorPanel").classList.add("hidden");
+    $("#authPanel").classList.remove("hidden");
+    $("#tokenInput").value = "";
+    msg($("#authMsg"), "Token forgotten.", "ok");
+  });
+
+  if (token()) showEditor();
+})();
+</script>
+</body>
+</html>
