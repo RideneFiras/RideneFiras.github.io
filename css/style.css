@@ -609,6 +609,13 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   margin-bottom: 2rem;
 }
 
+footer .src-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+footer .src-link:hover .tico { background: var(--accent); }
+
 footer {
   margin-left: var(--rail-w);
   max-width: var(--wrap);
