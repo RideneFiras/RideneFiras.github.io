@@ -286,7 +286,7 @@ function observe() {
       "%cYou read source. Respect.",
       "font-family:monospace;font-size:14px;color:#2553c4;font-weight:bold"
     );
-    console.log("This site is hand-built: HTML + CSS + vanilla JS, content fed from JSON.\n→ https://github.com/RideneFiras/RideneFiras.github.io\n→ firasuv@gmail.com");
+    console.log("This site is hand-built: HTML + CSS + vanilla JS, content fed from JSON.\n→ https://github.com/RideneFiras/RideneFiras.github.io\n→ firas.ridene@outlook.com");
   } catch (err) {
     console.error(err);
     document.body.insertAdjacentHTML(
