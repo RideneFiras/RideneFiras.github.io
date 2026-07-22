@@ -162,5 +162,33 @@
     "stack": "Odoo, Python, OpenCV",
     "github": "",
     "demo": ""
+  },
+  {
+    "id": "leadgenmap",
+    "title": "LeadGenMAP",
+    "domain": "lead generation",
+    "tags": ["automation", "product"],
+    "oneliner": "Platform that generates qualified leads from Google Maps with filterable criteria and CSV export.",
+    "bullets": [
+      "Built a platform that generates leads from Google Maps with filterable search criteria and CSV export.",
+      "Reduced research time and improved prospect quality through automated extraction and filtering."
+    ],
+    "stack": "Google Maps API, SerperAPI, FastAPI, Next.js, Docker",
+    "github": "https://github.com/RideneFiras/LeadGenMAP",
+    "demo": ""
+  },
+  {
+    "id": "n8n-workflows",
+    "title": "n8n Workflow Library",
+    "domain": "automation",
+    "tags": ["automation"],
+    "oneliner": "Public collection of the n8n workflows behind my automation work, packaged for reuse.",
+    "bullets": [
+      "Open-sourced production workflows including Facebook sales conversation automation and a hiring agent.",
+      "Includes facial recognition and tender processing flows built as reusable n8n templates."
+    ],
+    "stack": "n8n, Webhooks, REST APIs",
+    "github": "https://github.com/RideneFiras/Myn8nWorkflows",
+    "demo": ""
   }
 ]
