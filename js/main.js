@@ -47,18 +47,42 @@ function chips(stack) {
     .join("")}</div>`;
 }
 
-/* ---------------- top bar ---------------- */
+/* ---------------- rail + theme ---------------- */
 
-function renderBar(site) {
+function renderChrome(site) {
   const time = () =>
     new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: site.timezone }).format(new Date());
 
-  $("#barStatus").innerHTML = `
-    <span class="live" aria-hidden="true"></span>
-    <span>${esc(site.status.availability)}</span>
-    <span>·</span>
-    <span>Tunis <span id="clock">${time()}</span></span>`;
-  setInterval(() => { const c = $("#clock"); if (c) c.textContent = time(); }, 30_000);
+  $("#railStatus").innerHTML = `
+    <div><span class="live" aria-hidden="true"></span>${esc(site.status.availability)}</div>
+    <div>${esc(site.location)} · <span class="clock">${time()}</span></div>`;
+  setInterval(() => document.querySelectorAll(".clock").forEach((c) => { c.textContent = time(); }), 30_000);
+
+  $("#railLinks").innerHTML = `
+    <a href="${esc(site.links.github)}" ${EXT}>github</a>
+    <a href="${esc(site.links.linkedin)}" ${EXT}>linkedin</a>
+    <a href="${esc(site.links.youtube)}" ${EXT}>youtube</a>
+    <a href="mailto:${esc(site.links.email)}">email</a>
+    <a href="${esc(site.resume)}" ${EXT}>resume</a>`;
+}
+
+function initTheme() {
+  const btns = [...document.querySelectorAll(".theme-btn")];
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const apply = (t) => {
+    document.documentElement.dataset.theme = t;
+    if (meta) meta.content = t === "dark" ? "#0f1014" : "#f5f4ef";
+    btns.forEach((b) => b.setAttribute("aria-label", t === "dark" ? "Switch to light mode" : "Switch to dark mode"));
+  };
+  /* light by default; only an explicit choice switches to dark */
+  apply(localStorage.getItem("theme") === "dark" ? "dark" : "light");
+  btns.forEach((b) =>
+    b.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
+      apply(next);
+    })
+  );
 }
 
 /* ---------------- hero ---------------- */
@@ -219,8 +243,8 @@ function initReveals() {
 }
 
 function initNav() {
-  const links = [...document.querySelectorAll(".bar-nav a")];
-  const sections = links.map((a) => $(a.getAttribute("href"))).filter(Boolean);
+  const links = [...document.querySelectorAll(".rail-nav a, .bar-nav a")];
+  const sections = [...new Set(links.map((a) => $(a.getAttribute("href"))).filter(Boolean))];
   const navIO = new IntersectionObserver(
     (entries) =>
       entries.forEach((en) => {
@@ -235,6 +259,7 @@ function initNav() {
 /* ---------------- boot ---------------- */
 
 (async function init() {
+  initTheme();
   try {
     const [site, profile, projects, experience, skills, education, certs] = await Promise.all([
       loadJSON("data/site.json"),
@@ -246,7 +271,7 @@ function initNav() {
       loadJSON("data/certifications.json"),
     ]);
 
-    renderBar(site);
+    renderChrome(site);
     renderHero(profile, site);
     renderMarquee();
     renderWork(projects);
