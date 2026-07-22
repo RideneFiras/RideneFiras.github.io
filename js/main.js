@@ -57,6 +57,7 @@ function renderRail(site) {
   $("#railLinks").innerHTML = `
     <a href="${esc(site.links.github)}" ${EXT}>github</a>
     <a href="${esc(site.links.linkedin)}" ${EXT}>linkedin</a>
+    <a href="${esc(site.links.youtube)}" ${EXT}>youtube</a>
     <a href="mailto:${esc(site.links.email)}">email</a>
     <a href="${esc(site.resume)}" ${EXT}>resume</a>`;
 }
@@ -154,7 +155,8 @@ function buildAgentGraph() {
 
 /* ---------------- work: all projects + filters ---------------- */
 
-const TAG_ORDER = ["agents", "voice", "sales", "marketing", "hr", "ops", "ml"];
+const TAG_ORDER = ["agents", "voice", "automation", "ml", "product"];
+const TAG_LABELS = { agents: "agents", voice: "voice & chat", automation: "automation", ml: "ml & data", product: "product" };
 
 function renderWork(projects) {
   $("#workGrid").innerHTML = projects
@@ -182,7 +184,7 @@ function renderWork(projects) {
   const tags = TAG_ORDER.filter((t) => present.has(t));
   const bar = $("#filters");
   bar.innerHTML = ["all", ...tags]
-    .map((t) => `<button class="fchip${t === "all" ? " on" : ""}" data-tag="${esc(t)}">${esc(t)}</button>`)
+    .map((t) => `<button class="fchip${t === "all" ? " on" : ""}" data-tag="${esc(t)}">${esc(TAG_LABELS[t] || t)}</button>`)
     .join("");
 
   bar.addEventListener("click", (e) => {

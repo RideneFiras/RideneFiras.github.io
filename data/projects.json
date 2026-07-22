@@ -3,7 +3,7 @@
     "id": "vocaflow",
     "title": "VocaFlow",
     "domain": "voice AI · SaaS",
-    "tags": ["agents", "voice", "sales"],
+    "tags": ["agents", "voice", "product"],
     "oneliner": "Multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp.",
     "bullets": [
       "Designed a multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp.",
@@ -11,14 +11,14 @@
       "Enabled businesses to offer 24/7 customer engagement without added headcount, handling inquiries, bookings, and support."
     ],
     "stack": "React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure",
-    "github": "",
+    "github": "https://github.com/RideneFiras/Vocaflow",
     "demo": ""
   },
   {
     "id": "claude-code-team",
     "title": "8-Agent Dev Team",
     "domain": "AI-assisted development",
-    "tags": ["agents", "ops"],
+    "tags": ["agents", "automation"],
     "oneliner": "A full software team staffed by Claude Code agents, running complete sprint workflows solo.",
     "bullets": [
       "Built a team of 8 specialized Claude Code agents (PM, Frontend, Backend, AI, DevOps, QA, Test, Docs) coordinated through Notion and GitHub.",
@@ -26,14 +26,14 @@
       "Shipped 170+ GitHub issues and 726 automated tests across a ~40,000 line codebase in about 4 weeks."
     ],
     "stack": "Claude Code, Notion MCP, GitHub CLI, Playwright MCP",
-    "github": "",
+    "github": "https://github.com/RideneFiras/ClaudeCodeTeam",
     "demo": ""
   },
   {
     "id": "prospecting-system",
     "title": "Multi-Agent Prospecting System",
     "domain": "multi-agent automation",
-    "tags": ["agents", "sales"],
+    "tags": ["agents", "automation"],
     "oneliner": "Agents that research, qualify, and analyze prospects, then write the outreach and the reports.",
     "bullets": [
       "Designed a multi-agent system to research, qualify, and analyze prospects, generating strategic reports.",
@@ -48,7 +48,7 @@
     "id": "content-automation",
     "title": "Content Creation Automation",
     "domain": "agent orchestration",
-    "tags": ["agents", "marketing"],
+    "tags": ["agents", "automation"],
     "oneliner": "Automated research, generation, and publication of Facebook content, with a human checkpoint before anything ships.",
     "bullets": [
       "Built a platform automating research, generation, and publication of Facebook content across objectives.",
@@ -63,7 +63,7 @@
     "id": "recruitment-automation",
     "title": "Recruitment Automation System",
     "domain": "automation",
-    "tags": ["hr", "ops"],
+    "tags": ["automation"],
     "oneliner": "Four interconnected pipelines covering candidate intake, AI scoring, ATS sync, and lead generation.",
     "bullets": [
       "Built four interconnected pipelines covering candidate intake, AI scoring, ATS synchronization, and lead generation.",
@@ -78,7 +78,7 @@
     "id": "airline-assistant",
     "title": "Airline Customer Service Assistant",
     "domain": "conversational AI",
-    "tags": ["agents", "ops"],
+    "tags": ["voice"],
     "oneliner": "GenAI capstone (Kaggle × Google): structured-dialogue assistant with RAG over a dedicated knowledge base.",
     "bullets": [
       "Designed a conversational assistant that collects customer information through structured dialogue.",
@@ -93,7 +93,7 @@
     "id": "pedagogia",
     "title": "Pedagog'IA",
     "domain": "EdTech · GenAI",
-    "tags": ["agents"],
+    "tags": ["product"],
     "oneliner": "Social platform for Tunisian teachers with AI generation of fiches, quizzes, and exercises.",
     "bullets": [
       "Built a social platform for Tunisian teachers to share resources, combined with an AI feature generating fiches, quizzes, and exercises.",
@@ -108,7 +108,7 @@
     "id": "tt-assistant",
     "title": "TT Assistant",
     "domain": "conversational AI",
-    "tags": ["agents", "voice"],
+    "tags": ["voice"],
     "oneliner": "Multilingual voice + text chatbot for Tunisie Telecom. 3rd place at the AI for CSR Hackathon.",
     "bullets": [
       "Built an inclusive multilingual chatbot for Tunisie Telecom supporting Arabic, French, English, and Tunisian dialect.",
@@ -153,7 +153,7 @@
     "id": "odoo-integrations",
     "title": "Odoo Integrations",
     "domain": "integrations",
-    "tags": ["ops", "sales"],
+    "tags": ["automation"],
     "oneliner": "Odoo CRM wired into a multi-agent prospecting system, plus a facial-recognition attendance module.",
     "bullets": [
       "Integrated Odoo CRM into a multi-agent AI prospecting system for automated lead and pipeline updates.",

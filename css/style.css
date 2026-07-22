@@ -183,7 +183,7 @@ a:hover { color: var(--blue-deep); }
   50% { box-shadow: 0 0 0 5px rgba(183, 128, 47, 0); }
 }
 
-.rail-links { display: flex; gap: 1rem; }
+.rail-links { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; }
 .rail-links a {
   font-family: var(--mono);
   font-size: 0.78rem;
