@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src 'self'; connect-src https://api.github.com; img-src data:; base-uri 'none'; form-action 'none'">
   <title>FR · admin</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111B2B'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23B7802F'/%3E%3Cpath d='M18 46V18h14' stroke='%23F5F4EF' stroke-width='6' fill='none'/%3E%3Cpath d='M18 32h11' stroke='%23F5F4EF' stroke-width='6'/%3E%3C/svg%3E">
   <style>
@@ -41,7 +42,8 @@
       padding: 1.4rem;
       margin-bottom: 1.2rem;
     }
-    label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+    label { display: block; font-size: 0.78rem; color: var(--muted); margin: 0.9rem 0 0.4rem; }
+    label:first-child { margin-top: 0; }
     input[type="password"], textarea {
       width: 100%;
       font-family: var(--mono);
@@ -90,22 +92,36 @@
 </head>
 <body>
   <h1>FR<span>·</span> admin</h1>
-  <p class="sub">Edits commit straight to <a href="https://github.com/RideneFiras/RideneFiras.github.io" target="_blank" rel="noopener">RideneFiras.github.io</a> and go live in about a minute. Token never leaves this browser.</p>
+  <p class="sub">Edits commit straight to <a href="https://github.com/RideneFiras/RideneFiras.github.io" target="_blank" rel="noopener">RideneFiras.github.io</a> and go live in about a minute. The token is encrypted with your PIN and never leaves this browser.</p>
 
-  <!-- token setup -->
-  <div class="panel" id="authPanel">
+  <!-- first-time setup -->
+  <div class="panel hidden" id="authPanel">
     <label for="tokenInput">GitHub fine-grained personal access token</label>
-    <input type="password" id="tokenInput" placeholder="github_pat_...">
+    <input type="password" id="tokenInput" placeholder="github_pat_..." autocomplete="off">
+    <label for="pinInput">Choose a PIN (encrypts the token on this device)</label>
+    <input type="password" id="pinInput" placeholder="at least 4 characters" autocomplete="off">
     <ol>
       <li>GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token</li>
+      <li>Expiration: 90 days is a good default (you can mint a new one any time)</li>
       <li>Repository access: only <strong>RideneFiras.github.io</strong></li>
       <li>Permissions → Repository → <strong>Contents: Read and write</strong>, everything else: none</li>
-      <li>Paste it here. It is stored in this browser's localStorage only.</li>
+      <li>Paste it here with a PIN. Both stay on this device; the token is stored AES-GCM encrypted.</li>
     </ol>
     <div class="row">
-      <button id="saveToken">Save token</button>
+      <button id="saveToken">Encrypt &amp; save</button>
     </div>
     <p class="msg" id="authMsg"></p>
+  </div>
+
+  <!-- unlock -->
+  <div class="panel hidden" id="unlockPanel">
+    <label for="unlockPin">PIN</label>
+    <input type="password" id="unlockPin" placeholder="unlock this device's token" autocomplete="off">
+    <div class="row">
+      <button id="unlock">Unlock</button>
+      <button class="ghost" id="resetToken">Forget stored token</button>
+    </div>
+    <p class="msg" id="unlockMsg"></p>
   </div>
 
   <!-- editor -->
@@ -116,55 +132,105 @@
     <div class="row">
       <button id="save">Commit &amp; publish</button>
       <button class="ghost" id="reload">Reload from repo</button>
+      <button class="ghost" id="lock">Lock</button>
       <button class="ghost" id="logout">Forget token</button>
     </div>
     <p class="msg" id="msg"></p>
-    <p class="hint">Tip: content is plain JSON, the same files as <code>data/*.json</code>. Invalid JSON is refused before it ever reaches the repo.</p>
+    <p class="hint">Tip: content is plain JSON, the same files as <code>data/*.json</code>. Invalid JSON is refused before it ever reaches the repo. Lock drops the decrypted token from memory.</p>
   </div>
 
 <script>
 (function () {
   var REPO = "RideneFiras/RideneFiras.github.io";
   var FILES = ["site", "profile", "projects", "experience", "skills", "education", "certifications"];
+  var STORE = "gh_tok_enc";
   var $ = function (s) { return document.querySelector(s); };
 
+  var TOKEN = null; /* decrypted token lives in memory only */
   var state = { file: "projects", sha: null, busy: false };
 
-  function token() { try { return localStorage.getItem("gh_token") || ""; } catch (e) { return ""; } }
+  /* ---------- crypto: PBKDF2 -> AES-GCM ---------- */
+  function blob() {
+    try { return JSON.parse(localStorage.getItem(STORE)); } catch (e) { return null; }
+  }
+  function bufToB64(buf) {
+    var bytes = new Uint8Array(buf), bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64ToBuf(b64) {
+    var bin = atob(b64), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return bytes;
+  }
+  function deriveKey(pin, salt) {
+    return crypto.subtle.importKey("raw", new TextEncoder().encode(pin), "PBKDF2", false, ["deriveKey"])
+      .then(function (base) {
+        return crypto.subtle.deriveKey(
+          { name: "PBKDF2", salt: salt, iterations: 310000, hash: "SHA-256" },
+          base,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["encrypt", "decrypt"]
+        );
+      });
+  }
+  function encryptToken(tok, pin) {
+    var salt = crypto.getRandomValues(new Uint8Array(16));
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    return deriveKey(pin, salt).then(function (key) {
+      return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, new TextEncoder().encode(tok));
+    }).then(function (ct) {
+      localStorage.setItem(STORE, JSON.stringify({ s: bufToB64(salt), i: bufToB64(iv), c: bufToB64(ct) }));
+    });
+  }
+  function decryptToken(pin) {
+    var b = blob();
+    if (!b) return Promise.reject(new Error("No stored token."));
+    return deriveKey(pin, b64ToBuf(b.s)).then(function (key) {
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBuf(b.i) }, key, b64ToBuf(b.c));
+    }).then(function (pt) {
+      return new TextDecoder().decode(pt);
+    });
+  }
+
+  /* ---------- GitHub API ---------- */
   function headers() {
     return {
-      "Authorization": "Bearer " + token(),
+      "Authorization": "Bearer " + TOKEN,
       "Accept": "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28"
     };
   }
   function apiPath(file) { return "https://api.github.com/repos/" + REPO + "/contents/data/" + file + ".json"; }
 
-  /* unicode-safe base64 */
-  function b64decode(b64) {
+  function b64decodeText(b64) {
     var bin = atob(b64.replace(/\n/g, ""));
     var bytes = new Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
     return new TextDecoder().decode(bytes);
   }
-  function b64encode(str) {
-    var bytes = new TextEncoder().encode(str);
-    var bin = "";
+  function b64encodeText(str) {
+    var bytes = new TextEncoder().encode(str), bin = "";
     for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
     return btoa(bin);
   }
 
+  /* ---------- UI ---------- */
   function msg(el, text, cls) {
     el.textContent = text;
     el.className = "msg" + (cls ? " " + cls : "");
   }
-
+  function show(id) {
+    ["authPanel", "unlockPanel", "editorPanel"].forEach(function (p) {
+      $("#" + p).classList.toggle("hidden", p !== id);
+    });
+  }
   function setBusy(b) {
     state.busy = b;
     $("#save").disabled = b;
     $("#reload").disabled = b;
   }
-
   function renderTabs() {
     $("#tabs").innerHTML = FILES.map(function (f) {
       return '<button class="tab' + (f === state.file ? " on" : "") + '" data-f="' + f + '">' + f + "</button>";
@@ -179,13 +245,13 @@
     setBusy(true);
     fetch(apiPath(file), { headers: headers() })
       .then(function (r) {
-        if (r.status === 401 || r.status === 403) throw new Error("Token rejected (HTTP " + r.status + "). Check its permissions.");
+        if (r.status === 401 || r.status === 403) throw new Error("Token rejected (HTTP " + r.status + "). It may have expired.");
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
       .then(function (data) {
         state.sha = data.sha;
-        var text = b64decode(data.content);
+        var text = b64decodeText(data.content);
         try { text = JSON.stringify(JSON.parse(text), null, 2); } catch (e) { /* show as-is */ }
         $("#editor").value = text;
         msg($("#msg"), "Loaded (" + text.length + " chars).", "ok");
@@ -195,8 +261,7 @@
   }
 
   function save() {
-    var text = $("#editor").value;
-    var parsed;
+    var text = $("#editor").value, parsed;
     try { parsed = JSON.parse(text); } catch (e) {
       msg($("#msg"), "Invalid JSON: " + e.message, "err");
       return;
@@ -209,7 +274,7 @@
       headers: headers(),
       body: JSON.stringify({
         message: "content: update " + state.file + ".json via admin",
-        content: b64encode(pretty),
+        content: b64encodeText(pretty),
         sha: state.sha
       })
     })
@@ -228,23 +293,55 @@
       .finally(function () { setBusy(false); });
   }
 
-  function showEditor() {
-    $("#authPanel").classList.add("hidden");
-    $("#editorPanel").classList.remove("hidden");
-    load(state.file);
+  function forget() {
+    try { localStorage.removeItem(STORE); } catch (e) {}
+    TOKEN = null;
+    $("#tokenInput").value = "";
+    $("#pinInput").value = "";
+    show("authPanel");
+    msg($("#authMsg"), "Stored token erased.", "ok");
   }
 
+  /* ---------- events ---------- */
   $("#saveToken").addEventListener("click", function () {
     var t = $("#tokenInput").value.trim();
+    var pin = $("#pinInput").value;
     if (!t) { msg($("#authMsg"), "Paste a token first.", "err"); return; }
+    if (pin.length < 4) { msg($("#authMsg"), "PIN must be at least 4 characters.", "err"); return; }
     msg($("#authMsg"), "Checking token...", "");
     fetch(apiPath("site"), { headers: { "Authorization": "Bearer " + t, "Accept": "application/vnd.github+json" } })
       .then(function (r) {
         if (!r.ok) throw new Error("Token rejected (HTTP " + r.status + "). Check repo access and Contents permission.");
-        try { localStorage.setItem("gh_token", t); } catch (e) {}
-        showEditor();
+        return encryptToken(t, pin);
+      })
+      .then(function () {
+        TOKEN = t;
+        show("editorPanel");
+        load(state.file);
       })
       .catch(function (e) { msg($("#authMsg"), String(e.message || e), "err"); });
+  });
+
+  $("#unlock").addEventListener("click", function () {
+    var pin = $("#unlockPin").value;
+    if (!pin) { msg($("#unlockMsg"), "Enter your PIN.", "err"); return; }
+    decryptToken(pin)
+      .then(function (t) {
+        TOKEN = t;
+        $("#unlockPin").value = "";
+        show("editorPanel");
+        load(state.file);
+      })
+      .catch(function () { msg($("#unlockMsg"), "Wrong PIN.", "err"); });
+  });
+  $("#unlockPin").addEventListener("keydown", function (e) { if (e.key === "Enter") $("#unlock").click(); });
+
+  $("#resetToken").addEventListener("click", forget);
+  $("#logout").addEventListener("click", forget);
+  $("#lock").addEventListener("click", function () {
+    TOKEN = null;
+    show("unlockPanel");
+    msg($("#unlockMsg"), "Locked. Token cleared from memory.", "ok");
   });
 
   $("#tabs").addEventListener("click", function (e) {
@@ -253,15 +350,9 @@
   });
   $("#save").addEventListener("click", save);
   $("#reload").addEventListener("click", function () { load(state.file); });
-  $("#logout").addEventListener("click", function () {
-    try { localStorage.removeItem("gh_token"); } catch (e) {}
-    $("#editorPanel").classList.add("hidden");
-    $("#authPanel").classList.remove("hidden");
-    $("#tokenInput").value = "";
-    msg($("#authMsg"), "Token forgotten.", "ok");
-  });
 
-  if (token()) showEditor();
+  /* ---------- boot ---------- */
+  show(blob() ? "unlockPanel" : "authPanel");
 })();
 </script>
 </body>
