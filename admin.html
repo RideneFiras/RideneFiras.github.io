@@ -27,13 +27,12 @@
       line-height: 1.6;
       background: var(--bg);
       color: var(--text);
-      max-width: 900px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 2.2rem 1.2rem 4rem;
     }
-    h1 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+    h1 { font-size: 1.1rem; margin-bottom: 1.6rem; }
     h1 span { color: var(--blue); }
-    .sub { color: var(--muted); font-size: 0.78rem; margin-bottom: 2rem; }
     a { color: var(--blue); }
     .panel {
       background: var(--card);
@@ -42,9 +41,9 @@
       padding: 1.4rem;
       margin-bottom: 1.2rem;
     }
-    label { display: block; font-size: 0.78rem; color: var(--muted); margin: 0.9rem 0 0.4rem; }
-    label:first-child { margin-top: 0; }
-    input[type="password"], textarea {
+    label { display: block; font-size: 0.74rem; color: var(--muted); margin: 0.9rem 0 0.3rem; }
+    .panel > label:first-child, .item label:first-child { margin-top: 0; }
+    input[type="password"], input[type="text"], textarea {
       width: 100%;
       font-family: var(--mono);
       font-size: 0.84rem;
@@ -52,9 +51,10 @@
       background: var(--bg);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 0.6rem 0.8rem;
+      padding: 0.55rem 0.75rem;
     }
-    textarea { min-height: 420px; resize: vertical; line-height: 1.55; tab-size: 2; }
+    textarea { min-height: 72px; resize: vertical; line-height: 1.55; }
+    textarea.tall { min-height: 120px; }
     textarea:focus, input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
     button {
       font-family: var(--mono);
@@ -70,8 +70,9 @@
     button:hover { background: var(--blue-deep); border-color: var(--blue-deep); }
     button.ghost { background: transparent; color: var(--muted); border-color: var(--line); }
     button.ghost:hover { color: var(--blue); border-color: var(--blue); background: transparent; }
+    button.mini { padding: 0.2rem 0.55rem; font-size: 0.74rem; border-radius: 6px; }
     button:disabled { opacity: 0.5; cursor: wait; }
-    .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 0.9rem; }
+    .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
     .tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
     .tab {
       background: transparent; color: var(--muted);
@@ -83,40 +84,59 @@
     .msg { font-size: 0.78rem; margin-top: 0.7rem; min-height: 1.2em; }
     .msg.ok { color: var(--ok); }
     .msg.err { color: var(--err); }
-    .hint { font-size: 0.76rem; color: var(--muted); margin-top: 0.8rem; }
-    .hint code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 0.3rem; }
     .hidden { display: none; }
-    ol { margin: 0.6rem 0 0.6rem 1.2rem; font-size: 0.78rem; color: var(--muted); }
-    ol li { margin-bottom: 0.3rem; }
+    .how { margin-top: 1rem; font-size: 0.76rem; color: var(--muted); }
+    .how summary { cursor: pointer; color: var(--blue); }
+    .how ol { margin: 0.5rem 0 0 1.2rem; }
+    .how li { margin-bottom: 0.25rem; }
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.9rem;
+      background: var(--bg);
+    }
+    .item-head {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+    .item-head b { font-size: 0.82rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .item input[type="text"], .item textarea { background: var(--card); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+    .grid2 .full { grid-column: 1 / -1; }
+    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <h1>FR<span>·</span> admin</h1>
-  <p class="sub">Edits commit straight to <a href="https://github.com/RideneFiras/RideneFiras.github.io" target="_blank" rel="noopener">RideneFiras.github.io</a> and go live in about a minute. The token is encrypted with your PIN and never leaves this browser.</p>
 
   <!-- first-time setup -->
   <div class="panel hidden" id="authPanel">
-    <label for="tokenInput">GitHub fine-grained personal access token</label>
+    <label for="tokenInput">GitHub token</label>
     <input type="password" id="tokenInput" placeholder="github_pat_..." autocomplete="off">
-    <label for="pinInput">Choose a PIN (encrypts the token on this device)</label>
+    <label for="pinInput">PIN</label>
     <input type="password" id="pinInput" placeholder="at least 4 characters" autocomplete="off">
-    <ol>
-      <li>GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token</li>
-      <li>Expiration: 90 days is a good default (you can mint a new one any time)</li>
-      <li>Repository access: only <strong>RideneFiras.github.io</strong></li>
-      <li>Permissions → Repository → <strong>Contents: Read and write</strong>, everything else: none</li>
-      <li>Paste it here with a PIN. Both stay on this device; the token is stored AES-GCM encrypted.</li>
-    </ol>
     <div class="row">
-      <button id="saveToken">Encrypt &amp; save</button>
+      <button id="saveToken">Save</button>
     </div>
     <p class="msg" id="authMsg"></p>
+    <details class="how">
+      <summary>How to create the token</summary>
+      <ol>
+        <li>GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token</li>
+        <li>Expiration: 90 days · Repository access: only <strong>RideneFiras.github.io</strong></li>
+        <li>Permissions → Repository → Contents: <strong>Read and write</strong>, everything else: none</li>
+      </ol>
+      The token is stored on this device only, encrypted with your PIN.
+    </details>
   </div>
 
   <!-- unlock -->
   <div class="panel hidden" id="unlockPanel">
     <label for="unlockPin">PIN</label>
-    <input type="password" id="unlockPin" placeholder="unlock this device's token" autocomplete="off">
+    <input type="password" id="unlockPin" autocomplete="off">
     <div class="row">
       <button id="unlock">Unlock</button>
       <button class="ghost" id="resetToken">Forget stored token</button>
@@ -127,27 +147,206 @@
   <!-- editor -->
   <div class="panel hidden" id="editorPanel">
     <div class="tabs" id="tabs"></div>
-    <label id="fileLabel"></label>
-    <textarea id="editor" spellcheck="false"></textarea>
+    <div id="form"></div>
     <div class="row">
-      <button id="save">Commit &amp; publish</button>
-      <button class="ghost" id="reload">Reload from repo</button>
+      <button id="save">Save &amp; publish</button>
+      <button class="ghost" id="reload">Reload</button>
       <button class="ghost" id="lock">Lock</button>
       <button class="ghost" id="logout">Forget token</button>
     </div>
     <p class="msg" id="msg"></p>
-    <p class="hint">Tip: content is plain JSON, the same files as <code>data/*.json</code>. Invalid JSON is refused before it ever reaches the repo. Lock drops the decrypted token from memory.</p>
   </div>
 
 <script>
 (function () {
   var REPO = "RideneFiras/RideneFiras.github.io";
-  var FILES = ["site", "profile", "projects", "experience", "skills", "education", "certifications"];
   var STORE = "gh_tok_enc";
   var $ = function (s) { return document.querySelector(s); };
 
   var TOKEN = null; /* decrypted token lives in memory only */
-  var state = { file: "projects", sha: null, busy: false };
+  var state = { file: "projects", sha: null, doc: null, busy: false };
+
+  /* ---------- what each file looks like as a form ---------- */
+  var SCHEMAS = {
+    projects: { kind: "array", labelField: "title", addLabel: "Add project", fields: [
+      { p: "title", t: "text", l: "Title" },
+      { p: "domain", t: "text", l: "Domain label (shown above the title)" },
+      { p: "tags", t: "csv", l: "Tags, comma separated (agents, voice, automation, ml, product)" },
+      { p: "oneliner", t: "area", l: "One-liner" },
+      { p: "bullets", t: "lines", l: "Bullets, one per line" },
+      { p: "stack", t: "area", l: "Stack, comma separated" },
+      { p: "github", t: "text", l: "GitHub URL (optional)", half: true },
+      { p: "demo", t: "text", l: "Demo URL (optional)", half: true }
+    ]},
+    experience: { kind: "array", labelField: "title", addLabel: "Add experience", fields: [
+      { p: "title", t: "text", l: "Title", half: true },
+      { p: "org", t: "text", l: "Organization", half: true },
+      { p: "dateRange", t: "text", l: "Date range" },
+      { p: "bullets", t: "lines", l: "Bullets, one per line" },
+      { p: "stack", t: "area", l: "Stack, comma separated" }
+    ]},
+    skills: { kind: "array", labelField: "category", addLabel: "Add skill group", fields: [
+      { p: "category", t: "text", l: "Category" },
+      { p: "items", t: "area", l: "Items, comma separated" }
+    ]},
+    education: { kind: "array", labelField: "institution", addLabel: "Add education", fields: [
+      { p: "institution", t: "text", l: "Institution", half: true },
+      { p: "location", t: "text", l: "Location", half: true },
+      { p: "degree", t: "text", l: "Degree", half: true },
+      { p: "dateRange", t: "text", l: "Date range", half: true }
+    ]},
+    certifications: { kind: "array", path: "list", labelField: "name", addLabel: "Add certification", fields: [
+      { p: "name", t: "text", l: "Certification", half: true },
+      { p: "issuer", t: "text", l: "Issuer", half: true }
+    ]},
+    profile: { kind: "object", fields: [
+      { p: "hero.eyebrow", t: "text", l: "Hero eyebrow" },
+      { p: "hero.headline", t: "text", l: "Hero headline" },
+      { p: "hero.sub", t: "area", l: "Hero subtitle" },
+      { p: "about", t: "paras", l: "About paragraphs (separate with an empty line)" }
+    ]},
+    site: { kind: "object", fields: [
+      { p: "name", t: "text", l: "Name", half: true },
+      { p: "role", t: "text", l: "Role", half: true },
+      { p: "focus", t: "text", l: "Focus", half: true },
+      { p: "location", t: "text", l: "Location", half: true },
+      { p: "timezone", t: "text", l: "Timezone", half: true },
+      { p: "status.availability", t: "text", l: "Availability", half: true },
+      { p: "links.github", t: "text", l: "GitHub URL", half: true },
+      { p: "links.linkedin", t: "text", l: "LinkedIn URL", half: true },
+      { p: "links.youtube", t: "text", l: "YouTube URL", half: true },
+      { p: "links.email", t: "text", l: "Email", half: true },
+      { p: "resume", t: "text", l: "Resume file path" },
+      { p: "languages", t: "lines", l: "Languages, one per line" }
+    ]}
+  };
+  var FILES = ["projects", "experience", "skills", "education", "certifications", "profile", "site"];
+
+  var esc = function (s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+
+  /* ---------- dotted path helpers ---------- */
+  function getPath(obj, p) {
+    return p.split(".").reduce(function (o, k) { return o == null ? o : o[k]; }, obj);
+  }
+  function setPath(obj, p, v) {
+    var keys = p.split("."), o = obj;
+    for (var i = 0; i < keys.length - 1; i++) {
+      var k = keys[i];
+      if (o[k] == null) o[k] = String(Number(keys[i + 1])) === keys[i + 1] ? [] : {};
+      o = o[k];
+    }
+    o[keys[keys.length - 1]] = v;
+  }
+
+  /* ---------- field value <-> input text ---------- */
+  function toText(t, v) {
+    if (v == null) return "";
+    if (t === "lines") return (v || []).join("\n");
+    if (t === "paras") return (v || []).join("\n\n");
+    if (t === "csv") return Array.isArray(v) ? v.join(", ") : String(v);
+    return String(v);
+  }
+  function fromText(t, v) {
+    if (t === "lines") return v.split("\n");
+    if (t === "paras") return v.split(/\n\s*\n/);
+    if (t === "csv") return v.split(",").map(function (s) { return s.trim(); });
+    return v;
+  }
+
+  /* ---------- form rendering ---------- */
+  function fieldHTML(f, base, value) {
+    var p = base ? base + "." + f.p : f.p;
+    var id = "f_" + p.replace(/\./g, "_");
+    var ctrl;
+    if (f.t === "text") {
+      ctrl = '<input type="text" id="' + id + '" data-p="' + esc(p) + '" data-t="text" value="' + esc(value) + '">';
+    } else {
+      var cls = f.t === "paras" ? ' class="tall"' : "";
+      ctrl = "<textarea" + cls + ' id="' + id + '" data-p="' + esc(p) + '" data-t="' + f.t + '">' + esc(value) + "</textarea>";
+    }
+    return '<div' + (f.half ? "" : ' class="full"') + '><label for="' + id + '">' + esc(f.l) + "</label>" + ctrl + "</div>";
+  }
+
+  function renderForm() {
+    var sch = SCHEMAS[state.file];
+    var html = "";
+    if (sch.kind === "object") {
+      html += '<div class="grid2">';
+      sch.fields.forEach(function (f) {
+        html += fieldHTML(f, "", toText(f.t, getPath(state.doc, f.p)));
+      });
+      html += "</div>";
+    } else {
+      var base = sch.path || "";
+      var items = (base ? getPath(state.doc, base) : state.doc) || [];
+      items.forEach(function (it, i) {
+        var prefix = (base ? base + "." : "") + i;
+        html += '<div class="item">';
+        html += '<div class="item-head"><b>' + esc(it[sch.labelField] || "untitled") + "</b>" +
+          '<button class="ghost mini" data-act="up" data-i="' + i + '" title="Move up">↑</button>' +
+          '<button class="ghost mini" data-act="down" data-i="' + i + '" title="Move down">↓</button>' +
+          '<button class="ghost mini" data-act="del" data-i="' + i + '" title="Delete">✕</button></div>';
+        html += '<div class="grid2">';
+        sch.fields.forEach(function (f) {
+          html += fieldHTML(f, prefix, toText(f.t, it[f.p]));
+        });
+        html += "</div></div>";
+      });
+      html += '<div class="row" style="margin-top:0.2rem"><button class="ghost" data-act="add">+ ' + esc(sch.addLabel) + "</button></div>";
+    }
+    $("#form").innerHTML = html;
+  }
+
+  function newItem() {
+    var sch = SCHEMAS[state.file];
+    var it = {};
+    sch.fields.forEach(function (f) {
+      it[f.p] = (f.t === "lines" || f.t === "csv" || f.t === "paras") ? [] : "";
+    });
+    return it;
+  }
+
+  function itemsRef() {
+    var sch = SCHEMAS[state.file];
+    if (sch.path) {
+      if (!getPath(state.doc, sch.path)) setPath(state.doc, sch.path, []);
+      return getPath(state.doc, sch.path);
+    }
+    return state.doc;
+  }
+
+  /* ---------- cleanup before commit ---------- */
+  function slug(s) {
+    return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  function normalize() {
+    var doc = state.doc;
+    function scrub(v) {
+      if (Array.isArray(v)) {
+        return v
+          .map(function (x) { return typeof x === "string" ? x : scrub(x); })
+          .filter(function (x) { return !(typeof x === "string" && x.trim() === ""); });
+      }
+      if (v && typeof v === "object") {
+        Object.keys(v).forEach(function (k) { v[k] = scrub(v[k]); });
+        return v;
+      }
+      return v;
+    }
+    scrub(doc);
+    if (state.file === "projects") {
+      doc.forEach(function (it) { if (!it.id && it.title) it.id = slug(it.title); });
+    }
+    if (state.file === "experience") {
+      doc.forEach(function (it, i) { if (!it.id) it.id = "exp" + (i + 1); });
+    }
+    if (state.file === "certifications") doc.total = (doc.list || []).length;
+    return doc;
+  }
 
   /* ---------- crypto: PBKDF2 -> AES-GCM ---------- */
   function blob() {
@@ -168,10 +367,7 @@
       .then(function (base) {
         return crypto.subtle.deriveKey(
           { name: "PBKDF2", salt: salt, iterations: 310000, hash: "SHA-256" },
-          base,
-          { name: "AES-GCM", length: 256 },
-          false,
-          ["encrypt", "decrypt"]
+          base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
         );
       });
   }
@@ -189,9 +385,7 @@
     if (!b) return Promise.reject(new Error("No stored token."));
     return deriveKey(pin, b64ToBuf(b.s)).then(function (key) {
       return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBuf(b.i) }, key, b64ToBuf(b.c));
-    }).then(function (pt) {
-      return new TextDecoder().decode(pt);
-    });
+    }).then(function (pt) { return new TextDecoder().decode(pt); });
   }
 
   /* ---------- GitHub API ---------- */
@@ -203,7 +397,6 @@
     };
   }
   function apiPath(file) { return "https://api.github.com/repos/" + REPO + "/contents/data/" + file + ".json"; }
-
   function b64decodeText(b64) {
     var bin = atob(b64.replace(/\n/g, ""));
     var bytes = new Uint8Array(bin.length);
@@ -216,21 +409,14 @@
     return btoa(bin);
   }
 
-  /* ---------- UI ---------- */
-  function msg(el, text, cls) {
-    el.textContent = text;
-    el.className = "msg" + (cls ? " " + cls : "");
-  }
+  /* ---------- UI plumbing ---------- */
+  function msg(el, text, cls) { el.textContent = text; el.className = "msg" + (cls ? " " + cls : ""); }
   function show(id) {
     ["authPanel", "unlockPanel", "editorPanel"].forEach(function (p) {
       $("#" + p).classList.toggle("hidden", p !== id);
     });
   }
-  function setBusy(b) {
-    state.busy = b;
-    $("#save").disabled = b;
-    $("#reload").disabled = b;
-  }
+  function setBusy(b) { state.busy = b; $("#save").disabled = b; $("#reload").disabled = b; }
   function renderTabs() {
     $("#tabs").innerHTML = FILES.map(function (f) {
       return '<button class="tab' + (f === state.file ? " on" : "") + '" data-f="' + f + '">' + f + "</button>";
@@ -240,7 +426,7 @@
   function load(file) {
     state.file = file;
     renderTabs();
-    $("#fileLabel").textContent = "data/" + file + ".json";
+    $("#form").innerHTML = "";
     msg($("#msg"), "Loading...", "");
     setBusy(true);
     fetch(apiPath(file), { headers: headers() })
@@ -251,43 +437,38 @@
       })
       .then(function (data) {
         state.sha = data.sha;
-        var text = b64decodeText(data.content);
-        try { text = JSON.stringify(JSON.parse(text), null, 2); } catch (e) { /* show as-is */ }
-        $("#editor").value = text;
-        msg($("#msg"), "Loaded (" + text.length + " chars).", "ok");
+        state.doc = JSON.parse(b64decodeText(data.content));
+        renderForm();
+        msg($("#msg"), "", "");
       })
       .catch(function (e) { msg($("#msg"), String(e.message || e), "err"); })
       .finally(function () { setBusy(false); });
   }
 
   function save() {
-    var text = $("#editor").value, parsed;
-    try { parsed = JSON.parse(text); } catch (e) {
-      msg($("#msg"), "Invalid JSON: " + e.message, "err");
-      return;
-    }
-    var pretty = JSON.stringify(parsed, null, 2) + "\n";
+    if (!state.doc) return;
+    var pretty = JSON.stringify(normalize(), null, 2) + "\n";
     setBusy(true);
-    msg($("#msg"), "Committing...", "");
+    msg($("#msg"), "Publishing...", "");
     fetch(apiPath(state.file), {
       method: "PUT",
       headers: headers(),
       body: JSON.stringify({
-        message: "content: update " + state.file + ".json via admin",
+        message: "content: update " + state.file + " via admin",
         content: b64encodeText(pretty),
         sha: state.sha
       })
     })
       .then(function (r) {
-        if (r.status === 409) throw new Error("Conflict: the file changed on GitHub. Hit Reload, re-apply your edit, save again.");
+        if (r.status === 409) throw new Error("Conflict: the file changed on GitHub. Hit Reload, redo your edit, save again.");
         if (r.status === 401 || r.status === 403) throw new Error("Token rejected (HTTP " + r.status + ").");
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
       .then(function (data) {
         state.sha = data.content.sha;
-        $("#editor").value = pretty.trimEnd();
-        msg($("#msg"), "Committed " + data.commit.sha.slice(0, 7) + ". Live in about a minute.", "ok");
+        renderForm();
+        msg($("#msg"), "Published. Live in about a minute.", "ok");
       })
       .catch(function (e) { msg($("#msg"), String(e.message || e), "err"); })
       .finally(function () { setBusy(false); });
@@ -303,6 +484,27 @@
   }
 
   /* ---------- events ---------- */
+  $("#form").addEventListener("input", function (e) {
+    var t = e.target;
+    if (t.dataset.p) setPath(state.doc, t.dataset.p, fromText(t.dataset.t, t.value));
+  });
+  /* keep the card title in sync when its label field changes */
+  $("#form").addEventListener("change", function (e) {
+    var sch = SCHEMAS[state.file];
+    if (sch.kind === "array" && e.target.dataset.p && e.target.dataset.p.endsWith("." + sch.labelField)) renderForm();
+  });
+  $("#form").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-act]");
+    if (!b) return;
+    var items = itemsRef();
+    var i = Number(b.dataset.i);
+    if (b.dataset.act === "add") items.push(newItem());
+    if (b.dataset.act === "del" && confirm("Delete this item?")) items.splice(i, 1);
+    if (b.dataset.act === "up" && i > 0) { var a = items[i - 1]; items[i - 1] = items[i]; items[i] = a; }
+    if (b.dataset.act === "down" && i < items.length - 1) { var c = items[i + 1]; items[i + 1] = items[i]; items[i] = c; }
+    renderForm();
+  });
+
   $("#saveToken").addEventListener("click", function () {
     var t = $("#tokenInput").value.trim();
     var pin = $("#pinInput").value;
@@ -311,14 +513,10 @@
     msg($("#authMsg"), "Checking token...", "");
     fetch(apiPath("site"), { headers: { "Authorization": "Bearer " + t, "Accept": "application/vnd.github+json" } })
       .then(function (r) {
-        if (!r.ok) throw new Error("Token rejected (HTTP " + r.status + "). Check repo access and Contents permission.");
+        if (!r.ok) throw new Error("Token rejected (HTTP " + r.status + ").");
         return encryptToken(t, pin);
       })
-      .then(function () {
-        TOKEN = t;
-        show("editorPanel");
-        load(state.file);
-      })
+      .then(function () { TOKEN = t; show("editorPanel"); load(state.file); })
       .catch(function (e) { msg($("#authMsg"), String(e.message || e), "err"); });
   });
 
@@ -326,12 +524,7 @@
     var pin = $("#unlockPin").value;
     if (!pin) { msg($("#unlockMsg"), "Enter your PIN.", "err"); return; }
     decryptToken(pin)
-      .then(function (t) {
-        TOKEN = t;
-        $("#unlockPin").value = "";
-        show("editorPanel");
-        load(state.file);
-      })
+      .then(function (t) { TOKEN = t; $("#unlockPin").value = ""; show("editorPanel"); load(state.file); })
       .catch(function () { msg($("#unlockMsg"), "Wrong PIN.", "err"); });
   });
   $("#unlockPin").addEventListener("keydown", function (e) { if (e.key === "Enter") $("#unlock").click(); });
@@ -341,9 +534,8 @@
   $("#lock").addEventListener("click", function () {
     TOKEN = null;
     show("unlockPanel");
-    msg($("#unlockMsg"), "Locked. Token cleared from memory.", "ok");
+    msg($("#unlockMsg"), "Locked.", "ok");
   });
-
   $("#tabs").addEventListener("click", function (e) {
     var b = e.target.closest(".tab");
     if (b && !state.busy) load(b.dataset.f);
