@@ -50,6 +50,48 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Fustat';
+  src: url('/assets/fonts/fustat-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fustat';
+  src: url('/assets/fonts/fustat-500.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fustat';
+  src: url('/assets/fonts/fustat-600.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fustat';
+  src: url('/assets/fonts/fustat-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manufacturing Consent';
+  src: url('/assets/fonts/manufacturing-consent-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UnifrakturMaguntia';
+  src: url('/assets/fonts/unifraktur-maguntia-400.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
 html,
 body,
 #root {

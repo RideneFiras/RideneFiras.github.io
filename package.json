@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astryxdesign/core": "^0.1.8",
+    "@astryxdesign/theme-gothic": "^0.1.8",
     "@astryxdesign/theme-matcha": "^0.1.8",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
