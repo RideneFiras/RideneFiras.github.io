@@ -420,7 +420,45 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
 /* ================================================================
    Filters + bento work grid
    ================================================================ */
-.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.8rem; }
+.hidden { display: none !important; }
+
+.work-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.8rem;
+}
+.work-tools { display: flex; align-items: center; gap: 0.45rem; margin-left: auto; }
+.wcount {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-right: 0.35rem;
+  min-width: 3.4em;
+  text-align: right;
+}
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+.icon-btn.on { color: var(--accent); border-color: var(--accent); }
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn:disabled { opacity: 0.35; cursor: default; }
+.icon-btn:disabled:hover { color: var(--muted); border-color: var(--line); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .fchip {
   font-family: var(--mono);
   font-size: 0.78rem;
@@ -441,6 +479,28 @@ h2 .sec-label { display: block; margin-bottom: 0.7rem; }
   grid-template-columns: repeat(6, 1fr);
   gap: 1.1rem;
   align-items: stretch;
+}
+
+/* carousel mode */
+.work-grid.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1.1rem;
+  padding-bottom: 0.7rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .work-grid.carousel { scroll-behavior: smooth; }
+}
+.work-grid.carousel::-webkit-scrollbar { height: 6px; }
+.work-grid.carousel::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.work-grid.carousel .case,
+.work-grid.carousel .case.wide {
+  flex: 0 0 min(520px, 88%);
+  scroll-snap-align: start;
 }
 .case {
   grid-column: span 2;

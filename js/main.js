@@ -147,6 +147,42 @@ function renderWork(projects) {
     .map((t) => `<button class="fchip${t === "all" ? " on" : ""}" data-tag="${esc(t)}">${esc(TAG_LABELS[t] || t)}</button>`)
     .join("");
 
+  /* ---- carousel / grid views ---- */
+  const grid = $("#workGrid");
+  const gap = 18; /* keep in sync with the 1.1rem flex gap */
+  const cards = () => [...grid.querySelectorAll(".case:not(.hide)")];
+  const step = () => {
+    const c = cards()[0];
+    return c ? c.getBoundingClientRect().width + gap : 400;
+  };
+  const updateCount = () => {
+    const n = cards().length;
+    const i = n ? Math.min(n, Math.round(grid.scrollLeft / step()) + 1) : 0;
+    $("#wCount").textContent = `${i} / ${n}`;
+    $("#wPrev").disabled = grid.scrollLeft <= 4;
+    $("#wNext").disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 4;
+  };
+
+  let view = "carousel";
+  const setView = (v) => {
+    view = v;
+    grid.classList.toggle("carousel", v === "carousel");
+    $("#viewCar").classList.toggle("on", v === "carousel");
+    $("#viewGrid").classList.toggle("on", v === "grid");
+    $("#viewCar").setAttribute("aria-pressed", String(v === "carousel"));
+    $("#viewGrid").setAttribute("aria-pressed", String(v === "grid"));
+    ["#wCount", "#wPrev", "#wNext"].forEach((s) => $(s).classList.toggle("hidden", v !== "carousel"));
+    try { localStorage.setItem("workview", v); } catch (e) { /* private mode */ }
+    if (v === "carousel") updateCount();
+  };
+
+  $("#viewCar").addEventListener("click", () => setView("carousel"));
+  $("#viewGrid").addEventListener("click", () => setView("grid"));
+  $("#wPrev").addEventListener("click", () => grid.scrollBy({ left: -step(), behavior: REDUCED ? "auto" : "smooth" }));
+  $("#wNext").addEventListener("click", () => grid.scrollBy({ left: step(), behavior: REDUCED ? "auto" : "smooth" }));
+  grid.addEventListener("scroll", () => { if (view === "carousel") requestAnimationFrame(updateCount); });
+  window.addEventListener("resize", () => { if (view === "carousel") updateCount(); });
+
   bar.addEventListener("click", (e) => {
     const b = e.target.closest(".fchip");
     if (!b) return;
@@ -155,11 +191,19 @@ function renderWork(projects) {
     document.querySelectorAll("#workGrid .case").forEach((c) => {
       c.classList.toggle("hide", t !== "all" && !c.dataset.tags.split(" ").includes(t));
     });
+    if (view === "carousel") {
+      grid.scrollTo({ left: 0, behavior: "auto" });
+      updateCount();
+    }
   });
+
+  let stored = "carousel";
+  try { stored = localStorage.getItem("workview") || "carousel"; } catch (e) { /* private mode */ }
+  setView(stored === "grid" ? "grid" : "carousel");
 
   /* spotlight follows the cursor inside each card */
   if (!REDUCED) {
-    $("#workGrid").addEventListener("pointermove", (e) => {
+    grid.addEventListener("pointermove", (e) => {
       const card = e.target.closest(".case");
       if (!card) return;
       const r = card.getBoundingClientRect();
