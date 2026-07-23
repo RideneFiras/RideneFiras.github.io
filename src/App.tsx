@@ -1,5 +1,5 @@
 import { Theme } from '@astryxdesign/core/theme';
-import { graphiteTheme } from './theme/graphiteTheme';
+import { matchaPortfolioTheme } from './theme/matchaPortfolioTheme';
 import { AppShell } from '@astryxdesign/core/AppShell';
 import { TopNav, TopNavItem, TopNavHeading } from '@astryxdesign/core/TopNav';
 import { ThemeModeProvider, useThemeMode } from './theme-mode';
@@ -25,7 +25,7 @@ function ThemedApp() {
   const { mode } = useThemeMode();
 
   return (
-    <Theme theme={graphiteTheme} mode={mode}>
+    <Theme theme={matchaPortfolioTheme} mode={mode}>
       <Spotlight />
       <AppShell
         variant="elevated"
