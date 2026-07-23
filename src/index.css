@@ -1,6 +1,5 @@
 @import '@astryxdesign/core/reset.css';
 @import '@astryxdesign/core/astryx.css';
-@import '@astryxdesign/theme-neutral/theme.css';
 
 @font-face {
   font-family: 'Archivo';
@@ -38,12 +37,19 @@ body,
 
 body {
   margin: 0;
+  background: var(--color-background-body);
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
 
 .page-container {
-  max-width: 1120px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
 }
 
 @media (max-width: 640px) {
@@ -52,28 +58,147 @@ body {
   }
 }
 
+/* ---------------- cursor spotlight ---------------- */
+
+.spotlight {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--spotlight-opacity, 0);
+  transition: opacity 0.6s ease;
+  background: radial-gradient(
+    560px circle at var(--spot-x, 50%) var(--spot-y, 30%),
+    var(--color-accent-muted),
+    transparent 70%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight {
+    display: none;
+  }
+}
+
+/* ---------------- tech icon chips ---------------- */
+
 .tech-icon {
   width: 14px;
   height: 14px;
   flex: none;
-  filter: var(--tech-icon-filter, none);
+  opacity: 0.85;
 }
 
 [data-theme-mode='dark'] .tech-icon {
-  filter: invert(1) brightness(1.8);
+  filter: invert(1) brightness(1.9);
 }
 
-.work-card-enter {
-  animation: workCardIn 0.5s ease both;
+/* ---------------- marquee ---------------- */
+
+.marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--color-border);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
-@keyframes workCardIn {
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 48px;
+  padding-block: 14px;
+  animation: marquee 32s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-family: var(--font-family-code);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+@keyframes marquee {
   from {
-    opacity: 0;
-    transform: translateY(8px);
+    transform: translateX(0);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ---------------- scroll reveal ---------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--duration-slow, 600ms) var(--ease-standard, ease),
+    transform var(--duration-slow, 600ms) var(--ease-standard, ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------------- interactive lift ---------------- */
+
+.lift-on-hover {
+  transition:
+    transform var(--duration-medium, 300ms) var(--ease-standard, ease),
+    border-color var(--duration-medium, 300ms) var(--ease-standard, ease),
+    box-shadow var(--duration-medium, 300ms) var(--ease-standard, ease);
+}
+
+.lift-on-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 24px 48px -24px var(--color-shadow, rgba(0, 0, 0, 0.4));
+}
+
+/* ---------------- gradient accent text ---------------- */
+
+.accent-text {
+  background: linear-gradient(100deg, var(--color-accent), var(--color-text-primary) 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------- hero grid backdrop ---------------- */
+
+.hero-grid-bg {
+  position: absolute;
+  inset: -80px -24px auto -24px;
+  height: 520px;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(60% 60% at 50% 0%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(60% 60% at 50% 0%, #000 30%, transparent 85%);
+  opacity: 0.6;
 }

@@ -7,16 +7,31 @@ import { Badge } from '@astryxdesign/core/Badge';
 import site from '../data/profile.json';
 import profile from '../data/site.json';
 
+function HighlightedHeadline({ text, highlight }: { text: string; highlight: string }) {
+  const i = text.toLowerCase().indexOf(highlight.toLowerCase());
+  if (i === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <span className="accent-text">{text.slice(i, i + highlight.length)}</span>
+      {text.slice(i + highlight.length)}
+    </>
+  );
+}
+
 export function Hero() {
   return (
     <Section variant="transparent" padding={0}>
-      <VStack gap={5} paddingBlock={10} maxWidth={880}>
+      <VStack gap={5} paddingBlock={10} maxWidth={880} style={{ position: 'relative' }}>
+        <div className="hero-grid-bg" aria-hidden="true" />
         <HStack gap={2} vAlign="center" wrap="wrap">
           <Badge variant="success" label={profile.status.availability} />
-          <Text type="supporting">{site.hero.eyebrow}</Text>
+          <Text type="code" size="sm" color="secondary">
+            {site.hero.eyebrow}
+          </Text>
         </HStack>
-        <Heading level={1} type="display-1">
-          {site.hero.headline}
+        <Heading level={1} type="display-1" textWrap="balance">
+          <HighlightedHeadline text={site.hero.headline} highlight="agent systems" />
         </Heading>
         <Text type="large" color="secondary">
           {site.hero.sub}

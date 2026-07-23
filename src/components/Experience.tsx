@@ -6,6 +6,7 @@ import { Text } from '@astryxdesign/core/Text';
 import { Divider } from '@astryxdesign/core/Divider';
 import { Card } from '@astryxdesign/core/Card';
 import { TechChipRow } from './TechChip';
+import { SectionEyebrow } from './SectionEyebrow';
 import experience from '../data/experience.json';
 import skills from '../data/skills.json';
 import { splitStack } from '../lib/techIcons';
@@ -14,9 +15,7 @@ export function Experience() {
   return (
     <Section id="experience" variant="transparent" padding={0}>
       <VStack gap={6} paddingBlock={8}>
-        <Text type="label" color="accent">
-          03 / experience
-        </Text>
+        <SectionEyebrow>03 / experience</SectionEyebrow>
         <Heading level={2} type="display-3">
           Where I've shipped
         </Heading>
@@ -47,7 +46,7 @@ export function Experience() {
 
         <Grid columns={{ minWidth: 240 }} gap={4}>
           {skills.map((group) => (
-            <Card key={group.category} variant="muted" padding={4}>
+            <Card key={group.category} variant="muted" padding={4} className="lift-on-hover">
               <VStack gap={2}>
                 <Text type="label">{group.category}</Text>
                 <Text type="supporting" size="sm">

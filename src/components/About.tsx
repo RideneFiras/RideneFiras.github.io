@@ -6,6 +6,7 @@ import { Text } from '@astryxdesign/core/Text';
 import { Avatar } from '@astryxdesign/core/Avatar';
 import { Collapsible } from '@astryxdesign/core/Collapsible';
 import { Badge } from '@astryxdesign/core/Badge';
+import { SectionEyebrow } from './SectionEyebrow';
 import site from '../data/profile.json';
 import profile from '../data/site.json';
 import certifications from '../data/certifications.json';
@@ -15,11 +16,7 @@ export function About() {
   return (
     <Section id="about" variant="transparent" padding={0}>
       <VStack gap={6} paddingBlock={8}>
-        <HStack gap={2} vAlign="center">
-          <Text type="label" color="accent">
-            01 / about
-          </Text>
-        </HStack>
+        <SectionEyebrow>01 / about</SectionEyebrow>
         <Heading level={2} type="display-3">
           Behind the agents
         </Heading>

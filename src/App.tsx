@@ -1,9 +1,12 @@
 import { Theme } from '@astryxdesign/core/theme';
-import { neutralTheme } from '@astryxdesign/theme-neutral';
+import { graphiteTheme } from './theme/graphiteTheme';
 import { AppShell } from '@astryxdesign/core/AppShell';
 import { TopNav, TopNavItem, TopNavHeading } from '@astryxdesign/core/TopNav';
 import { ThemeModeProvider, useThemeMode } from './theme-mode';
 import { ThemeToggle } from './components/ThemeToggle';
+import { Spotlight } from './components/Spotlight';
+import { TechMarquee } from './components/TechMarquee';
+import { Reveal } from './components/Reveal';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Work } from './components/Work';
@@ -22,9 +25,10 @@ function ThemedApp() {
   const { mode } = useThemeMode();
 
   return (
-    <Theme theme={neutralTheme} mode={mode}>
+    <Theme theme={graphiteTheme} mode={mode}>
+      <Spotlight />
       <AppShell
-        variant="wash"
+        variant="elevated"
         height="auto"
         contentPadding={0}
         topNav={
@@ -38,13 +42,26 @@ function ThemedApp() {
           </TopNav>
         }
       >
-        <div id="top" className="page-container">
-          <Hero />
-          <About />
-          <Work />
-          <Experience />
-          <Contact />
-          <SiteFooter />
+        <div id="top">
+          <div className="page-container">
+            <Hero />
+          </div>
+          <TechMarquee />
+          <div className="page-container">
+            <Reveal>
+              <About />
+            </Reveal>
+            <Reveal>
+              <Work />
+            </Reveal>
+            <Reveal>
+              <Experience />
+            </Reveal>
+            <Reveal>
+              <Contact />
+            </Reveal>
+            <SiteFooter />
+          </div>
         </div>
       </AppShell>
     </Theme>

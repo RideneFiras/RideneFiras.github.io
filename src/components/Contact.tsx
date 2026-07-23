@@ -1,19 +1,17 @@
 import { Section } from '@astryxdesign/core/Section';
 import { VStack, HStack } from '@astryxdesign/core/Stack';
 import { Heading } from '@astryxdesign/core/Heading';
-import { Text } from '@astryxdesign/core/Text';
 import { Button } from '@astryxdesign/core/Button';
+import { SectionEyebrow } from './SectionEyebrow';
 import profile from '../data/site.json';
 
 export function Contact() {
   return (
     <Section id="contact" variant="transparent" padding={0}>
       <VStack gap={6} paddingBlock={10} hAlign="center" vAlign="center">
-        <Text type="label" color="accent">
-          04 / contact
-        </Text>
+        <SectionEyebrow>04 / contact</SectionEyebrow>
         <Heading level={2} type="display-1" justify="center">
-          Let's build.
+          <span className="accent-text">Let's build.</span>
         </Heading>
         <HStack gap={3} wrap="wrap" hAlign="center">
           <Button label="Email me" variant="primary" size="lg" href={`mailto:${profile.links.email}`} />
