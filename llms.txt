@@ -1,0 +1,51 @@
+# Firas Ridene
+
+> AI engineer based in Tunis, Tunisia, specialized in generative AI and multi-agent systems. Builds voice agents, automation pipelines, and multi-agent platforms that ship to production.
+
+Firas Ridene is a computer science engineering student at Esprit (Tunis) and an AI engineer building agent systems that do real work: voice agents that answer phones, an agent team that ships code, and pipelines that cut manual prospecting time by up to 80%. He designs multi-agent systems end-to-end and picks the stack per problem, not per habit.
+
+## Contact
+
+- Email: firas.ridene@outlook.com
+- GitHub: https://github.com/RideneFiras
+- LinkedIn: https://www.linkedin.com/in/firas-ridene
+- Website: https://firasridene.tech
+
+## Experience
+
+- Freelance Software Engineer — B2B SaaS startup, Paris (remote), Mar 2026–present: contributes to a multi-tenant AI sales-outreach platform; built an AI agent system that autonomously qualifies prospects and generates personalized outreach at scale.
+- End-of-Studies Intern — Agile4UX, Feb–Jul 2026: designed a multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp, with real-time voice, knowledge retrieval, and human handoff at sub-second latency.
+- AI Automation Intern — Agile4ux, 2025: designed a multi-agent system to research, qualify, and analyze prospects; cut manual prospecting time by ~80%.
+- Data Platform Development Intern — Designet, 2024: built a lead-generation platform from Google Maps data with filterable criteria and CSV export.
+
+## Selected projects
+
+- VocaFlow — multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp. https://github.com/RideneFiras/Vocaflow
+- 8-Agent Dev Team — a full software team staffed by 8 specialized Claude Code agents (PM, Frontend, Backend, AI, DevOps, QA, Test, Docs); shipped 170+ GitHub issues and 726 automated tests across a ~40,000-line codebase in about 4 weeks. https://github.com/RideneFiras/ClaudeCodeTeam
+- Multi-Agent Prospecting System — agents that research, qualify, and analyze prospects, then write the outreach and the reports.
+- Content Creation Automation — automated research, generation, and publication of Facebook content, with a human checkpoint before anything ships.
+- Recruitment Automation System — four interconnected pipelines covering candidate intake, AI scoring, ATS sync, and lead generation.
+- TT Assistant — multilingual (Arabic, French, English, Tunisian dialect) voice + text chatbot for Tunisie Telecom; 3rd place at the AI for CSR Hackathon. https://github.com/RideneFiras/ChatbotTT
+- Airline Customer Service Assistant — GenAI capstone (Kaggle x Google): structured-dialogue assistant with RAG over a dedicated knowledge base. https://github.com/RideneFiras/KagglexGoogle
+- Pedagog'IA — social platform for Tunisian teachers with AI generation of fiches, quizzes, and exercises. https://github.com/RideneFiras/PedagogIA
+- 5G Throughput Prediction — MLOps pipeline comparing 300+ models on Azure ML, explainable with SHAP, monitored with Elasticsearch/Kibana. https://github.com/RideneFiras/QosMLOPS
+- Industrial Anomaly Detection — CNN autoencoder trained only on defect-free images, flags visual defects by reconstruction error; cut manual inspection time by 70%. https://github.com/RideneFiras/Anomaly_detection
+- Odoo Integrations — Odoo CRM wired into a multi-agent prospecting system, plus a facial-recognition attendance module.
+- LeadGenMAP — platform that generates qualified leads from Google Maps with filterable criteria and CSV export. https://github.com/RideneFiras/LeadGenMAP
+- n8n Workflow Library — public collection of the n8n workflows behind his automation work, packaged for reuse. https://github.com/RideneFiras/Myn8nWorkflows
+
+## Skills
+
+- Generative AI & Agents: LLMs, RAG, LangChain, CrewAI, MCP, Claude Code, Transformers
+- ML & MLOps: PyTorch, TensorFlow, Scikit-learn, MLflow, Azure ML Studio, SHAP, GitHub Actions
+- Development & Data: Python, JavaScript (Node.js), Java (Spring Boot), FastAPI, REST APIs, Pandas, SQL, NoSQL
+- Infra & Automation: Docker, Render, Git/GitHub, Elasticsearch, Kibana, n8n, Latenode
+
+## Education
+
+- Esprit: School of Engineering, Tunis — Engineering Degree in Computer Science, 2023–present
+- Esprit Integrated Preparatory Cycle, Tunis — Mathematics & Physics, 2020–2023
+
+## Certifications
+
+22 certifications, including: AI Security & GenAI Red Teaming (ESPRIT), Multi AI Agent Systems with crewAI (CrewAI), Microsoft Azure AI Essentials Professional Certificate (Microsoft), Machine Learning in Production (DeepLearning.AI), Building RAG Agents with LLMs (NVIDIA), Building AI Agents with Multimodal Models (NVIDIA), 5-Day Gen AI Intensive (Kaggle), Agentic AI for Enterprise (ESPRIT), Data Engineering & MLOps (ESPRIT), AWS Academy Graduate: Cloud Foundations (AWS), and others across AI/ML, cloud, and networking.
