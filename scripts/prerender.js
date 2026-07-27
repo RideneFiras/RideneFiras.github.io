@@ -19,14 +19,11 @@ const skills = readJSON("data/skills.json");
 const education = readJSON("data/education.json");
 const certs = readJSON("data/certifications.json");
 
-const time = new Intl.DateTimeFormat("en-GB", {
-  hour: "2-digit",
-  minute: "2-digit",
-  timeZone: site.timezone,
-}).format(new Date());
-
+/* static placeholder: js/main.js replaces this with the live clock on load,
+   so baking in the real time here would just make every build diff by a
+   few minutes and spam the auto-commit workflow with no real change */
 const regions = {
-  railStatus: Render.railStatusHTML(site, time),
+  railStatus: Render.railStatusHTML(site, "--:--"),
   railLinks: Render.railLinksHTML(site),
   heroEyebrow: Render.esc(profile.hero.eyebrow),
   heroSub: Render.esc(profile.hero.sub),
