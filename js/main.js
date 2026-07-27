@@ -182,6 +182,62 @@ function initReveals() {
   });
 }
 
+function initCopyEmail() {
+  const btn = $("#copyEmail");
+  if (!btn) return;
+  const original = btn.innerHTML;
+  const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  btn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText("firas.ridene@outlook.com");
+      btn.innerHTML = check;
+      btn.setAttribute("aria-label", "Email address copied");
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.setAttribute("aria-label", "Copy email address");
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+}
+
+function initContactForm() {
+  const form = $("#contactForm");
+  if (!form) return;
+  const status = $("#cfStatus");
+  const btn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.botcheck.checked) return; /* honeypot tripped, silently drop */
+
+    btn.disabled = true;
+    status.textContent = "Sending…";
+    status.className = "contact-form-status";
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message || "Send failed");
+      status.textContent = "Message sent — thanks, I'll get back to you soon.";
+      status.className = "contact-form-status ok";
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      status.textContent = "Couldn't send — try again or email me directly.";
+      status.className = "contact-form-status err";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 function initNav() {
   const links = [...document.querySelectorAll(".rail-nav a, .bar-nav a")];
   const sections = [...new Set(links.map((a) => $(a.getAttribute("href"))).filter(Boolean))];
@@ -220,6 +276,8 @@ function initNav() {
     initSpotlight();
     initReveals();
     initNav();
+    initCopyEmail();
+    initContactForm();
 
     $("#year").textContent = new Date().getFullYear();
 

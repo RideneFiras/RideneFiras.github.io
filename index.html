@@ -320,8 +320,34 @@
     <section id="contact" class="contact">
       <h2><span class="sec-label">04 / contact</span></h2>
       <p class="contact-big"><span class="outline">LET'S</span> BUILD.</p>
+
+      <form class="contact-form" id="contactForm">
+        <input type="hidden" name="access_key" value="6ffc600b-c280-4182-b818-5d5a5bd8e5a0">
+        <input type="hidden" name="subject" value="New message from firasridene.tech">
+        <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field">
+          <label for="cfName">Name</label>
+          <input type="text" id="cfName" name="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="cfEmail">Email</label>
+          <input type="email" id="cfEmail" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="cfMessage">Message</label>
+          <textarea id="cfMessage" name="message" rows="4" required></textarea>
+        </div>
+        <div class="contact-form-row">
+          <button class="btn" type="submit">Send message</button>
+          <span class="contact-form-status" id="cfStatus" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+
       <div class="hero-cta">
-        <a class="btn" href="mailto:firas.ridene@outlook.com">Email me</a>
+        <a class="btn ghost" href="mailto:firas.ridene@outlook.com">firas.ridene@outlook.com</a>
+        <button class="icon-btn" id="copyEmail" type="button" aria-label="Copy email address">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        </button>
         <a class="btn ghost" href="https://github.com/RideneFiras" target="_blank" rel="noopener">GitHub</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/firas-ridene" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn ghost" href="https://youtube.com/playlist?list=PLRjr8ZSeOB_w&amp;si=cJURnWFpjs_r5p9U" target="_blank" rel="noopener">YouTube</a>
