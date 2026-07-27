@@ -1,12 +1,9 @@
 /* firasridene.tech · v3 "graphite". No frameworks, just fetch + DOM.
-   Content lives in data/*.json; this file only renders it. */
+   Content lives in data/*.json; HTML-string builders live in js/render.js
+   (shared with scripts/prerender.js); this file only wires them to the DOM. */
 
 const $ = (sel) => document.querySelector(sel);
-const esc = (s) =>
-  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-
-/* external links always open in a new tab */
-const EXT = 'target="_blank" rel="noopener"';
+const { marqueeHTML, workGridHTML, filtersHTML, expListHTML, skillsHTML, aboutTextHTML, certsHTML, railStatusHTML, railLinksHTML } = Render;
 
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -16,54 +13,16 @@ async function loadJSON(path) {
   return res.json();
 }
 
-/* ---------------- tech icons (Simple Icons, self-hosted, monochrome via CSS mask) ---------------- */
-
-const ICONS = {
-  "python": "python", "fastapi": "fastapi", "react": "react", "next.js": "nextdotjs",
-  "typescript": "typescript", "postgresql": "postgresql", "pgvector": "postgresql",
-  "supabase": "supabase", "twilio": "twilio", "stripe": "stripe", "redis": "redis",
-  "docker": "docker", "langchain": "langchain", "anthropic claude": "anthropic",
-  "claude code": "claude", "gemini": "googlegemini", "n8n": "n8n", "notion": "notion",
-  "notion mcp": "notion", "github": "github", "git/github": "github", "github cli": "github",
-  "github actions": "githubactions", "github models (gpt-4o-mini)": "github",
-  "elasticsearch": "elasticsearch", "kibana": "kibana", "tensorflow": "tensorflow",
-  "pytorch": "pytorch", "scikit-learn": "scikitlearn", "mlflow": "mlflow",
-  "opencv": "opencv", "tailwindcss": "tailwindcss", "telegram": "telegram",
-  "railway": "railway", "vercel": "vercel", "gradio": "gradio", "odoo": "odoo",
-  "java (spring boot)": "spring", "js (node.js)": "nodedotjs", "pandas": "pandas",
-  "make": "make", "google maps api": "googlemaps", "render": "render",
-};
-
-const icon = (slug) =>
-  `<i class="tico" style="--i:url('/assets/icons/${slug}.svg')" aria-hidden="true"></i>`;
-
-function chips(stack) {
-  const items = stack.split(",").map((s) => s.trim()).filter(Boolean);
-  return `<div class="stack-chips">${items
-    .map((name) => {
-      const slug = ICONS[name.toLowerCase()];
-      return `<span class="chip">${slug ? icon(slug) : ""}${esc(name)}</span>`;
-    })
-    .join("")}</div>`;
-}
-
 /* ---------------- rail + theme ---------------- */
 
 function renderChrome(site) {
   const time = () =>
     new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: site.timezone }).format(new Date());
 
-  $("#railStatus").innerHTML = `
-    <div><span class="live" aria-hidden="true"></span>${esc(site.status.availability)}</div>
-    <div>${esc(site.location)} · <span class="clock">${time()}</span></div>`;
+  $("#railStatus").innerHTML = railStatusHTML(site, time());
   setInterval(() => document.querySelectorAll(".clock").forEach((c) => { c.textContent = time(); }), 30_000);
 
-  $("#railLinks").innerHTML = `
-    <a href="${esc(site.links.github)}" ${EXT}>github</a>
-    <a href="${esc(site.links.linkedin)}" ${EXT}>linkedin</a>
-    <a href="${esc(site.links.youtube)}" ${EXT}>youtube</a>
-    <a href="mailto:${esc(site.links.email)}">email</a>
-    <a href="${esc(site.resume)}" ${EXT}>resume</a>`;
+  $("#railLinks").innerHTML = railLinksHTML(site);
 }
 
 function initTheme() {
@@ -96,56 +55,18 @@ function renderHero(profile, site) {
 
 /* ---------------- marquee of the stack ---------------- */
 
-const MARQUEE = [
-  ["Python", "python"], ["FastAPI", "fastapi"], ["LangChain", "langchain"],
-  ["Claude Code", "claude"], ["CrewAI", null], ["OpenAI", null],
-  ["React", "react"], ["Next.js", "nextdotjs"], ["TypeScript", "typescript"],
-  ["PostgreSQL", "postgresql"], ["Supabase", "supabase"], ["Docker", "docker"],
-  ["n8n", "n8n"], ["Redis", "redis"], ["PyTorch", "pytorch"],
-  ["TensorFlow", "tensorflow"], ["MLflow", "mlflow"], ["Elasticsearch", "elasticsearch"],
-];
-
 function renderMarquee() {
-  const items = MARQUEE.map(
-    ([name, slug]) => `<span class="mq-item">${slug ? icon(slug) : ""}${esc(name)}</span>`
-  ).join("");
   /* track duplicated once so the -50% translate loops seamlessly */
-  $("#marquee").innerHTML = items + items;
+  $("#marquee").innerHTML = marqueeHTML();
 }
 
 /* ---------------- work: all projects + filters ---------------- */
 
-const TAG_ORDER = ["agents", "voice", "automation", "ml", "product"];
-const TAG_LABELS = { agents: "agents", voice: "voice & chat", automation: "automation", ml: "ml & data", product: "product" };
-
 function renderWork(projects) {
-  $("#workGrid").innerHTML = projects
-    .map(
-      (p, i) => `
-    <article class="case rv${i < 2 ? " wide" : ""}" data-tags="${esc(p.tags.join(" "))}">
-      <span class="eyebrow">${esc(p.domain)}</span>
-      <h3>${esc(p.title)}</h3>
-      <p class="desc">${esc(p.oneliner)}</p>
-      <ul class="points">${p.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
-      ${chips(p.stack)}
-      ${
-        p.github || p.demo
-          ? `<div class="links">
-              ${p.github ? `<a href="${esc(p.github)}" ${EXT}>source ↗</a>` : ""}
-              ${p.demo ? `<a href="${esc(p.demo)}" ${EXT}>demo ↗</a>` : ""}
-            </div>`
-          : ""
-      }
-    </article>`
-    )
-    .join("");
+  $("#workGrid").innerHTML = workGridHTML(projects);
 
-  const present = new Set(projects.flatMap((p) => p.tags));
-  const tags = TAG_ORDER.filter((t) => present.has(t));
   const bar = $("#filters");
-  bar.innerHTML = ["all", ...tags]
-    .map((t) => `<button class="fchip${t === "all" ? " on" : ""}" data-tag="${esc(t)}">${esc(TAG_LABELS[t] || t)}</button>`)
-    .join("");
+  bar.innerHTML = filtersHTML(projects);
 
   /* ---- carousel / grid views ---- */
   const grid = $("#workGrid");
@@ -216,40 +137,15 @@ function renderWork(projects) {
 /* ---------------- experience / skills ---------------- */
 
 function renderExperience(xp, skills) {
-  $("#expList").innerHTML = xp
-    .map(
-      (e) => `
-    <div class="xp rv">
-      <div class="when">${esc(e.dateRange)}</div>
-      <h3>${esc(e.title)}</h3>
-      <p class="org">${esc(e.org)}</p>
-      <ul>${e.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
-      ${chips(e.stack)}
-    </div>`
-    )
-    .join("");
-
-  $("#skills").innerHTML = skills
-    .map((s) => `<div class="skill-cell rv"><b>${esc(s.category)}</b><span>${esc(s.items)}</span></div>`)
-    .join("");
+  $("#expList").innerHTML = expListHTML(xp);
+  $("#skills").innerHTML = skillsHTML(skills);
 }
 
 /* ---------------- about ---------------- */
 
 function renderAbout(profile, site, education, certs) {
-  const edu = education.map((e) => `${e.degree}, ${e.institution} (${e.dateRange})`).join(" · ");
-
-  $("#aboutText").innerHTML =
-    profile.about.map((p) => `<p>${esc(p)}</p>`).join("") +
-    `<div class="about-facts">
-      <div><span class="k">education</span> · ${esc(edu)}</div>
-      <div><span class="k">languages</span> · ${site.languages.map(esc).join(" · ")}</div>
-      <div><span class="k">community</span> · Scout Leader, Tunisian Scouts · Member, JCI Kelibia</div>
-    </div>`;
-
-  $("#certs").innerHTML = `
-    <summary>${certs.total} certifications · show all</summary>
-    <ul>${certs.list.map((c) => `<li><b>${esc(c.name)}</b> · ${esc(c.issuer)}</li>`).join("")}</ul>`;
+  $("#aboutText").innerHTML = aboutTextHTML(profile, site, education);
+  $("#certs").innerHTML = certsHTML(certs);
 }
 
 /* ---------------- spotlight, reveals, nav ---------------- */
