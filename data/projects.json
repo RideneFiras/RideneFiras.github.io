@@ -222,5 +222,22 @@
     "stack": "n8n, Webhooks, REST APIs",
     "github": "https://github.com/RideneFiras/Myn8nWorkflows",
     "demo": ""
+  },
+  {
+    "title": "Churn Prediction & Billing Analysis, Telecom Subscriber Data",
+    "domain": "Data science",
+    "tags": [
+      "ml"
+    ],
+    "oneliner": "A predictive analytics project uncovering key churn drivers and revenue patterns across 20K telecom subscribers to power targeted retention strategies.",
+    "bullets": [
+      "Analyzed 20k subscriber records to uncover churn drivers, retention dynamics, and revenue patterns.",
+      "Built cohort and monthly churn analysis, identifying early-tenure churn segmented by technology and acquisition channel.",
+      "Linked billing patterns to retention behavior and proposed a churn prediction framework to prioritize retention actions."
+    ],
+    "stack": "Python, Pandas, NumPy, Matplotlib",
+    "github": "",
+    "demo": "",
+    "id": "churn-prediction-billing-analysis-telecom-subscriber-data"
   }
 ]
