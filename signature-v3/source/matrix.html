@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>dot matrix · scanline</title>
+<style>
+/* ================================================================
+   Signature mark v3 · "matrix"
+   An LED dot-matrix panel. The resting glyph is a terminal prompt —
+   a chevron and a blinking block cursor — drawn in dots. A scanline
+   of light sweeps the panel and passes through it.
+
+   No typeface, no logo, no imported palette. Near-black, one acid
+   accent, and light.
+
+   260x260 native for a 130px display size. Every frame comes from
+   seek(ms); nothing uses CSS animation, so the headless capture is
+   frame-exact rather than racing a rAF clock.
+   ================================================================ */
+:root {
+  --bg: #08080b;
+  --off: #16171c;   /* an unlit cell still reads, faintly */
+  --lime: #ccff2e;
+  --hot: #ffffff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #2a2a2a; }
+
+.panel {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  background: var(--bg);
+  overflow: hidden;
+}
+.cell {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;   /* centre on the lattice point */
+  border-radius: 50%;
+  background: var(--off);
+  transform: scale(0.5);
+  will-change: transform, background-color;
+}
+</style>
+</head>
+<body>
+  <div class="panel" id="panel"></div>
+
+<script>
+/* ---------------- lattice ---------------- */
+const N = 11;              /* 11 x 11 cells            */
+const PITCH = 21;
+const SIZE = 260;
+const ORIGIN = (SIZE - (N - 1) * PITCH) / 2;   /* 25 */
+const BOX = 12;            /* the cell's fixed layout box */
+
+/* ---------------- the resting glyph ----------------
+   A prompt: a chevron, and a block cursor that blinks. Written as a
+   picture so the shape is legible in the source rather than a list of
+   coordinates. '#' is always lit, 'C' is the cursor. */
+const GLYPH = [
+  "...........",
+  "...........",
+  "..#........",
+  "...#.......",
+  "....#..CC..",
+  ".....#.CC..",
+  "....#..CC..",
+  "...#.......",
+  "..#........",
+  "...........",
+  "...........",
+];
+const isOn = (c, r) => GLYPH[r][c] === "#";
+const isCursor = (c, r) => GLYPH[r][c] === "C";
+
+/* ---------------- timing ---------------- */
+const LOOP = 3600;
+const SWEEP = [0, 1600];
+const BLINK = 300;         /* 300 on, 300 off — 6 full blinks a loop */
+const TAIL = 75;           /* how far the glow trails the front      */
+const LEAD = 12;           /* short ramp so the front is not aliased  */
+const FROM = -90, TO = 350;
+const BASE = 0.55;         /* how bright a resting lit cell sits      */
+
+const clamp01 = (v) => Math.max(0, Math.min(1, v));
+const easeInOut = (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+
+/* ---------------- build ---------------- */
+const panel = document.getElementById("panel");
+const cells = [];
+for (let r = 0; r < N; r++) {
+  for (let c = 0; c < N; c++) {
+    const el = document.createElement("div");
+    el.className = "cell";
+    el.style.left = ORIGIN + c * PITCH + "px";
+    el.style.top = ORIGIN + r * PITCH + "px";
+    panel.appendChild(el);
+    cells.push({ el, c, r, x: ORIGIN + c * PITCH });
+  }
+}
+
+/* ---------------- colour ramp ----------------
+   unlit -> lime across most of the range, then lime -> white only at
+   the very front, so the leading edge reads as hotter than its trail */
+const OFF = [22, 23, 28], LIME = [204, 255, 46], HOT = [255, 255, 255];
+const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+function shade(i) {
+  if (i <= 0) return OFF;
+  if (i < 0.7) return mix(OFF, LIME, i / 0.7);
+  return mix(LIME, HOT, ((i - 0.7) / 0.3) * 0.85);
+}
+
+/* ---------------- seek ---------------- */
+function seek(t) {
+  const p = clamp01((t - SWEEP[0]) / (SWEEP[1] - SWEEP[0]));
+  const front = FROM + (TO - FROM) * easeInOut(p);
+  const cursorOn = Math.floor(t / BLINK) % 2 === 0;
+
+  for (const cell of cells) {
+    /* the front bows slightly per row so the scan reads as a wave
+       rather than a ruler sliding across */
+    const bow = 16 * Math.sin((cell.r / (N - 1)) * Math.PI * 1.15);
+    const d = front + bow - cell.x;
+
+    let wave = 0;
+    if (d >= -LEAD && d < 0) wave = (d + LEAD) / LEAD;
+    else if (d >= 0 && d < TAIL) wave = 1 - d / TAIL;
+
+    const lit = isOn(cell.c, cell.r) || (isCursor(cell.c, cell.r) && cursorOn);
+    const i = Math.max(lit ? BASE : 0, wave);
+
+    const rgb = shade(i);
+    cell.el.style.backgroundColor = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+    /* 6px unlit, up to 11px at the front */
+    cell.el.style.transform = `scale(${((6 + 5 * i) / BOX).toFixed(4)})`;
+  }
+}
+
+/* ---------------- frame plan ----------------
+   Dense through the sweep, then just the blink edges — the panel is
+   otherwise identical frame to frame, and identical frames collapse
+   into one long frame in the encoder. */
+function framePlan() {
+  const times = new Set([0]);
+  for (let t = SWEEP[0]; t < SWEEP[1]; t += 50) times.add(t);
+  times.add(SWEEP[1]);
+  for (let t = 0; t < LOOP; t += BLINK) times.add(t);   /* blink edges */
+
+  const sorted = [...times].filter((t) => t >= 0 && t < LOOP).sort((a, b) => a - b);
+  const out = [];
+  for (let i = 0; i < sorted.length; i++) {
+    const d = (sorted[i + 1] ?? LOOP) - sorted[i];
+    if (d >= 20) out.push({ t: sorted[i], d });
+    else if (out.length) out[out.length - 1].d += d;
+  }
+  return out;
+}
+
+window.seek = seek;
+window.framePlan = framePlan;
+window.LOOP = LOOP;
+seek(0);
+window.__ready = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Email signature v3 - matrix</title>
+<style>
+ body{margin:0;padding:56px 32px;background:#f2f2f4;font-family:ui-monospace,Consolas,monospace;color:#6a6d76}
+ .wrap{max-width:820px;margin:0 auto}
+ h1{font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:1.6rem;font-weight:650;letter-spacing:-.5px;color:#0d0d10;margin:0 0 .4rem}
+ .sub{font-size:.78rem;margin:0 0 2.6rem}
+ .label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#0d0d10;margin:0 0 .9rem}
+ .panel{background:#fff;border:1px solid #e2e2e6;border-radius:14px;padding:30px;margin:0 0 2.4rem}
+ .note{font-size:.78rem;line-height:1.95;margin:0}
+ .note b{color:#0d0d10;font-weight:600}
+ code{background:#f2f2f4;border:1px solid #e2e2e6;border-radius:5px;padding:1px 5px;color:#0d0d10}
+ .dark{background:#f2f2f4}
+</style></head><body><div class="wrap">
+<h1>Email signature - v3</h1>
+<p class="sub">"matrix" - an LED dot-matrix panel. A terminal prompt, and a scanline that sweeps it.</p>
+
+<p class="label">01 / signature block</p>
+<div class="panel">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" bgcolor="#08080b" style="border-collapse:collapse;border-spacing:0;background-color:#08080b;-webkit-text-size-adjust:none;">
+  <tr>
+    <td style="padding:24px 28px 24px 24px;background-color:#08080b;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;border-spacing:0;">
+        <tr>
+          <td valign="middle" style="padding:0;">
+            <a href="https://firasridene.tech" target="_blank" style="text-decoration:none;border:0;">
+              <img src="fr-matrix.gif"
+                   alt="Firas Ridene — AI Engineer"
+                   width="130" height="130"
+                   style="display:block;width:130px;height:130px;border:0;outline:none;text-decoration:none;">
+            </a>
+          </td>
+
+          <td style="width:26px;padding:0;font-size:0;line-height:0;">&nbsp;</td>
+          <td bgcolor="#23252c" style="width:1px;padding:0;font-size:0;line-height:0;background-color:#23252c;">&nbsp;</td>
+          <td style="width:26px;padding:0;font-size:0;line-height:0;">&nbsp;</td>
+
+          <td valign="middle" style="padding:0;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;border-spacing:0;">
+              <tr>
+                <td style="padding:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:20px;font-weight:600;line-height:1.2;letter-spacing:-0.3px;color:#f5f6f8;">
+                  Firas Ridene
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0 0 0;font-family:ui-monospace,'SF Mono','Cascadia Mono',Consolas,'Courier New',monospace;font-size:11px;line-height:1.5;letter-spacing:1.6px;text-transform:uppercase;color:#7a7d87;">
+                  AI Engineer
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 0 0 0;font-family:ui-monospace,'SF Mono','Cascadia Mono',Consolas,'Courier New',monospace;font-size:12px;line-height:1.7;color:#7a7d87;">
+                  <a href="https://firasridene.tech" target="_blank" style="color:#ccff2e;text-decoration:none;"><span style="color:#ccff2e;">firasridene.tech</span></a><span style="color:#3a3d45;">&nbsp;&nbsp;/&nbsp;&nbsp;</span><a href="https://github.com/RideneFiras" target="_blank" style="color:#ccff2e;text-decoration:none;"><span style="color:#ccff2e;">github</span></a><span style="color:#3a3d45;">&nbsp;&nbsp;/&nbsp;&nbsp;</span><a href="https://www.linkedin.com/in/firas-ridene" target="_blank" style="color:#ccff2e;text-decoration:none;"><span style="color:#ccff2e;">linkedin</span></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+</div>
+
+<p class="label">02 / the panel, native size</p>
+<div class="panel">
+  <img src="fr-matrix.gif" width="260" height="260" alt="dot matrix, native" style="display:block;border-radius:6px">
+  <p class="note" style="margin-top:1rem">260x260 native, shown at 130 so it stays sharp on retina.</p>
+</div>
+
+<p class="label">03 / resting frame</p>
+<div class="panel">
+  <img src="fr-matrix-rest.png" width="260" height="260" alt="resting frame" style="display:block;border-radius:6px">
+  <p class="note" style="margin-top:1rem">Also frame 1 of the GIF - what Outlook for Windows shows, since it never animates.</p>
+</div>
+
+<p class="label">04 / notes</p>
+<div class="panel">
+  <p class="note">
+  <b>Before first use:</b> push this folder so the GIF resolves at
+  <code>https://firasridene.tech/signature-v3/fr-matrix.gif</code>.<br>
+  <b>The card background and the GIF background are the same #08080b</b>, so the
+  image has no visible edge.<br>
+  <b>Dark-mode clients</b> may try to invert the card. The GIF cannot be inverted, so
+  if that bothers you, v1 in <code>signature/</code> is the light-background option.<br>
+  <b>To paste:</b> open <code>signature.html</code>, select all, copy, paste into your
+  mail client's signature editor.
+  </p>
+</div>
+</div></body></html>
