@@ -12,18 +12,6 @@
     "stack": "React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure"
   },
   {
-    "id": "exp1",
-    "title": "Freelance Software Engineer",
-    "org": "B2B SaaS startup, Paris (remote)",
-    "dateRange": "Mar 2026 – Mai",
-    "bullets": [
-      "Contributing to a multi-tenant AI sales-outreach platform, shipping backend, AI, and frontend features end-to-end.",
-      "Built an AI agent system that autonomously qualifies prospects and generates personalized outreach at scale.",
-      "Handling deployments and stabilizing the production pipeline: scoring, enrichment, and webhook fixes."
-    ],
-    "stack": "Python, FastAPI, Next.js, TypeScript, PostgreSQL, Anthropic Claude, QStash, Unipile, Stripe, Railway, Vercel"
-  },
-  {
     "id": "exp3",
     "title": "AI Automation Intern",
     "org": "Agile4ux",
