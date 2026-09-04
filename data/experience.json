@@ -1,5 +1,17 @@
 [
   {
+    "title": "AI & Software Engineer",
+    "org": "Freelance / Self-Employed ",
+    "dateRange": "Mai - Present",
+    "bullets": [
+      "Delivered AI automation and fullstack solutions for clients across marketing, sales, finance, and insurance sectors.",
+      "Translated business needs into technical solutions, working directly with non-technical stakeholders and explaining AI systems in plain terms.",
+      "Owned projects end-to-end in full autonomy, from specification through development and deployment."
+    ],
+    "stack": "Python, React, FastAPI, Supabase, Docker, Azure, CrewAI, Latenode, n8n , Vercel",
+    "id": "exp1"
+  },
+  {
     "id": "exp2",
     "title": "End-of-Studies Intern",
     "org": "Agile4UX",
