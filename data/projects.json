@@ -239,5 +239,24 @@
     "github": "",
     "demo": "",
     "id": "churn-prediction-billing-analysis-telecom-subscriber-data"
+  },
+  {
+    "title": "Store Support Agent",
+    "domain": "",
+    "tags": [
+      "agents",
+      "automation",
+      "product"
+    ],
+    "oneliner": "AI customer support agent for e-commerce that checks real inventory before promising availability, and resists prompt-injection attempts to override its own rules.",
+    "bullets": [
+      "Built a multi-agent support system where an orchestrator dispatches to RAG, inventory, and order-capture subagents, syncing live across Notion and Google Sheets.",
+      "Handled the overselling edge case deterministically, refusing to confirm stock that's already pending on another order.",
+      "Defended against prompt injection with no discount/price tools in the system, a pre-filter guard, and a structured-output schema as a final backstop, tested against a set of adversarial prompts."
+    ],
+    "stack": "n8n · Notion · Google Sheets · Supabase · pgvector · Claude · Next.js · Vercel",
+    "github": "https://github.com/RideneFiras/MultiAppHackathon",
+    "demo": "https://youtu.be/t3_HilAUTEQ",
+    "id": "store-support-agent"
   }
 ]
