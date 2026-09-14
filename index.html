@@ -287,7 +287,7 @@
       
     </article>
     <article class="case rv" data-tags="agents automation product">
-      <span class="eyebrow"></span>
+      <span class="eyebrow">AI Automation</span>
       <h3>Store Support Agent</h3>
       <p class="desc">AI customer support agent for e-commerce that checks real inventory before promising availability, and resists prompt-injection attempts to override its own rules.</p>
       <ul class="points"><li>Built a multi-agent support system where an orchestrator dispatches to RAG, inventory, and order-capture subagents, syncing live across Notion and Google Sheets.</li><li>Handled the overselling edge case deterministically, refusing to confirm stock that&#39;s already pending on another order.</li><li>Defended against prompt injection with no discount/price tools in the system, a pre-filter guard, and a structured-output schema as a final backstop, tested against a set of adversarial prompts.</li></ul>
