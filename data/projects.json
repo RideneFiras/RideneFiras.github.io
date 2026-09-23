@@ -258,5 +258,22 @@
     "github": "https://github.com/RideneFiras/MultiAppHackathon",
     "demo": "https://youtu.be/t3_HilAUTEQ",
     "id": "store-support-agent"
+  },
+  {
+    "title": "ChronoWorks - Unified platform for freelancers",
+    "domain": "SaaS · freelance ops",
+    "tags": [
+      "product automation"
+    ],
+    "oneliner": "Unified platform for freelancers to manage clients, projects, time, tasks, leave, and invoices in one linked system.",
+    "bullets": [
+      "Designed a linked data model where logging time on a task feeds project status, leave-adjusted totals, and client invoices automatically.",
+      "Built a locked invoicing system with gapless numbering and immutable issued invoices, enforced with Postgres triggers and row-level security.",
+      "Implemented tax-profile logic for Tunisia and France, covering VAT, matricule fiscal, stamp duty, and reverse charge."
+    ],
+    "stack": "Next.js TypeScript Supabase PostgreSQL Tailwind CSS dnd-kit Vercel",
+    "github": "https://github.com/RideneFiras/ChronoWorks",
+    "demo": "",
+    "id": "chronoworks-unified-platform-for-freelancers"
   }
 ]
