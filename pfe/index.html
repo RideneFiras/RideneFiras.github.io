@@ -4,17 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Invitation · Soutenance de PFE · Firas Ridene</title>
-  <meta name="description" content="Invitation à la soutenance du projet de fin d'études de Firas Ridene, élève ingénieur en informatique à ESPRIT, Ghazela.">
-  <meta name="robots" content="noindex">
+  <!-- private page: shared by direct link only, never listed in the sitemap, robots.txt, llms.txt or the portfolio -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Invitation à la soutenance du projet de fin d'études de Firas Ridene, à ESPRIT Ghazela.">
   <meta name="theme-color" content="#f5f4ef">
-  <link rel="canonical" href="https://firasridene.tech/pfe/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Firas Ridene">
-  <meta property="og:locale" content="fr_FR">
-  <meta property="og:title" content="Invitation · Soutenance de PFE de Firas Ridene">
-  <meta property="og:description" content="Vous êtes invité·e à la soutenance de mon projet de fin d'études, à ESPRIT Ghazela.">
-  <meta property="og:url" content="https://firasridene.tech/pfe/">
+  <meta property="og:title" content="🎟️ Invitation · Soutenance de PFE de Firas Ridene">
+  <meta property="og:description" content="Tu es invité·e à la soutenance de mon projet de fin d'études, à ESPRIT Ghazela.">
   <meta property="og:image" content="https://firasridene.tech/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,23 +28,17 @@
   <style>
     /* standalone page: no left rail, so reclaim the margin the shared sheet reserves */
     .inv-main { margin-left: 0; }
-    .inv-main > section { max-width: 880px; padding-top: clamp(2.5rem, 6vw, 4rem); }
-    .inv-footer { margin-left: 0; max-width: 880px; margin: 0 auto; }
+    .inv-main > section { max-width: 940px; padding-top: clamp(2rem, 5vw, 3.4rem); }
+    .inv-footer { margin: 0 auto; max-width: 940px; }
 
+    /* ---------- top bar ---------- */
     .inv-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      margin-bottom: clamp(2.4rem, 6vw, 3.6rem);
+      margin-bottom: clamp(2.2rem, 6vw, 3.4rem);
     }
-    .inv-back {
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-      text-decoration: none;
-    }
-    .inv-back:hover { text-decoration: underline; }
     .inv-top .logo {
       font-family: var(--display);
       font-stretch: 125%;
@@ -56,161 +48,249 @@
       text-decoration: none;
     }
     .inv-top .logo span { color: var(--brass); }
+    .lang {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
+      background: var(--card);
+    }
+    .lang button {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      border: 0;
+      background: none;
+      color: var(--muted);
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .lang button[aria-pressed="true"] { background: var(--blue); color: #fff; }
 
+    /* ---------- heading ---------- */
     .inv-title {
       font-family: var(--display);
       font-stretch: 122%;
-      font-size: clamp(2.6rem, 9vw, 5.6rem);
+      font-size: clamp(2.1rem, 7.4vw, 5.2rem);
       font-weight: 850;
       text-transform: uppercase;
-      line-height: 0.95;
+      line-height: 0.98;
       letter-spacing: 0.005em;
-      margin: 0.9rem 0 1.4rem;
+      margin: 0.9rem 0 1.3rem;
+      overflow-wrap: anywhere;
     }
-    .inv-title .outline {
-      color: transparent;
-      -webkit-text-stroke: 2px var(--text);
-    }
+    .inv-title span { display: block; }
+    .inv-title .outline { color: transparent; -webkit-text-stroke: 2px var(--text); }
     .inv-lead {
-      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      font-size: clamp(1.05rem, 2.2vw, 1.22rem);
       color: var(--muted);
-      max-width: 44ch;
-      margin-bottom: clamp(2.4rem, 6vw, 3.4rem);
+      max-width: 46ch;
+      margin-bottom: clamp(2.2rem, 6vw, 3.2rem);
     }
     .inv-lead b { color: var(--text); font-weight: 600; }
 
-    /* ---- the ticket ---- */
+    /* ---------- the ticket ---------- */
+    .ticket-wrap {
+      --stub: 230px;
+      --notch: 15px;
+      filter: drop-shadow(0 22px 34px color-mix(in srgb, var(--blue) 22%, transparent))
+              drop-shadow(0 2px 3px rgba(17, 27, 43, 0.08));
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .ticket-wrap { animation: deal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+      @keyframes deal {
+        from { opacity: 0; transform: translateY(34px) rotate(-2.4deg); }
+        to { opacity: 1; transform: none; }
+      }
+    }
     .ticket {
       position: relative;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: 0 18px 50px -28px color-mix(in srgb, var(--blue) 45%, transparent);
+      display: grid;
+      grid-template-columns: 1fr var(--stub);
+      background:
+        repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--accent) 3.5%, transparent) 11px 12px),
+        var(--card);
+      border-radius: 20px;
+      /* real notches cut out on both ends of the tear line */
+      -webkit-mask:
+        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+              mask:
+        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+      overflow: hidden;
     }
     .ticket::before {
-      /* Sidi Bou blue band along the top edge */
+      /* Sidi Bou blue band into brass along the top */
       content: "";
       position: absolute;
       inset: 0 0 auto 0;
-      height: 6px;
-      border-radius: 18px 18px 0 0;
-      background: linear-gradient(90deg, var(--blue), var(--blue-deep) 70%, var(--brass));
+      height: 7px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-deep) 62%, var(--brass));
     }
-    .ticket-head { padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.3rem, 4vw, 2.4rem) clamp(1.4rem, 3vw, 1.8rem); }
-    .ticket-head .eyebrow { display: block; margin-bottom: 0.9rem; }
-    .project {
-      font-family: var(--display);
-      font-stretch: 112%;
-      font-size: clamp(1.45rem, 3.6vw, 2.1rem);
-      font-weight: 750;
-      line-height: 1.15;
-      margin-bottom: 0.7rem;
-    }
-    .project-sub { color: var(--muted); max-width: 58ch; }
 
-    /* perforation between the head and the stub */
-    .perf {
-      position: relative;
-      height: 0;
-      border-top: 2px dashed var(--line);
-      margin: 0 22px;
-    }
-    .perf::before,
-    .perf::after {
-      content: "";
+    .t-main { position: relative; padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.3rem, 4vw, 2.4rem) clamp(1.4rem, 3vw, 2rem); min-width: 0; }
+    .t-main::after {
+      /* faint watermark */
+      content: "PFE";
       position: absolute;
-      top: -13px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--bg);
-      border: 1px solid var(--line);
+      right: 1rem;
+      top: 2.6rem;
+      font-family: var(--display);
+      font-stretch: 125%;
+      font-weight: 900;
+      font-size: 9rem;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 9%, transparent);
+      pointer-events: none;
     }
-    .perf::before { left: -35px; clip-path: inset(0 0 0 50%); }
-    .perf::after { right: -35px; clip-path: inset(0 50% 0 0); }
+    .t-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .t-kicker {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .stamp {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brass);
+      border: 1.5px solid var(--brass);
+      border-radius: 6px;
+      padding: 0.22rem 0.6rem;
+      transform: rotate(-3deg);
+    }
 
-    .details {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      padding: clamp(1.2rem, 3vw, 1.6rem) clamp(1.3rem, 4vw, 2.4rem);
-    }
-    .detail { padding: 0.9rem 1rem 0.9rem 0; }
-    .detail + .detail { border-left: 1px solid var(--line); padding-left: 1.2rem; }
-    .detail.wide { grid-column: 1 / -1; border-left: none; padding-left: 0; border-top: 1px solid var(--line); margin-top: 0.4rem; padding-top: 1.3rem; }
-    .detail .k {
+    .guest { margin: 1.5rem 0 1.4rem; }
+    .k {
       display: block;
       font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
     }
-    .detail .v {
+    .guest .v {
+      display: block;
+      font-family: var(--display);
+      font-stretch: 118%;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+    .guest .v::after { content: ""; display: block; margin-top: 0.7rem; border-bottom: 1.5px solid var(--text); opacity: 0.8; }
+
+    .project { margin-bottom: 1.4rem; }
+    .project .v {
+      font-family: var(--display);
+      font-stretch: 112%;
+      font-weight: 750;
+      font-size: 1.2rem;
+    }
+    .project p { color: var(--muted); font-size: 0.95rem; max-width: 52ch; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 0.8fr 0.8fr;
+      border-top: 1.5px dashed var(--line);
+      border-bottom: 1.5px dashed var(--line);
+    }
+    .cell { padding: 0.9rem 0.9rem 0.9rem 0; min-width: 0; }
+    .cell + .cell { border-left: 1.5px dashed var(--line); padding-left: 0.9rem; }
+    .cell .v, .venue .v {
       font-family: var(--display);
       font-stretch: 110%;
       font-weight: 700;
-      font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
       line-height: 1.25;
     }
-    .detail .v small {
-      display: block;
-      font-family: var(--body);
-      font-stretch: 100%;
-      font-weight: 400;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 0.2rem;
-    }
-    /* not decided yet: shown as an empty slot, not as fake data */
+    .venue { padding-top: 1rem; }
+    .venue small { display: block; color: var(--muted); font-size: 0.9rem; }
+
+    /* not decided yet: an empty slot, never fake data */
     .tbd {
       display: inline-block;
       font-family: var(--mono);
       font-weight: 500;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       letter-spacing: 0.04em;
       color: var(--brass);
       border: 1px dashed color-mix(in srgb, var(--brass) 70%, transparent);
       background: color-mix(in srgb, var(--brass) 8%, transparent);
       border-radius: 6px;
-      padding: 0.15rem 0.55rem;
+      padding: 0.12rem 0.5rem;
       white-space: nowrap;
     }
 
-    .people {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem 2rem;
-      margin-top: 0.3rem;
-    }
-    .people b { display: block; font-weight: 600; }
-    .people span { color: var(--muted); font-size: 0.92rem; }
-
-    .countdown {
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-top: 0.3rem;
-    }
-
-    .actions {
+    /* the tear-off stub */
+    .t-stub {
+      position: relative;
+      border-left: 2px dashed var(--line);
+      padding: clamp(1.6rem, 4vw, 2.4rem) 1.4rem 1.6rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 2rem;
-      align-items: center;
+      flex-direction: column;
+      gap: 1rem;
+      background: color-mix(in srgb, var(--accent) 4%, transparent);
     }
+    .tear {
+      position: absolute;
+      left: -1px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      writing-mode: vertical-rl;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--card);
+      padding: 0.6rem 0.15rem;
+      white-space: nowrap;
+    }
+    .stub-guest { font-family: var(--display); font-stretch: 112%; font-weight: 700; font-size: 1.05rem; line-height: 1.2; overflow-wrap: anywhere; }
+    .stub-no {
+      font-family: var(--display);
+      font-stretch: 118%;
+      font-weight: 800;
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+    .stub-no small { font-family: var(--mono); font-size: 0.7rem; font-weight: 500; color: var(--muted); margin-right: 0.3rem; }
+    .stub-date { font-family: var(--mono); font-size: 0.95rem; }
+    .countdown {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      margin-top: 0.4rem;
+    }
+    .countdown[hidden] { display: none; }
+    .barcode { margin-top: auto; color: var(--text); }
+    .barcode svg { display: block; width: 100%; height: 54px; }
+    .barcode span { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.3em; color: var(--muted); margin-top: 0.35rem; text-align: center; }
+
+    /* ---------- actions & closing ---------- */
+    .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2rem; align-items: center; }
     .actions button.btn { cursor: pointer; font-family: var(--mono); line-height: inherit; }
     .actions .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
-    :root[data-theme="dark"] .actions .btn:not(.ghost) { color: #fff; }
     .actions .note { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+    :root[data-theme="dark"] .actions .btn:not(.ghost) { color: #fff; }
 
-    .inv-close {
-      margin-top: clamp(2.6rem, 6vw, 3.6rem);
-      max-width: 56ch;
-      color: var(--muted);
-    }
+    .inv-close { margin-top: clamp(2.4rem, 6vw, 3.4rem); max-width: 56ch; color: var(--muted); }
     .inv-close .sig {
       display: block;
       margin-top: 1rem;
@@ -222,10 +302,40 @@
       letter-spacing: 0.02em;
     }
 
-    @media (max-width: 640px) {
-      .details { grid-template-columns: 1fr 1fr; }
-      .detail:nth-child(3) { border-left: none; padding-left: 0; border-top: 1px solid var(--line); grid-column: 1 / -1; }
-      .people { grid-template-columns: 1fr; }
+    /* ---------- phones: the stub moves under the ticket ---------- */
+    @media (max-width: 720px) {
+      .ticket-wrap { --stub: 150px; }
+      .ticket {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto var(--stub);
+        -webkit-mask:
+          radial-gradient(circle var(--notch) at 0 calc(100% - var(--stub)), #0000 98%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle var(--notch) at 100% calc(100% - var(--stub)), #0000 98%, #000) right / 51% 100% no-repeat;
+                mask:
+          radial-gradient(circle var(--notch) at 0 calc(100% - var(--stub)), #0000 98%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle var(--notch) at 100% calc(100% - var(--stub)), #0000 98%, #000) right / 51% 100% no-repeat;
+      }
+      .t-stub {
+        border-left: 0;
+        border-top: 2px dashed var(--line);
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        align-content: center;
+        column-gap: 1.2rem;
+        row-gap: 0.3rem;
+        padding: 1.2rem 1.3rem;
+      }
+      .t-stub .stub-num { grid-row: 1 / 3; }
+      .barcode { grid-column: 2; grid-row: 1 / 3; margin: 0; align-self: center; }
+      .barcode svg { height: 46px; }
+      .tear { left: 50%; top: -1px; writing-mode: horizontal-tb; padding: 0.1rem 0.6rem; }
+      .stub-guest-wrap { display: none; }
+      .stub-when { display: none; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .cell:nth-child(3) { border-left: 0; padding-left: 0; }
+      .cell:nth-child(n+3) { border-top: 1.5px dashed var(--line); }
+      .t-main::after { display: none; }
       .inv-title .outline { -webkit-text-stroke-width: 1.4px; }
     }
   </style>
@@ -236,87 +346,98 @@
   <main class="inv-main">
     <section>
       <div class="inv-top">
-        <a class="inv-back" href="/">&larr; firasridene.tech</a>
-        <a class="logo" href="/" aria-label="Firas Ridene, accueil">FR<span>·</span></a>
+        <a class="logo" href="/" aria-label="Firas Ridene">FR<span>·</span></a>
+        <div class="lang" role="group" aria-label="Langue / Language">
+          <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
       </div>
 
-      <span class="sec-label">Soutenance · Projet de fin d'études</span>
-      <h1 class="inv-title">Vous êtes<br><span class="outline">invité·e</span></h1>
-      <p class="inv-lead">
-        J'ai le plaisir de vous inviter à la soutenance de mon <b>projet de fin d'études</b>,
-        dernière étape de mon diplôme d'ingénieur en informatique à <b>ESPRIT</b>.
-      </p>
+      <span class="sec-label" data-t="eyebrow">Soutenance · Projet de fin d'études</span>
+      <h1 class="inv-title"><span id="h1a">Vous êtes</span><span class="outline" id="h1b">invité·e</span></h1>
+      <p class="inv-lead" id="lead"></p>
 
-      <!-- Fill in when confirmed: data-date (YYYY-MM-DD), data-start / data-end (HH:MM),
-           then replace each .tbd placeholder below with the real value. -->
-      <article class="ticket" id="event" data-date="" data-start="" data-end="">
-        <div class="ticket-head">
-          <span class="eyebrow">Firas Ridene · PFE 2025 – 2026</span>
-          <h2 class="project">Conception et développement de VocaFlow</h2>
-          <p class="project-sub">
-            Plateforme SaaS permettant à toute entreprise de créer ses propres agents IA,
-            conversationnels et vocaux, sans écrire de code. Réalisé chez Agile 4UX.
-          </p>
-        </div>
+      <!-- ============ FILL IN WHEN CONFIRMED ============
+           data-date  YYYY-MM-DD      data-start / data-end  HH:MM
+           data-bloc  e.g. E          data-salle             e.g. 204
+           Empty values show as "to be announced" slots.     -->
+      <div class="ticket-wrap">
+        <article class="ticket" id="event" data-date="" data-start="" data-end="" data-bloc="" data-salle="">
+          <div class="t-main">
+            <div class="t-row">
+              <span class="t-kicker" data-t="kicker">ESPRIT · Soutenance PFE</span>
+              <span class="stamp" id="stamp">Entrée · 1</span>
+            </div>
 
-        <div class="perf" aria-hidden="true"></div>
+            <div class="guest">
+              <span class="k" id="guestK">Invité·e</span>
+              <span class="v" id="guestV">Invité·e d'honneur</span>
+            </div>
 
-        <div class="details">
-          <div class="detail">
-            <span class="k">Date</span>
-            <span class="v" id="vDate"><span class="tbd">JJ / MM / 2026</span></span>
-          </div>
-          <div class="detail">
-            <span class="k">Heure</span>
-            <span class="v" id="vTime"><span class="tbd">HH : MM</span></span>
-          </div>
-          <div class="detail">
-            <span class="k">Bloc · Salle</span>
-            <span class="v">Bloc <span class="tbd">—</span> · Salle <span class="tbd">—</span></span>
-          </div>
+            <div class="project">
+              <span class="k" data-t="projectK">Projet</span>
+              <span class="v">VocaFlow</span>
+              <p data-t="projectSub">Conception et développement d'une plateforme d'agents IA, conversationnels et vocaux · Agile 4UX</p>
+            </div>
 
-          <div class="detail wide">
-            <span class="k">Lieu</span>
-            <span class="v">ESPRIT Ghazela
+            <div class="grid">
+              <div class="cell"><span class="k" data-t="date">Date</span><span class="v" id="vDate"></span></div>
+              <div class="cell"><span class="k" data-t="time">Heure</span><span class="v" id="vTime"></span></div>
+              <div class="cell"><span class="k" data-t="bloc">Bloc</span><span class="v" id="vBloc"></span></div>
+              <div class="cell"><span class="k" data-t="salle">Salle</span><span class="v" id="vSalle"></span></div>
+            </div>
+
+            <div class="venue">
+              <span class="k" data-t="venue">Lieu</span>
+              <span class="v">ESPRIT Ghazela</span>
               <small>Pôle Technologique El Ghazela, Ariana</small>
-            </span>
-            <p class="countdown" id="countdown" hidden></p>
-          </div>
-
-          <div class="detail wide">
-            <span class="k">Encadrement</span>
-            <div class="people">
-              <div><b>Dr. Latifa Guesmi</b><span>Encadrante académique · ESPRIT</span></div>
-              <div><b>M. Khouldoun Bouraoui</b><span>Encadrant professionnel · Agile 4UX</span></div>
             </div>
           </div>
-        </div>
-      </article>
 
-      <div class="actions">
-        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=ESPRIT+El+Ghazela+Ariana" target="_blank" rel="noopener">Itinéraire ↗</a>
-        <a class="btn ghost" id="addCal" href="#" aria-disabled="true">Ajouter au calendrier</a>
-        <button class="btn ghost" id="share" type="button">Partager l'invitation</button>
-        <span class="note" id="note" role="status" aria-live="polite">Date, heure et salle communiquées prochainement.</span>
+          <aside class="t-stub">
+            <span class="tear" aria-hidden="true">✂ <span data-t="tear">détacher ici</span></span>
+            <div class="stub-num">
+              <span class="k" data-t="ticket">Billet</span>
+              <div class="stub-no"><small>Nº</small><span id="ticketNo">0001</span></div>
+            </div>
+            <div class="stub-guest-wrap">
+              <span class="k" id="stubGuestK">Invité·e</span>
+              <div class="stub-guest" id="stubGuest">—</div>
+            </div>
+            <div class="stub-when">
+              <span class="k" data-t="date">Date</span>
+              <div class="stub-date" id="stubDate">— / — / 2026</div>
+              <span class="countdown" id="countdown" hidden></span>
+            </div>
+            <div class="barcode" aria-hidden="true">
+              <svg id="barcode" viewBox="0 0 180 54" preserveAspectRatio="none"></svg>
+              <span id="barcodeTxt">PFE·2026</span>
+            </div>
+          </aside>
+        </article>
       </div>
 
-      <p class="inv-close">
-        Votre présence serait pour moi un vrai plaisir, et un soutien précieux pour clôturer
-        ces années d'études.
-        <span class="sig">Firas Ridene</span>
-      </p>
+      <div class="actions">
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=ESPRIT+El+Ghazela+Ariana" target="_blank" rel="noopener" data-t="directions">Itinéraire ↗</a>
+        <a class="btn ghost" id="addCal" href="#" aria-disabled="true" data-t="addCal">Ajouter au calendrier</a>
+        <button class="btn ghost" id="share" type="button" data-t="share">Partager</button>
+        <span class="note" id="note" role="status" aria-live="polite"></span>
+      </div>
+
+      <p class="inv-close"><span id="close"></span><span class="sig">Firas Ridene</span></p>
     </section>
   </main>
 
   <footer class="inv-footer">
     <span>© <span id="year"></span> Firas Ridene</span>
-    <span><a href="/">retour au portfolio</a></span>
-    <span><a href="mailto:firas.ridene@outlook.com">firas.ridene@outlook.com</a></span>
+    <span><a href="/">firasridene.tech</a></span>
   </footer>
 
   <script>
   (function () {
-    document.getElementById("year").textContent = new Date().getFullYear();
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+    $("year").textContent = new Date().getFullYear();
 
     /* spotlight, same as the portfolio */
     var spot = document.querySelector(".spot");
@@ -325,50 +446,178 @@
       spot.style.setProperty("--my", e.clientY + "px");
     }, { passive: true });
 
-    var ev = document.getElementById("event").dataset;
-    var note = document.getElementById("note");
+    /* ---------- who is invited: /pfe/?amal  ?amal&f  ?amal+sami  ?amal&en ---------- */
+    var FLAGS = { en: 1, fr: 1, f: 1, m: 1 };
+    var params = new URLSearchParams(location.search);
+    var raw = params.get("to") || params.get("n") || "";
+    if (!raw) params.forEach(function (v, k) { if (!raw && !v && !FLAGS[k.toLowerCase()]) raw = k; });
+    if (!raw && location.hash) raw = decodeURIComponent(location.hash.slice(1));
+    var cap = function (w) { return w.split("-").map(function (p) { return p.charAt(0).toLocaleUpperCase() + p.slice(1).toLocaleLowerCase(); }).join("-"); };
+    var names = raw.split(/[\s,&+]+/)
+      .filter(function (w) { return /^[\p{L}\p{M}'’.-]{1,24}$/u.test(w); })
+      .slice(0, 4)
+      .map(cap);
+    var who = names.length === 0 ? null : names.length === 1 ? names[0]
+      : names.slice(0, -1).join(", ") + " & " + names[names.length - 1];
+    var plural = names.length > 1;
+    var tu = names.length === 1; /* friends & family: "tu" for one named guest, "vous" otherwise */
+    var g = params.has("f") ? "f" : params.has("m") ? "m" : "";
 
-    /* once a date is set: show it nicely, count down, and offer an .ics file */
-    if (ev.date) {
-      var start = new Date(ev.date + "T" + (ev.start || "09:00") + ":00");
+    /* ---------- event details ---------- */
+    var ev = $("event").dataset;
+
+    /* ---------- copy ---------- */
+    var invitedFR = (plural ? (g === "f" ? "invitées" : "invités") : (g === "f" ? "invitée" : g === "m" ? "invité" : "invité·e"));
+    var T = {
+      fr: {
+        title: "Invitation · Soutenance de PFE · Firas Ridene",
+        eyebrow: "Soutenance · Projet de fin d'études",
+        h1a: who ? who + "," : "Vous êtes",
+        h1b: who ? (tu ? "tu es " : "vous êtes ") + invitedFR : invitedFR,
+        lead: (tu ? "J'ai le plaisir de t'inviter" : "J'ai le plaisir de vous inviter") +
+          " à la soutenance de mon <b>projet de fin d'études</b>, la dernière étape de mon diplôme d'ingénieur en informatique à <b>ESPRIT</b>.",
+        kicker: "ESPRIT · Soutenance PFE",
+        stamp: "Entrée · " + Math.max(1, names.length),
+        guestK: plural ? invitedFR : invitedFR.charAt(0).toUpperCase() + invitedFR.slice(1),
+        guestV: who || "Invité·e d'honneur",
+        projectK: "Projet",
+        projectSub: "Conception et développement d'une plateforme d'agents IA, conversationnels et vocaux · Agile 4UX",
+        date: "Date", time: "Heure", bloc: "Bloc", salle: "Salle", venue: "Lieu",
+        tbdDate: "JJ / MM / 2026", tbdTime: "HH : MM",
+        ticket: "Billet", tear: "détacher ici",
+        directions: "Itinéraire ↗", addCal: "Ajouter au calendrier", share: "Partager",
+        pending: "Date, heure et salle communiquées très bientôt.",
+        copied: "Lien copié.",
+        close: (tu ? "Ta présence" : "Votre présence") +
+          " me ferait vraiment plaisir, et ce serait un beau soutien pour clôturer ces années d'études.",
+        days: function (n) { return n > 1 ? "J-" + n : n === 1 ? "C'est demain !" : "C'est aujourd'hui !"; },
+        locale: "fr-FR"
+      },
+      en: {
+        title: "Invitation · Firas Ridene's graduation defense",
+        eyebrow: "Graduation defense · End-of-studies project",
+        h1a: who ? who + "," : "You're",
+        h1b: who ? "you're invited" : "invited",
+        lead: "I'd love for you to come to the defense of my <b>end-of-studies project</b>, the last step of my computer engineering degree at <b>ESPRIT</b>.",
+        kicker: "ESPRIT · Graduation defense",
+        stamp: "Admit " + (["one", "one", "two", "three", "four"][names.length] || names.length),
+        guestK: plural ? "Guests" : "Guest",
+        guestV: who || "Guest of honour",
+        projectK: "Project",
+        projectSub: "Design and development of a platform for AI chat and voice agents · Agile 4UX",
+        date: "Date", time: "Time", bloc: "Block", salle: "Room", venue: "Venue",
+        tbdDate: "DD / MM / 2026", tbdTime: "HH : MM",
+        ticket: "Ticket", tear: "tear here",
+        directions: "Directions ↗", addCal: "Add to calendar", share: "Share",
+        pending: "Date, time and room coming very soon.",
+        copied: "Link copied.",
+        close: "It would mean a lot to have you there as I wrap up these years of study.",
+        days: function (n) { return n > 1 ? n + " days to go" : n === 1 ? "It's tomorrow!" : "It's today!"; },
+        locale: "en-GB"
+      }
+    };
+
+    /* ---------- ticket number & barcode, unique per guest ---------- */
+    var seed = 2166136261;
+    (names.join(" ").toLowerCase() || "pfe").split("").forEach(function (c) {
+      seed ^= c.charCodeAt(0); seed = Math.imul(seed, 16777619) >>> 0;
+    });
+    $("ticketNo").textContent = String(1000 + (seed % 9000));
+    (function barcode() {
+      var s = seed || 1, x = 0, bars = "";
+      var rnd = function () { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return (s >>> 0) / 4294967296; };
+      while (x < 176) {
+        var w = 1 + Math.floor(rnd() * 3.2);
+        bars += '<rect x="' + x + '" y="0" width="' + w + '" height="54" fill="currentColor"/>';
+        x += w + 1 + Math.floor(rnd() * 3);
+      }
+      $("barcode").innerHTML = bars;
+      $("barcodeTxt").textContent = "PFE·2026·" + $("ticketNo").textContent;
+    })();
+
+    /* ---------- render ---------- */
+    var slot = function (el, value, placeholder) {
+      el.textContent = "";
+      if (value) { el.textContent = value; return; }
+      var s = document.createElement("span");
+      s.className = "tbd";
+      s.textContent = placeholder;
+      el.appendChild(s);
+    };
+    var start = ev.date ? new Date(ev.date + "T" + (ev.start || "09:00") + ":00") : null;
+
+    function render(lang) {
+      var t = T[lang];
+      document.documentElement.lang = lang;
+      document.title = t.title;
+      document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t[el.dataset.t]; });
+      document.querySelectorAll(".lang button").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+      });
+      $("h1a").textContent = t.h1a;
+      $("h1b").textContent = t.h1b;
+      $("lead").innerHTML = t.lead; /* fixed copy only, the guest name never goes through innerHTML */
+      $("stamp").textContent = t.stamp;
+      $("guestK").textContent = t.guestK;
+      $("guestV").textContent = t.guestV;
+      $("stubGuestK").textContent = t.guestK;
+      $("stubGuest").textContent = t.guestV;
+      $("close").textContent = t.close;
+
+      slot($("vDate"), start && start.toLocaleDateString(t.locale, { weekday: "long", day: "numeric", month: "long" }), t.tbdDate);
+      slot($("vTime"), ev.start && (lang === "fr" ? ev.start.replace(":", "h") : ev.start), t.tbdTime);
+      slot($("vBloc"), ev.bloc, "—");
+      slot($("vSalle"), ev.salle, "—");
+      $("stubDate").textContent = start
+        ? start.toLocaleDateString(t.locale, { day: "2-digit", month: "2-digit", year: "numeric" })
+        : "— / — / 2026";
+
+      var cd = $("countdown");
+      cd.hidden = true;
+      if (start) {
+        var days = Math.round((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
+        if (days >= 0) { cd.textContent = t.days(days); cd.hidden = false; }
+      }
+      $("note").textContent = ev.date && ev.start && ev.salle ? "" : t.pending;
+      try { localStorage.setItem("pfe-lang", lang); } catch (e) {}
+    }
+
+    var lang = params.has("en") ? "en" : params.has("fr") ? "fr" : "fr";
+    if (!params.has("en") && !params.has("fr")) {
+      try { lang = localStorage.getItem("pfe-lang") || "fr"; } catch (e) {}
+    }
+    render(lang);
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.addEventListener("click", function () { render(b.dataset.lang); });
+    });
+
+    /* ---------- add to calendar (once a date is set) ---------- */
+    if (start) {
       var end = ev.end ? new Date(ev.date + "T" + ev.end + ":00") : new Date(start.getTime() + 90 * 60000);
-
-      document.getElementById("vDate").textContent =
-        start.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-      if (ev.start) document.getElementById("vTime").textContent = ev.start.replace(":", "h");
-
-      var days = Math.ceil((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
-      var cd = document.getElementById("countdown");
-      if (days > 1) { cd.textContent = "J-" + days; cd.hidden = false; }
-      else if (days === 1) { cd.textContent = "C'est demain !"; cd.hidden = false; }
-      else if (days === 0) { cd.textContent = "C'est aujourd'hui !"; cd.hidden = false; }
-
       var stamp = function (d) { return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); };
+      var where = "ESPRIT Ghazela" + (ev.bloc ? "\\, Bloc " + ev.bloc : "") + (ev.salle ? "\\, Salle " + ev.salle : "") + "\\, Pôle Technologique El Ghazela\\, Ariana";
       var ics = [
         "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//firasridene.tech//PFE//FR", "BEGIN:VEVENT",
         "UID:pfe-" + ev.date + "@firasridene.tech",
         "DTSTAMP:" + stamp(new Date()),
         "DTSTART:" + stamp(start), "DTEND:" + stamp(end),
-        "SUMMARY:Soutenance de PFE · Firas Ridene",
-        "DESCRIPTION:Conception et développement de VocaFlow. https://firasridene.tech/pfe/",
-        "LOCATION:ESPRIT Ghazela\\, Pôle Technologique El Ghazela\\, Ariana",
+        "SUMMARY:Soutenance PFE · Firas Ridene",
+        "LOCATION:" + where,
         "END:VEVENT", "END:VCALENDAR"
       ].join("\r\n");
-      var cal = document.getElementById("addCal");
+      var cal = $("addCal");
       cal.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
       cal.download = "soutenance-firas-ridene.ics";
       cal.removeAttribute("aria-disabled");
-      note.textContent = "";
     }
 
-    document.getElementById("share").addEventListener("click", function () {
-      var data = { title: "Soutenance de PFE · Firas Ridene", url: "https://firasridene.tech/pfe/" };
-      if (navigator.share) { navigator.share(data).catch(function () {}); return; }
-      navigator.clipboard.writeText(data.url).then(function () {
-        note.textContent = "Lien copié.";
-      }, function () {
-        note.textContent = data.url;
-      });
+    /* ---------- share: always the plain link, never someone's personal one ---------- */
+    $("share").addEventListener("click", function () {
+      var url = location.origin + "/pfe/";
+      if (navigator.share) { navigator.share({ title: document.title, url: url }).catch(function () {}); return; }
+      navigator.clipboard.writeText(url).then(function () {
+        $("note").textContent = T[document.documentElement.lang].copied;
+      }, function () { $("note").textContent = url; });
     });
   })();
   </script>
