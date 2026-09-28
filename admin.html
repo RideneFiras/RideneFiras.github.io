@@ -177,12 +177,15 @@
           </div>
         </div>
       </div>
-      <label for="invLink">Link</label>
+      <label for="invShort">Short link (name coded, not readable)</label>
+      <input type="text" id="invShort" readonly>
+      <label for="invLink">Readable link</label>
       <input type="text" id="invLink" readonly>
-      <label for="invText">Message (edit freely before sending)</label>
+      <label for="invText">Message, with the short link (edit freely before sending)</label>
       <textarea id="invText" class="tall"></textarea>
       <div class="row">
-        <button id="invCopyLink">Copy link</button>
+        <button id="invCopyShort">Copy short link</button>
+        <button class="ghost" id="invCopyLink">Copy readable link</button>
         <button class="ghost" id="invCopyText">Copy message</button>
         <a class="btn" id="invWa" href="#" target="_blank" rel="noopener">WhatsApp ↗</a>
         <a class="btn" id="invOpen" href="#" target="_blank" rel="noopener">Preview ↗</a>
@@ -598,9 +601,61 @@
   $("#save").addEventListener("click", save);
   $("#reload").addEventListener("click", function () { load(state.file); });
 
+  /* ---------- short invite codes: #<p><code> (kept identical in pfe/index.html and admin.html) ----------
+     p    = gender + 3 × language   (gender 0 none · 1 F · 2 M, language 0 FR · 1 EN)
+     code = the guest name(s) as base-32 digits, lightly scrambled, written in base 62.
+     It keeps names from being readable at a glance; it is not encryption.                */
+  var PFE_CODE = (function () {
+    var B62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var SYM = " abcdefghijklmnopqrstuvwxyz,-'";   /* digits 1..30 */
+    var ACC = "éèêëàâäîïôöûüùçñÿœæáíóúãõåøß";     /* after the escape digit: 1..28 */
+    var ESC = 31, CP = 31;                          /* ESC then CP: any other letter, as 3 digits */
+    var key = function (i, n) { return (i * 7 + n * 13 + 5) % 31; };
+    var mod = function (a, m) { return ((a % m) + m) % m; };
+    function encode(name) {
+      var d = [];
+      Array.from(String(name).toLowerCase()).forEach(function (ch) {
+        var s = SYM.indexOf(ch), a = ACC.indexOf(ch), c = ch.codePointAt(0);
+        if (s >= 0) d.push(s + 1);
+        else if (a >= 0) d.push(ESC, a + 1);
+        else if (c < 29791) d.push(ESC, CP, c % 31 + 1, Math.floor(c / 31) % 31 + 1, Math.floor(c / 961) + 1);
+      });
+      var n = d.length, prev = 0, s = [];
+      for (var i = 0; i < n; i++) { prev = mod(d[i] - 1 + prev + key(i, n), 31); s.push(prev + 1); }
+      var v = BigInt(0), out = "";
+      for (var j = n - 1; j >= 0; j--) v = v * BigInt(32) + BigInt(s[j]);
+      while (v > BigInt(0)) { out = B62[Number(v % BigInt(62))] + out; v = v / BigInt(62); }
+      return out;
+    }
+    function decode(code) {
+      var v = BigInt(0), s = [], d = [], out = "";
+      for (var i = 0; i < code.length; i++) {
+        var k = B62.indexOf(code[i]);
+        if (k < 0) return null;
+        v = v * BigInt(62) + BigInt(k);
+      }
+      while (v > BigInt(0)) {
+        var x = Number(v % BigInt(32));
+        if (!x) return null;
+        s.push(x); v = v / BigInt(32);
+      }
+      var n = s.length, prev = 0;
+      for (var j = 0; j < n; j++) { d.push(mod(s[j] - 1 - prev - key(j, n), 31) + 1); prev = s[j] - 1; }
+      for (var p = 0; p < n; p++) {
+        if (d[p] !== ESC) { out += SYM[d[p] - 1] || ""; continue; }
+        var t = d[++p];
+        if (t === CP) { out += String.fromCodePoint((d[p + 1] - 1) + (d[p + 2] - 1) * 31 + (d[p + 3] - 1) * 961); p += 3; }
+        else out += ACC[t - 1] || "";
+      }
+      return out;
+    }
+    return { encode: encode, decode: decode };
+  })();
+
   /* ---------- PFE invitation links ----------
      must match the parser in pfe/index.html:
-     words joined by "+", guests by ",", then &f / &m and &en            */
+     short:    /pfe/#<gender + 3 × language><coded name>
+     readable: words joined by "+", guests by ",", then &1 (F) / &2 (M) and &en          */
   var INV_STORE = "pfe_invites";
   var inv = { g: "", l: "fr" };
   function invGuests() {
@@ -613,8 +668,13 @@
     var q = guests.map(function (w) {
       return w.map(function (x) { return encodeURIComponent(x.toLowerCase()); }).join("+");
     }).join(",");
-    var flags = (inv.g ? "&" + inv.g : "") + (inv.l === "en" ? "&en" : "");
-    var link = "https://firasridene.tech/pfe/" + (q ? "?" + q + flags : flags ? "?" + flags.slice(1) : "");
+    var gd = { "": 0, f: 1, m: 2 }[inv.g];
+    var flags = (gd ? "&" + gd : "") + (inv.l === "en" ? "&en" : "");
+    var readable = "https://firasridene.tech/pfe/" + (q ? "?" + q + flags : flags ? "?" + flags.slice(1) : "");
+    var plain = guests.map(function (w) { return w.join(" ").toLowerCase(); }).join(",");
+    var link = plain
+      ? "https://firasridene.tech/pfe/#" + (gd + (inv.l === "en" ? 3 : 0)) + PFE_CODE.encode(plain)
+      : readable;
     var firsts = guests.map(function (w) { return w[0].charAt(0).toUpperCase() + w[0].slice(1); });
     var who = firsts.length < 2 ? firsts[0] || "" : firsts.slice(0, -1).join(", ") + " & " + firsts[firsts.length - 1];
     var one = guests.length === 1;
@@ -622,7 +682,8 @@
       ? "Hi" + (who ? " " + who : "") + "! 🎓 I'd love for you to come to my end-of-studies project defense at ESPRIT Ghazela. Your invitation is here: " + link
       : "Salut" + (who ? " " + who : "") + " ! 🎓 J'ai le plaisir de " + (one ? "t'inviter" : "vous inviter") +
         " à la soutenance de mon projet de fin d'études à ESPRIT Ghazela. " + (one ? "Ton" : "Votre") + " invitation est ici : " + link;
-    $("#invLink").value = link;
+    $("#invShort").value = link;
+    $("#invLink").value = readable;
     $("#invText").value = text;
     $("#invOpen").href = link;
     syncWa();
@@ -653,13 +714,14 @@
       buildInvite();
     });
   });
-  $("#invCopyLink").addEventListener("click", function () { copy($("#invLink").value, "Link"); });
+  $("#invCopyShort").addEventListener("click", function () { copy($("#invShort").value, "Short link"); });
+  $("#invCopyLink").addEventListener("click", function () { copy($("#invLink").value, "Readable link"); });
   $("#invCopyText").addEventListener("click", function () { copy($("#invText").value, "Message"); });
   $("#invKeep").addEventListener("click", function () {
     var name = $("#invName").value.trim();
     if (!name) { msg($("#invOut"), "Type a name first.", "err"); return; }
-    var list = invLoad().filter(function (it) { return it.link !== $("#invLink").value; });
-    list.unshift({ name: name, flags: [inv.g ? inv.g.toUpperCase() : "", inv.l.toUpperCase()].filter(Boolean).join(" · "), link: $("#invLink").value });
+    var list = invLoad().filter(function (it) { return it.link !== $("#invShort").value; });
+    list.unshift({ name: name, flags: [inv.g ? inv.g.toUpperCase() : "", inv.l.toUpperCase()].filter(Boolean).join(" · "), link: $("#invShort").value, readable: $("#invLink").value });
     invSaveList(list);
     renderInvList();
     msg($("#invOut"), "Kept on this device.", "ok");
