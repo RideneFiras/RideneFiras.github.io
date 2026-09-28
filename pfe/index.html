@@ -488,7 +488,7 @@
     }, { passive: true });
 
     /* ---------- who is invited ----------
-       /pfe/?amal                 one guest       /pfe/?amal+ridene        full name
+       /pfe/?amal                 one guest       /pfe/?amal+ridene        full name (also amal_ridene, amal.ridene, "amal ridene")
        /pfe/?amal+ridene,sami     two guests      &f / &m                  French agreement
        &en / &fr                  opening language (the toggle still works)            */
     var FLAGS = { en: 1, fr: 1, f: 1, m: 1 };
@@ -499,10 +499,13 @@
     var cap = function (w) {
       return w.split("-").map(function (p) { return p.charAt(0).toLocaleUpperCase() + p.slice(1).toLocaleLowerCase(); }).join("-");
     };
+    /* first + last name however it was typed: space, %20, +, _ or . between words
+       (a hyphen stays inside the name: Mohamed-Amine) */
+    raw = raw.replace(/[_.]+/g, " ");
     var guests = raw.split(/\s*[,;&]\s*/)
       .map(function (g) {
         return g.trim().split(/\s+/)
-          .filter(function (w) { return /^[\p{L}\p{M}'’.-]{1,24}$/u.test(w); })
+          .filter(function (w) { return /^[\p{L}\p{M}'’-]{1,24}$/u.test(w); })
           .slice(0, 4).map(cap).join(" ");
       })
       .filter(Boolean)
