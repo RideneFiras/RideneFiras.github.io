@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invitation · Soutenance de PFE · Firas Ridene</title>
+  <meta name="description" content="Invitation à la soutenance du projet de fin d'études de Firas Ridene, élève ingénieur en informatique à ESPRIT, Ghazela.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f5f4ef">
+  <link rel="canonical" href="https://firasridene.tech/pfe/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Firas Ridene">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Invitation · Soutenance de PFE de Firas Ridene">
+  <meta property="og:description" content="Vous êtes invité·e à la soutenance de mon projet de fin d'études, à ESPRIT Ghazela.">
+  <meta property="og:url" content="https://firasridene.tech/pfe/">
+  <meta property="og:image" content="https://firasridene.tech/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232553C4'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23B7802F'/%3E%3Cpath d='M18 46V18h14' stroke='%23F5F4EF' stroke-width='6' fill='none'/%3E%3Cpath d='M18 32h11' stroke='%23F5F4EF' stroke-width='6'/%3E%3C/svg%3E">
+
+  <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+  <link rel="preload" href="../assets/fonts/archivo-vf.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/instrument-sans-vf.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* standalone page: no left rail, so reclaim the margin the shared sheet reserves */
+    .inv-main { margin-left: 0; }
+    .inv-main > section { max-width: 880px; padding-top: clamp(2.5rem, 6vw, 4rem); }
+    .inv-footer { margin-left: 0; max-width: 880px; margin: 0 auto; }
+
+    .inv-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: clamp(2.4rem, 6vw, 3.6rem);
+    }
+    .inv-back {
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+    }
+    .inv-back:hover { text-decoration: underline; }
+    .inv-top .logo {
+      font-family: var(--display);
+      font-stretch: 125%;
+      font-weight: 850;
+      font-size: 1.25rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .inv-top .logo span { color: var(--brass); }
+
+    .inv-title {
+      font-family: var(--display);
+      font-stretch: 122%;
+      font-size: clamp(2.6rem, 9vw, 5.6rem);
+      font-weight: 850;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: 0.005em;
+      margin: 0.9rem 0 1.4rem;
+    }
+    .inv-title .outline {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--text);
+    }
+    .inv-lead {
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 44ch;
+      margin-bottom: clamp(2.4rem, 6vw, 3.4rem);
+    }
+    .inv-lead b { color: var(--text); font-weight: 600; }
+
+    /* ---- the ticket ---- */
+    .ticket {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px -28px color-mix(in srgb, var(--blue) 45%, transparent);
+    }
+    .ticket::before {
+      /* Sidi Bou blue band along the top edge */
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(90deg, var(--blue), var(--blue-deep) 70%, var(--brass));
+    }
+    .ticket-head { padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.3rem, 4vw, 2.4rem) clamp(1.4rem, 3vw, 1.8rem); }
+    .ticket-head .eyebrow { display: block; margin-bottom: 0.9rem; }
+    .project {
+      font-family: var(--display);
+      font-stretch: 112%;
+      font-size: clamp(1.45rem, 3.6vw, 2.1rem);
+      font-weight: 750;
+      line-height: 1.15;
+      margin-bottom: 0.7rem;
+    }
+    .project-sub { color: var(--muted); max-width: 58ch; }
+
+    /* perforation between the head and the stub */
+    .perf {
+      position: relative;
+      height: 0;
+      border-top: 2px dashed var(--line);
+      margin: 0 22px;
+    }
+    .perf::before,
+    .perf::after {
+      content: "";
+      position: absolute;
+      top: -13px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--line);
+    }
+    .perf::before { left: -35px; clip-path: inset(0 0 0 50%); }
+    .perf::after { right: -35px; clip-path: inset(0 50% 0 0); }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      padding: clamp(1.2rem, 3vw, 1.6rem) clamp(1.3rem, 4vw, 2.4rem);
+    }
+    .detail { padding: 0.9rem 1rem 0.9rem 0; }
+    .detail + .detail { border-left: 1px solid var(--line); padding-left: 1.2rem; }
+    .detail.wide { grid-column: 1 / -1; border-left: none; padding-left: 0; border-top: 1px solid var(--line); margin-top: 0.4rem; padding-top: 1.3rem; }
+    .detail .k {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .detail .v {
+      font-family: var(--display);
+      font-stretch: 110%;
+      font-weight: 700;
+      font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+      line-height: 1.25;
+    }
+    .detail .v small {
+      display: block;
+      font-family: var(--body);
+      font-stretch: 100%;
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+    /* not decided yet: shown as an empty slot, not as fake data */
+    .tbd {
+      display: inline-block;
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      color: var(--brass);
+      border: 1px dashed color-mix(in srgb, var(--brass) 70%, transparent);
+      background: color-mix(in srgb, var(--brass) 8%, transparent);
+      border-radius: 6px;
+      padding: 0.15rem 0.55rem;
+      white-space: nowrap;
+    }
+
+    .people {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem 2rem;
+      margin-top: 0.3rem;
+    }
+    .people b { display: block; font-weight: 600; }
+    .people span { color: var(--muted); font-size: 0.92rem; }
+
+    .countdown {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 0.3rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 2rem;
+      align-items: center;
+    }
+    .actions button.btn { cursor: pointer; font-family: var(--mono); line-height: inherit; }
+    .actions .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+    :root[data-theme="dark"] .actions .btn:not(.ghost) { color: #fff; }
+    .actions .note { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
+
+    .inv-close {
+      margin-top: clamp(2.6rem, 6vw, 3.6rem);
+      max-width: 56ch;
+      color: var(--muted);
+    }
+    .inv-close .sig {
+      display: block;
+      margin-top: 1rem;
+      font-family: var(--display);
+      font-stretch: 118%;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 640px) {
+      .details { grid-template-columns: 1fr 1fr; }
+      .detail:nth-child(3) { border-left: none; padding-left: 0; border-top: 1px solid var(--line); grid-column: 1 / -1; }
+      .people { grid-template-columns: 1fr; }
+      .inv-title .outline { -webkit-text-stroke-width: 1.4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="spot" aria-hidden="true"></div>
+
+  <main class="inv-main">
+    <section>
+      <div class="inv-top">
+        <a class="inv-back" href="/">&larr; firasridene.tech</a>
+        <a class="logo" href="/" aria-label="Firas Ridene, accueil">FR<span>·</span></a>
+      </div>
+
+      <span class="sec-label">Soutenance · Projet de fin d'études</span>
+      <h1 class="inv-title">Vous êtes<br><span class="outline">invité·e</span></h1>
+      <p class="inv-lead">
+        J'ai le plaisir de vous inviter à la soutenance de mon <b>projet de fin d'études</b>,
+        dernière étape de mon diplôme d'ingénieur en informatique à <b>ESPRIT</b>.
+      </p>
+
+      <!-- Fill in when confirmed: data-date (YYYY-MM-DD), data-start / data-end (HH:MM),
+           then replace each .tbd placeholder below with the real value. -->
+      <article class="ticket" id="event" data-date="" data-start="" data-end="">
+        <div class="ticket-head">
+          <span class="eyebrow">Firas Ridene · PFE 2025 – 2026</span>
+          <h2 class="project">Conception et développement de VocaFlow</h2>
+          <p class="project-sub">
+            Plateforme SaaS permettant à toute entreprise de créer ses propres agents IA,
+            conversationnels et vocaux, sans écrire de code. Réalisé chez Agile 4UX.
+          </p>
+        </div>
+
+        <div class="perf" aria-hidden="true"></div>
+
+        <div class="details">
+          <div class="detail">
+            <span class="k">Date</span>
+            <span class="v" id="vDate"><span class="tbd">JJ / MM / 2026</span></span>
+          </div>
+          <div class="detail">
+            <span class="k">Heure</span>
+            <span class="v" id="vTime"><span class="tbd">HH : MM</span></span>
+          </div>
+          <div class="detail">
+            <span class="k">Bloc · Salle</span>
+            <span class="v">Bloc <span class="tbd">—</span> · Salle <span class="tbd">—</span></span>
+          </div>
+
+          <div class="detail wide">
+            <span class="k">Lieu</span>
+            <span class="v">ESPRIT Ghazela
+              <small>Pôle Technologique El Ghazela, Ariana</small>
+            </span>
+            <p class="countdown" id="countdown" hidden></p>
+          </div>
+
+          <div class="detail wide">
+            <span class="k">Encadrement</span>
+            <div class="people">
+              <div><b>Dr. Latifa Guesmi</b><span>Encadrante académique · ESPRIT</span></div>
+              <div><b>M. Khouldoun Bouraoui</b><span>Encadrant professionnel · Agile 4UX</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div class="actions">
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=ESPRIT+El+Ghazela+Ariana" target="_blank" rel="noopener">Itinéraire ↗</a>
+        <a class="btn ghost" id="addCal" href="#" aria-disabled="true">Ajouter au calendrier</a>
+        <button class="btn ghost" id="share" type="button">Partager l'invitation</button>
+        <span class="note" id="note" role="status" aria-live="polite">Date, heure et salle communiquées prochainement.</span>
+      </div>
+
+      <p class="inv-close">
+        Votre présence serait pour moi un vrai plaisir, et un soutien précieux pour clôturer
+        ces années d'études.
+        <span class="sig">Firas Ridene</span>
+      </p>
+    </section>
+  </main>
+
+  <footer class="inv-footer">
+    <span>© <span id="year"></span> Firas Ridene</span>
+    <span><a href="/">retour au portfolio</a></span>
+    <span><a href="mailto:firas.ridene@outlook.com">firas.ridene@outlook.com</a></span>
+  </footer>
+
+  <script>
+  (function () {
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    /* spotlight, same as the portfolio */
+    var spot = document.querySelector(".spot");
+    window.addEventListener("pointermove", function (e) {
+      spot.style.setProperty("--mx", e.clientX + "px");
+      spot.style.setProperty("--my", e.clientY + "px");
+    }, { passive: true });
+
+    var ev = document.getElementById("event").dataset;
+    var note = document.getElementById("note");
+
+    /* once a date is set: show it nicely, count down, and offer an .ics file */
+    if (ev.date) {
+      var start = new Date(ev.date + "T" + (ev.start || "09:00") + ":00");
+      var end = ev.end ? new Date(ev.date + "T" + ev.end + ":00") : new Date(start.getTime() + 90 * 60000);
+
+      document.getElementById("vDate").textContent =
+        start.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      if (ev.start) document.getElementById("vTime").textContent = ev.start.replace(":", "h");
+
+      var days = Math.ceil((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
+      var cd = document.getElementById("countdown");
+      if (days > 1) { cd.textContent = "J-" + days; cd.hidden = false; }
+      else if (days === 1) { cd.textContent = "C'est demain !"; cd.hidden = false; }
+      else if (days === 0) { cd.textContent = "C'est aujourd'hui !"; cd.hidden = false; }
+
+      var stamp = function (d) { return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); };
+      var ics = [
+        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//firasridene.tech//PFE//FR", "BEGIN:VEVENT",
+        "UID:pfe-" + ev.date + "@firasridene.tech",
+        "DTSTAMP:" + stamp(new Date()),
+        "DTSTART:" + stamp(start), "DTEND:" + stamp(end),
+        "SUMMARY:Soutenance de PFE · Firas Ridene",
+        "DESCRIPTION:Conception et développement de VocaFlow. https://firasridene.tech/pfe/",
+        "LOCATION:ESPRIT Ghazela\\, Pôle Technologique El Ghazela\\, Ariana",
+        "END:VEVENT", "END:VCALENDAR"
+      ].join("\r\n");
+      var cal = document.getElementById("addCal");
+      cal.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+      cal.download = "soutenance-firas-ridene.ics";
+      cal.removeAttribute("aria-disabled");
+      note.textContent = "";
+    }
+
+    document.getElementById("share").addEventListener("click", function () {
+      var data = { title: "Soutenance de PFE · Firas Ridene", url: "https://firasridene.tech/pfe/" };
+      if (navigator.share) { navigator.share(data).catch(function () {}); return; }
+      navigator.clipboard.writeText(data.url).then(function () {
+        note.textContent = "Lien copié.";
+      }, function () {
+        note.textContent = data.url;
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
