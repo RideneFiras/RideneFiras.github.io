@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://firasridene.tech/</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
+    <image:image>
+      <image:loc>https://firasridene.tech/assets/firas.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://firasridene.tech/legal/</loc>
