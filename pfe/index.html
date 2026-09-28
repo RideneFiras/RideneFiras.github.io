@@ -92,7 +92,7 @@
     }
     .inv-lead b { color: var(--text); font-weight: 600; }
 
-    /* ---------- the ticket ---------- */
+    /* ---------- the ticket: two pieces, so the stub can really tear off ---------- */
     .ticket-wrap {
       --stub: 230px;
       --notch: 15px;
@@ -107,32 +107,36 @@
       }
     }
     .ticket {
+      display: flex;
+      transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: transform 0.18s ease-out;
+    }
+    .piece {
       position: relative;
-      display: grid;
-      grid-template-columns: 1fr var(--stub);
+      overflow: hidden;
       background:
         repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--accent) 3.5%, transparent) 11px 12px),
         var(--card);
-      border-radius: 20px;
-      /* real notches cut out on both ends of the tear line */
-      -webkit-mask:
-        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
-        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
-              mask:
-        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
-        radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
-      overflow: hidden;
     }
-    .ticket::before {
-      /* Sidi Bou blue band into brass along the top */
+    .piece::before {
       content: "";
       position: absolute;
       inset: 0 0 auto 0;
       height: 7px;
-      background: linear-gradient(90deg, var(--blue), var(--blue-deep) 62%, var(--brass));
     }
-
-    .t-main { position: relative; padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.3rem, 4vw, 2.4rem) clamp(1.4rem, 3vw, 2rem); min-width: 0; }
+    .t-main {
+      flex: 1;
+      min-width: 0;
+      border-radius: 20px 0 0 20px;
+      padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.3rem, 4vw, 2.4rem) clamp(1.4rem, 3vw, 2rem);
+      -webkit-mask:
+        radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) top / 100% 51% no-repeat,
+        radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+              mask:
+        radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) top / 100% 51% no-repeat,
+        radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+    }
+    .t-main::before { background: linear-gradient(90deg, var(--blue), var(--blue-deep)); }
     .t-main::after {
       /* faint watermark */
       content: "PFE";
@@ -148,6 +152,50 @@
       -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 9%, transparent);
       pointer-events: none;
     }
+    .t-stub {
+      flex: 0 0 var(--stub);
+      border-radius: 0 20px 20px 0;
+      border-left: 2px dashed var(--line);
+      padding: clamp(1.6rem, 4vw, 2.4rem) 1.4rem 1.6rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background:
+        repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--accent) 3.5%, transparent) 11px 12px),
+        color-mix(in srgb, var(--accent) 4%, var(--card));
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.55s cubic-bezier(0.3, 1.45, 0.5, 1);
+      -webkit-mask:
+        radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) top / 100% 51% no-repeat,
+        radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+              mask:
+        radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) top / 100% 51% no-repeat,
+        radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+    }
+    .t-stub::before { background: linear-gradient(90deg, var(--blue-deep), var(--brass)); }
+    .t-stub:hover { transform: translate(3px, 1px) rotate(0.8deg); }
+    .ticket.torn .t-stub { transform: translate(26px, 16px) rotate(6deg); }
+    .t-stub:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+    /* holographic sheen that follows the tilt */
+    .shine {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.7) 45%,
+        rgba(147, 170, 243, 0.45) 50%,
+        rgba(232, 180, 92, 0.35) 55%,
+        transparent 70%);
+      background-size: 280% 280%;
+      background-position: var(--sx, 50%) var(--sy, 50%);
+      mix-blend-mode: soft-light;
+      opacity: var(--so, 0);
+      transition: opacity 0.35s ease;
+    }
+
     .t-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .t-kicker {
       font-family: var(--mono);
@@ -192,12 +240,7 @@
     .guest .v::after { content: ""; display: block; margin-top: 0.7rem; border-bottom: 1.5px solid var(--text); opacity: 0.8; }
 
     .project { margin-bottom: 1.4rem; }
-    .project .v {
-      font-family: var(--display);
-      font-stretch: 112%;
-      font-weight: 750;
-      font-size: 1.2rem;
-    }
+    .project .v { font-family: var(--display); font-stretch: 112%; font-weight: 750; font-size: 1.2rem; }
     .project p { color: var(--muted); font-size: 0.95rem; max-width: 52ch; }
 
     .grid {
@@ -233,40 +276,22 @@
       white-space: nowrap;
     }
 
-    /* the tear-off stub */
-    .t-stub {
-      position: relative;
-      border-left: 2px dashed var(--line);
-      padding: clamp(1.6rem, 4vw, 2.4rem) 1.4rem 1.6rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      background: color-mix(in srgb, var(--accent) 4%, transparent);
-    }
     .tear {
       position: absolute;
-      left: -1px;
+      left: 0.35rem;
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
       writing-mode: vertical-rl;
       font-family: var(--mono);
       font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      background: var(--card);
-      padding: 0.6rem 0.15rem;
       white-space: nowrap;
     }
-    .stub-guest { font-family: var(--display); font-stretch: 112%; font-weight: 700; font-size: 1.05rem; line-height: 1.2; overflow-wrap: anywhere; }
-    .stub-no {
-      font-family: var(--display);
-      font-stretch: 118%;
-      font-weight: 800;
-      font-size: 1.9rem;
-      line-height: 1;
-    }
+    .stub-no { font-family: var(--display); font-stretch: 118%; font-weight: 800; font-size: 1.9rem; line-height: 1; }
     .stub-no small { font-family: var(--mono); font-size: 0.7rem; font-weight: 500; color: var(--muted); margin-right: 0.3rem; }
+    .stub-guest { font-family: var(--display); font-stretch: 112%; font-weight: 700; font-size: 1.05rem; line-height: 1.2; overflow-wrap: anywhere; }
     .stub-date { font-family: var(--mono); font-size: 0.95rem; }
     .countdown {
       display: inline-block;
@@ -284,8 +309,9 @@
     .barcode span { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.3em; color: var(--muted); margin-top: 0.35rem; text-align: center; }
 
     /* ---------- actions & closing ---------- */
-    .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2rem; align-items: center; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2.4rem; align-items: center; }
     .actions button.btn { cursor: pointer; font-family: var(--mono); line-height: inherit; }
+    .actions button.btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
     .actions .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
     .actions .note { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); }
     :root[data-theme="dark"] .actions .btn:not(.ghost) { color: #fff; }
@@ -304,39 +330,50 @@
 
     /* ---------- phones: the stub moves under the ticket ---------- */
     @media (max-width: 720px) {
-      .ticket-wrap { --stub: 150px; }
-      .ticket {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto var(--stub);
+      .ticket { flex-direction: column; }
+      .t-main {
+        border-radius: 20px 20px 0 0;
         -webkit-mask:
-          radial-gradient(circle var(--notch) at 0 calc(100% - var(--stub)), #0000 98%, #000) left / 51% 100% no-repeat,
-          radial-gradient(circle var(--notch) at 100% calc(100% - var(--stub)), #0000 98%, #000) right / 51% 100% no-repeat;
+          radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
                 mask:
-          radial-gradient(circle var(--notch) at 0 calc(100% - var(--stub)), #0000 98%, #000) left / 51% 100% no-repeat,
-          radial-gradient(circle var(--notch) at 100% calc(100% - var(--stub)), #0000 98%, #000) right / 51% 100% no-repeat;
+          radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
       }
+      .t-main::after { display: none; }
       .t-stub {
+        flex: none;
+        border-radius: 0 0 20px 20px;
         border-left: 0;
         border-top: 2px dashed var(--line);
         display: grid;
         grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-        align-content: center;
+        align-items: center;
         column-gap: 1.2rem;
-        row-gap: 0.3rem;
-        padding: 1.2rem 1.3rem;
+        padding: 1.9rem 1.3rem 1.3rem;
+        -webkit-mask:
+          radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
+                mask:
+          radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
       }
-      .t-stub .stub-num { grid-row: 1 / 3; }
-      .barcode { grid-column: 2; grid-row: 1 / 3; margin: 0; align-self: center; }
+      .t-stub::before { display: none; }
+      .t-stub:hover { transform: none; }
+      .ticket.torn .t-stub { transform: translate(8px, 24px) rotate(-3.5deg); }
+      .tear { left: 50%; top: 0.55rem; transform: translateX(-50%); writing-mode: horizontal-tb; }
+      .stub-guest-wrap, .stub-when { display: none; }
+      .barcode { margin: 0; }
       .barcode svg { height: 46px; }
-      .tear { left: 50%; top: -1px; writing-mode: horizontal-tb; padding: 0.1rem 0.6rem; }
-      .stub-guest-wrap { display: none; }
-      .stub-when { display: none; }
       .grid { grid-template-columns: 1fr 1fr; }
       .cell:nth-child(3) { border-left: 0; padding-left: 0; }
       .cell:nth-child(n+3) { border-top: 1.5px dashed var(--line); }
-      .t-main::after { display: none; }
       .inv-title .outline { -webkit-text-stroke-width: 1.4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticket, .t-stub { transition: none; }
+      .shine { display: none; }
     }
   </style>
 </head>
@@ -361,9 +398,9 @@
            data-date  YYYY-MM-DD      data-start / data-end  HH:MM
            data-bloc  e.g. E          data-salle             e.g. 204
            Empty values show as "to be announced" slots.     -->
-      <div class="ticket-wrap">
-        <article class="ticket" id="event" data-date="" data-start="" data-end="" data-bloc="" data-salle="">
-          <div class="t-main">
+      <div class="ticket-wrap" id="event" data-date="" data-start="" data-end="" data-bloc="" data-salle="">
+        <div class="ticket" id="ticket">
+          <article class="piece t-main">
             <div class="t-row">
               <span class="t-kicker" data-t="kicker">ESPRIT · Soutenance PFE</span>
               <span class="stamp" id="stamp">Entrée · 1</span>
@@ -392,10 +429,11 @@
               <span class="v">ESPRIT Ghazela</span>
               <small>Pôle Technologique El Ghazela, Ariana</small>
             </div>
-          </div>
+            <div class="shine" aria-hidden="true"></div>
+          </article>
 
-          <aside class="t-stub">
-            <span class="tear" aria-hidden="true">✂ <span data-t="tear">détacher ici</span></span>
+          <aside class="piece t-stub" id="stub" role="button" tabindex="0" aria-pressed="false">
+            <span class="tear" id="tear" aria-hidden="true">✂ détacher ici</span>
             <div class="stub-num">
               <span class="k" data-t="ticket">Billet</span>
               <div class="stub-no"><small>Nº</small><span id="ticketNo">0001</span></div>
@@ -413,12 +451,14 @@
               <svg id="barcode" viewBox="0 0 180 54" preserveAspectRatio="none"></svg>
               <span id="barcodeTxt">PFE·2026</span>
             </div>
+            <div class="shine" aria-hidden="true"></div>
           </aside>
-        </article>
+        </div>
       </div>
 
       <div class="actions">
         <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=ESPRIT+El+Ghazela+Ariana" target="_blank" rel="noopener" data-t="directions">Itinéraire ↗</a>
+        <button class="btn ghost" id="saveImg" type="button" data-t="saveImg">Enregistrer le billet</button>
         <a class="btn ghost" id="addCal" href="#" aria-disabled="true" data-t="addCal">Ajouter au calendrier</a>
         <button class="btn ghost" id="share" type="button" data-t="share">Partager</button>
         <span class="note" id="note" role="status" aria-live="polite"></span>
@@ -437,6 +477,7 @@
   (function () {
     "use strict";
     var $ = function (id) { return document.getElementById(id); };
+    var REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
     $("year").textContent = new Date().getFullYear();
 
     /* spotlight, same as the portfolio */
@@ -446,94 +487,112 @@
       spot.style.setProperty("--my", e.clientY + "px");
     }, { passive: true });
 
-    /* ---------- who is invited: /pfe/?amal  ?amal&f  ?amal+sami  ?amal&en ---------- */
+    /* ---------- who is invited ----------
+       /pfe/?amal                 one guest       /pfe/?amal+ridene        full name
+       /pfe/?amal+ridene,sami     two guests      &f / &m                  French agreement
+       &en / &fr                  opening language (the toggle still works)            */
     var FLAGS = { en: 1, fr: 1, f: 1, m: 1 };
     var params = new URLSearchParams(location.search);
     var raw = params.get("to") || params.get("n") || "";
     if (!raw) params.forEach(function (v, k) { if (!raw && !v && !FLAGS[k.toLowerCase()]) raw = k; });
-    if (!raw && location.hash) raw = decodeURIComponent(location.hash.slice(1));
-    var cap = function (w) { return w.split("-").map(function (p) { return p.charAt(0).toLocaleUpperCase() + p.slice(1).toLocaleLowerCase(); }).join("-"); };
-    var names = raw.split(/[\s,&+]+/)
-      .filter(function (w) { return /^[\p{L}\p{M}'’.-]{1,24}$/u.test(w); })
-      .slice(0, 4)
-      .map(cap);
-    var who = names.length === 0 ? null : names.length === 1 ? names[0]
-      : names.slice(0, -1).join(", ") + " & " + names[names.length - 1];
-    var plural = names.length > 1;
-    var tu = names.length === 1; /* friends & family: "tu" for one named guest, "vous" otherwise */
+    if (!raw && location.hash) { try { raw = decodeURIComponent(location.hash.slice(1)); } catch (e) {} }
+    var cap = function (w) {
+      return w.split("-").map(function (p) { return p.charAt(0).toLocaleUpperCase() + p.slice(1).toLocaleLowerCase(); }).join("-");
+    };
+    var guests = raw.split(/\s*[,;&]\s*/)
+      .map(function (g) {
+        return g.trim().split(/\s+/)
+          .filter(function (w) { return /^[\p{L}\p{M}'’.-]{1,24}$/u.test(w); })
+          .slice(0, 4).map(cap).join(" ");
+      })
+      .filter(Boolean)
+      .slice(0, 4);
+    var join = function (a) { return a.length < 2 ? a[0] : a.slice(0, -1).join(", ") + " & " + a[a.length - 1]; };
+    var greet = guests.length ? join(guests.map(function (g) { return g.split(" ")[0]; })) : null; /* first names in the greeting */
+    var full = guests.length ? join(guests) : null;                                               /* full names on the ticket */
+    var plural = guests.length > 1;
+    var tu = guests.length === 1; /* friends & family: "tu" for one named guest, "vous" otherwise */
     var g = params.has("f") ? "f" : params.has("m") ? "m" : "";
 
-    /* ---------- event details ---------- */
     var ev = $("event").dataset;
 
     /* ---------- copy ---------- */
-    var invitedFR = (plural ? (g === "f" ? "invitées" : "invités") : (g === "f" ? "invitée" : g === "m" ? "invité" : "invité·e"));
+    var invitedFR = plural ? (g === "f" ? "invitées" : "invités") : (g === "f" ? "invitée" : g === "m" ? "invité" : "invité·e");
     var T = {
       fr: {
         title: "Invitation · Soutenance de PFE · Firas Ridene",
         eyebrow: "Soutenance · Projet de fin d'études",
-        h1a: who ? who + "," : "Vous êtes",
-        h1b: who ? (tu ? "tu es " : "vous êtes ") + invitedFR : invitedFR,
+        h1a: greet ? greet + "," : "Vous êtes",
+        h1b: greet ? (tu ? "tu es " : "vous êtes ") + invitedFR : invitedFR,
         lead: (tu ? "J'ai le plaisir de t'inviter" : "J'ai le plaisir de vous inviter") +
           " à la soutenance de mon <b>projet de fin d'études</b>, la dernière étape de mon diplôme d'ingénieur en informatique à <b>ESPRIT</b>.",
         kicker: "ESPRIT · Soutenance PFE",
-        stamp: "Entrée · " + Math.max(1, names.length),
-        guestK: plural ? invitedFR : invitedFR.charAt(0).toUpperCase() + invitedFR.slice(1),
-        guestV: who || "Invité·e d'honneur",
+        stamp: "Entrée · " + Math.max(1, guests.length),
+        guestK: invitedFR.charAt(0).toUpperCase() + invitedFR.slice(1),
+        guestV: full || "Invité·e d'honneur",
         projectK: "Projet",
         projectSub: "Conception et développement d'une plateforme d'agents IA, conversationnels et vocaux · Agile 4UX",
         date: "Date", time: "Heure", bloc: "Bloc", salle: "Salle", venue: "Lieu",
-        tbdDate: "JJ / MM / 2026", tbdTime: "HH : MM",
-        ticket: "Billet", tear: "détacher ici",
-        directions: "Itinéraire ↗", addCal: "Ajouter au calendrier", share: "Partager",
+        tbdDate: "JJ / MM / 2026", tbdTime: "HH : MM", tbdShort: "à confirmer",
+        ticket: "Billet", tear: "✂ détacher ici", untear: "↺ recoller",
+        directions: "Itinéraire ↗", saveImg: "Enregistrer le billet", addCal: "Ajouter au calendrier", share: "Partager",
+        saving: "Préparation…", saved: "Billet enregistré.",
         pending: "Date, heure et salle communiquées très bientôt.",
         copied: "Lien copié.",
         close: (tu ? "Ta présence" : "Votre présence") +
           " me ferait vraiment plaisir, et ce serait un beau soutien pour clôturer ces années d'études.",
         days: function (n) { return n > 1 ? "J-" + n : n === 1 ? "C'est demain !" : "C'est aujourd'hui !"; },
+        file: "billet-soutenance",
         locale: "fr-FR"
       },
       en: {
         title: "Invitation · Firas Ridene's graduation defense",
         eyebrow: "Graduation defense · End-of-studies project",
-        h1a: who ? who + "," : "You're",
-        h1b: who ? "you're invited" : "invited",
+        h1a: greet ? greet + "," : "You're",
+        h1b: greet ? "you're invited" : "invited",
         lead: "I'd love for you to come to the defense of my <b>end-of-studies project</b>, the last step of my computer engineering degree at <b>ESPRIT</b>.",
         kicker: "ESPRIT · Graduation defense",
-        stamp: "Admit " + (["one", "one", "two", "three", "four"][names.length] || names.length),
+        stamp: "Admit " + (["one", "one", "two", "three", "four"][guests.length] || guests.length),
         guestK: plural ? "Guests" : "Guest",
-        guestV: who || "Guest of honour",
+        guestV: full || "Guest of honour",
         projectK: "Project",
         projectSub: "Design and development of a platform for AI chat and voice agents · Agile 4UX",
         date: "Date", time: "Time", bloc: "Block", salle: "Room", venue: "Venue",
-        tbdDate: "DD / MM / 2026", tbdTime: "HH : MM",
-        ticket: "Ticket", tear: "tear here",
-        directions: "Directions ↗", addCal: "Add to calendar", share: "Share",
+        tbdDate: "DD / MM / 2026", tbdTime: "HH : MM", tbdShort: "TBA",
+        ticket: "Ticket", tear: "✂ tear here", untear: "↺ put back",
+        directions: "Directions ↗", saveImg: "Save ticket", addCal: "Add to calendar", share: "Share",
+        saving: "Preparing…", saved: "Ticket saved.",
         pending: "Date, time and room coming very soon.",
         copied: "Link copied.",
         close: "It would mean a lot to have you there as I wrap up these years of study.",
         days: function (n) { return n > 1 ? n + " days to go" : n === 1 ? "It's tomorrow!" : "It's today!"; },
+        file: "defense-ticket",
         locale: "en-GB"
       }
     };
+    var lang = "fr";
 
     /* ---------- ticket number & barcode, unique per guest ---------- */
     var seed = 2166136261;
-    (names.join(" ").toLowerCase() || "pfe").split("").forEach(function (c) {
+    ((full || "").toLowerCase() || "pfe").split("").forEach(function (c) {
       seed ^= c.charCodeAt(0); seed = Math.imul(seed, 16777619) >>> 0;
     });
-    $("ticketNo").textContent = String(1000 + (seed % 9000));
-    (function barcode() {
-      var s = seed || 1, x = 0, bars = "";
+    var ticketNo = String(1000 + (seed % 9000));
+    $("ticketNo").textContent = ticketNo;
+    var BARS = (function () {
+      var s = seed || 1, x = 0, out = [];
       var rnd = function () { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return (s >>> 0) / 4294967296; };
       while (x < 176) {
         var w = 1 + Math.floor(rnd() * 3.2);
-        bars += '<rect x="' + x + '" y="0" width="' + w + '" height="54" fill="currentColor"/>';
+        out.push([x, w]);
         x += w + 1 + Math.floor(rnd() * 3);
       }
-      $("barcode").innerHTML = bars;
-      $("barcodeTxt").textContent = "PFE·2026·" + $("ticketNo").textContent;
+      return out;
     })();
+    $("barcode").innerHTML = BARS.map(function (b) {
+      return '<rect x="' + b[0] + '" y="0" width="' + b[1] + '" height="54" fill="currentColor"/>';
+    }).join("");
+    $("barcodeTxt").textContent = "PFE·2026·" + ticketNo;
 
     /* ---------- render ---------- */
     var slot = function (el, value, placeholder) {
@@ -545,27 +604,33 @@
       el.appendChild(s);
     };
     var start = ev.date ? new Date(ev.date + "T" + (ev.start || "09:00") + ":00") : null;
+    var fmtDate = function (t) { return start && start.toLocaleDateString(t.locale, { weekday: "long", day: "numeric", month: "long" }); };
+    var fmtTime = function (l) { return ev.start && (l === "fr" ? ev.start.replace(":", "h") : ev.start); };
+    var daysLeft = start ? Math.round((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000) : -1;
 
-    function render(lang) {
-      var t = T[lang];
-      document.documentElement.lang = lang;
+    function render(l) {
+      lang = l;
+      var t = T[l];
+      document.documentElement.lang = l;
       document.title = t.title;
       document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t[el.dataset.t]; });
       document.querySelectorAll(".lang button").forEach(function (b) {
-        b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+        b.setAttribute("aria-pressed", String(b.dataset.lang === l));
       });
       $("h1a").textContent = t.h1a;
       $("h1b").textContent = t.h1b;
-      $("lead").innerHTML = t.lead; /* fixed copy only, the guest name never goes through innerHTML */
+      $("lead").innerHTML = t.lead; /* fixed copy only, guest names never go through innerHTML */
       $("stamp").textContent = t.stamp;
       $("guestK").textContent = t.guestK;
       $("guestV").textContent = t.guestV;
       $("stubGuestK").textContent = t.guestK;
       $("stubGuest").textContent = t.guestV;
       $("close").textContent = t.close;
+      $("tear").textContent = $("ticket").classList.contains("torn") ? t.untear : t.tear;
+      $("stub").setAttribute("aria-label", t.tear.replace("✂ ", ""));
 
-      slot($("vDate"), start && start.toLocaleDateString(t.locale, { weekday: "long", day: "numeric", month: "long" }), t.tbdDate);
-      slot($("vTime"), ev.start && (lang === "fr" ? ev.start.replace(":", "h") : ev.start), t.tbdTime);
+      slot($("vDate"), fmtDate(t), t.tbdDate);
+      slot($("vTime"), fmtTime(l), t.tbdTime);
       slot($("vBloc"), ev.bloc, "—");
       slot($("vSalle"), ev.salle, "—");
       $("stubDate").textContent = start
@@ -573,22 +638,249 @@
         : "— / — / 2026";
 
       var cd = $("countdown");
-      cd.hidden = true;
-      if (start) {
-        var days = Math.round((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
-        if (days >= 0) { cd.textContent = t.days(days); cd.hidden = false; }
-      }
+      cd.hidden = daysLeft < 0;
+      if (daysLeft >= 0) cd.textContent = t.days(daysLeft);
       $("note").textContent = ev.date && ev.start && ev.salle ? "" : t.pending;
-      try { localStorage.setItem("pfe-lang", lang); } catch (e) {}
     }
 
-    var lang = params.has("en") ? "en" : params.has("fr") ? "fr" : "fr";
-    if (!params.has("en") && !params.has("fr")) {
-      try { lang = localStorage.getItem("pfe-lang") || "fr"; } catch (e) {}
-    }
-    render(lang);
+    var initial = params.has("en") ? "en" : params.has("fr") ? "fr" : null;
+    if (!initial) { try { initial = localStorage.getItem("pfe-lang"); } catch (e) {} }
+    render(initial === "en" ? "en" : "fr");
     document.querySelectorAll(".lang button").forEach(function (b) {
-      b.addEventListener("click", function () { render(b.dataset.lang); });
+      b.addEventListener("click", function () {
+        render(b.dataset.lang);
+        try { localStorage.setItem("pfe-lang", b.dataset.lang); } catch (e) {} /* only a real choice is remembered */
+      });
+    });
+
+    /* ---------- tear the stub off (and put it back) ---------- */
+    function toggleTear() {
+      var torn = $("ticket").classList.toggle("torn");
+      $("stub").setAttribute("aria-pressed", String(torn));
+      $("tear").textContent = torn ? T[lang].untear : T[lang].tear;
+      if (torn && navigator.vibrate) navigator.vibrate(12);
+    }
+    $("stub").addEventListener("click", toggleTear);
+    $("stub").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleTear(); }
+    });
+
+    /* ---------- tilt + sheen: mouse on desktop, gyroscope on phones ---------- */
+    var ticket = $("ticket");
+    var clamp = function (v, a) { return Math.max(-a, Math.min(a, v)); };
+    var frame = null;
+    function tilt(px, py, strength) { /* px, py in -1..1 */
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(function () {
+        ticket.style.setProperty("--rx", (-py * 7).toFixed(2) + "deg");
+        ticket.style.setProperty("--ry", (px * 9).toFixed(2) + "deg");
+        document.querySelectorAll(".shine").forEach(function (s) {
+          s.style.setProperty("--sx", (50 + px * 50).toFixed(1) + "%");
+          s.style.setProperty("--sy", (50 + py * 50).toFixed(1) + "%");
+          s.style.setProperty("--so", strength);
+        });
+      });
+    }
+    if (!REDUCED) {
+      var wrap = $("event");
+      wrap.addEventListener("pointermove", function (e) {
+        if (e.pointerType !== "mouse") return;
+        var r = wrap.getBoundingClientRect();
+        tilt(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1, 1);
+      });
+      wrap.addEventListener("pointerleave", function () { tilt(0, 0, 0); });
+
+      var base = null;
+      var onOrient = function (e) {
+        if (e.beta == null || e.gamma == null) return;
+        if (base === null) base = e.beta;
+        tilt(clamp(e.gamma / 25, 1), clamp((e.beta - base) / 25, 1), 0.9);
+      };
+      var listen = function () { window.addEventListener("deviceorientation", onOrient); };
+      if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function") {
+        /* iPhone: motion access has to be asked from a tap, so the first tap on the ticket asks */
+        var ask = function () {
+          wrap.removeEventListener("click", ask);
+          DeviceOrientationEvent.requestPermission().then(function (s) { if (s === "granted") listen(); }).catch(function () {});
+        };
+        wrap.addEventListener("click", ask);
+      } else if (window.DeviceOrientationEvent && matchMedia("(pointer: coarse)").matches) {
+        listen();
+      }
+    }
+
+    /* ---------- save the ticket as an image (drawn on a canvas, no library) ---------- */
+    var C = { bg: "#f5f4ef", card: "#fdfcf9", stub: "#f1f2f5", text: "#111b2b", muted: "#46536a",
+              blue: "#2553c4", deep: "#1c3e95", brass: "#b7802f", line: "rgba(17,27,43,0.18)", dot: "rgba(17,27,43,0.07)" };
+    function font(ctx, weight, size, family, stretch) {
+      ctx.font = weight + " " + size + "px " + family;
+      if ("fontStretch" in ctx) ctx.fontStretch = stretch || "normal";
+    }
+    function fit(ctx, text, weight, size, family, stretch, maxW) {
+      do { font(ctx, weight, size, family, stretch); size -= 2; } while (ctx.measureText(text).width > maxW && size > 20);
+    }
+    function spaced(ctx, text, x, y, spacing) { /* letter-spaced mono labels */
+      for (var i = 0; i < text.length; i++) { ctx.fillText(text[i], x, y); x += ctx.measureText(text[i]).width + spacing; }
+      return x;
+    }
+    function wrapText(ctx, text, x, y, maxW, lh) {
+      var words = text.split(" "), line = "";
+      words.forEach(function (w) {
+        var test = line ? line + " " + w : w;
+        if (ctx.measureText(test).width > maxW && line) { ctx.fillText(line, x, y); y += lh; line = w; } else line = test;
+      });
+      ctx.fillText(line, x, y);
+      return y;
+    }
+    function rr(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+    }
+    function slotBox(ctx, text, x, y) {
+      font(ctx, 500, 24, '"IBM Plex Mono"');
+      var w = ctx.measureText(text).width + 28;
+      ctx.save();
+      ctx.fillStyle = "rgba(183,128,47,0.09)"; rr(ctx, x, y - 34, w, 46, 10); ctx.fill();
+      ctx.setLineDash([6, 5]); ctx.strokeStyle = C.brass; ctx.lineWidth = 2; ctx.stroke();
+      ctx.restore();
+      ctx.fillStyle = C.brass; ctx.fillText(text, x + 14, y - 3);
+    }
+
+    function drawTicket() {
+      var t = T[lang], W = 1080, H = 1765;
+      var cv = document.createElement("canvas");
+      cv.width = W; cv.height = H;
+      var ctx = cv.getContext("2d");
+      ctx.textBaseline = "alphabetic";
+
+      /* background with the site's dot grid */
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = C.dot;
+      for (var gx = 15; gx < W; gx += 36) for (var gy = 15; gy < H; gy += 36) { ctx.beginPath(); ctx.arc(gx, gy, 1.6, 0, 7); ctx.fill(); }
+
+      /* heading */
+      ctx.fillStyle = C.blue; font(ctx, 500, 24, '"IBM Plex Mono"');
+      spaced(ctx, t.eyebrow.toUpperCase(), 80, 110, 3);
+      ctx.fillStyle = C.text;
+      fit(ctx, t.h1a.toUpperCase(), 800, 104, "Archivo", "expanded", 920);
+      ctx.fillText(t.h1a.toUpperCase(), 76, 220);
+      fit(ctx, t.h1b.toUpperCase(), 800, 104, "Archivo", "expanded", 920);
+      ctx.lineWidth = 2.5; ctx.strokeStyle = C.text; ctx.strokeText(t.h1b.toUpperCase(), 76, 322);
+
+      /* ticket card with notches */
+      var X = 60, Y = 390, TW = 960, MH = 975, SH = 250, R = 28, N = 24, P = 64;
+      ctx.save();
+      ctx.shadowColor = "rgba(37,83,196,0.20)"; ctx.shadowBlur = 50; ctx.shadowOffsetY = 24;
+      ctx.fillStyle = C.card; rr(ctx, X, Y, TW, MH + SH, R); ctx.fill();
+      ctx.restore();
+      ctx.save();
+      rr(ctx, X, Y, TW, MH + SH, R); ctx.clip();
+      ctx.fillStyle = C.stub; ctx.fillRect(X, Y + MH, TW, SH);
+      var band = ctx.createLinearGradient(X, 0, X + TW, 0);
+      band.addColorStop(0, C.blue); band.addColorStop(0.62, C.deep); band.addColorStop(1, C.brass);
+      ctx.fillStyle = band; ctx.fillRect(X, Y, TW, 10);
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath(); ctx.arc(X, Y + MH, N, 0, 7); ctx.arc(X + TW, Y + MH, N, 0, 7); ctx.fill();
+      ctx.restore();
+
+      var L = X + P, CW = TW - 2 * P, y = Y;
+      /* kicker + stamp */
+      ctx.fillStyle = C.blue; font(ctx, 500, 22, '"IBM Plex Mono"');
+      spaced(ctx, t.kicker.toUpperCase(), L, y + 84, 4);
+      ctx.save();
+      font(ctx, 500, 22, '"IBM Plex Mono"');
+      var st = t.stamp.toUpperCase(), sw = ctx.measureText(st).width + st.length * 3 + 34;
+      ctx.translate(X + TW - P - sw / 2, y + 76); ctx.rotate(-0.05);
+      ctx.strokeStyle = C.brass; ctx.lineWidth = 2.5; rr(ctx, -sw / 2, -24, sw, 46, 9); ctx.stroke();
+      ctx.fillStyle = C.brass; spaced(ctx, st, -sw / 2 + 17, 7, 3);
+      ctx.restore();
+
+      /* guest */
+      ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"'); spaced(ctx, t.guestK.toUpperCase(), L, y + 170, 4);
+      ctx.fillStyle = C.text; fit(ctx, t.guestV, 800, 68, "Archivo", "expanded", CW);
+      ctx.fillText(t.guestV, L, y + 248);
+      ctx.fillRect(L, y + 278, CW, 2.5);
+
+      /* project */
+      ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"'); spaced(ctx, t.projectK.toUpperCase(), L, y + 345, 4);
+      ctx.fillStyle = C.text; font(ctx, 700, 42, "Archivo", "semi-expanded"); ctx.fillText("VocaFlow", L, y + 398);
+      ctx.fillStyle = C.muted; font(ctx, 400, 28, '"Instrument Sans"');
+      wrapText(ctx, t.projectSub, L, y + 444, CW, 40);
+
+      /* 2 x 2 grid */
+      var gy0 = y + 530, half = CW / 2;
+      ctx.save(); ctx.setLineDash([8, 7]); ctx.strokeStyle = C.line; ctx.lineWidth = 2;
+      [gy0, gy0 + 130, gy0 + 260].forEach(function (ly) { ctx.beginPath(); ctx.moveTo(L, ly); ctx.lineTo(L + CW, ly); ctx.stroke(); });
+      ctx.beginPath(); ctx.moveTo(L + half, gy0); ctx.lineTo(L + half, gy0 + 260); ctx.stroke();
+      ctx.restore();
+      var cells = [[t.date, fmtDate(t)], [t.time, fmtTime(lang)], [t.bloc, ev.bloc], [t.salle, ev.salle]];
+      cells.forEach(function (c, i) {
+        var cx = L + (i % 2 ? half + 28 : 0), cy = gy0 + (i > 1 ? 130 : 0);
+        ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"'); spaced(ctx, c[0].toUpperCase(), cx, cy + 44, 4);
+        if (c[1]) { ctx.fillStyle = C.text; fit(ctx, c[1], 700, 38, "Archivo", "semi-expanded", half - 40); ctx.fillText(c[1], cx, cy + 98); }
+        else slotBox(ctx, t.tbdShort, cx, cy + 100);
+      });
+
+      /* venue */
+      ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"'); spaced(ctx, t.venue.toUpperCase(), L, y + 840, 4);
+      ctx.fillStyle = C.text; font(ctx, 700, 40, "Archivo", "semi-expanded"); ctx.fillText("ESPRIT Ghazela", L, y + 890);
+      ctx.fillStyle = C.muted; font(ctx, 400, 26, '"Instrument Sans"'); ctx.fillText("Pôle Technologique El Ghazela, Ariana", L, y + 924);
+
+      /* tear line */
+      var ty = Y + MH;
+      ctx.save(); ctx.setLineDash([12, 9]); ctx.strokeStyle = C.line; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(X + N + 12, ty); ctx.lineTo(X + TW - N - 12, ty); ctx.stroke(); ctx.restore();
+
+      /* stub */
+      ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"'); spaced(ctx, t.ticket.toUpperCase(), L, ty + 70, 4);
+      ctx.fillStyle = C.text; font(ctx, 500, 24, '"IBM Plex Mono"'); ctx.fillText("Nº", L, ty + 150);
+      font(ctx, 800, 84, "Archivo", "expanded"); ctx.fillText(ticketNo, L + 44, ty + 152);
+      var bx = X + TW - P - 400, bw = 400 / 180;
+      ctx.fillStyle = C.text;
+      BARS.forEach(function (b) { ctx.fillRect(bx + b[0] * bw, ty + 58, b[1] * bw, 110); });
+      ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"');
+      var code = "PFE·2026·" + ticketNo;
+      spaced(ctx, code, bx + 200 - (ctx.measureText(code).width + code.length * 8) / 2, ty + 204, 8);
+
+      /* footer */
+      ctx.fillStyle = C.text; font(ctx, 800, 30, "Archivo", "expanded"); ctx.fillText("FIRAS RIDENE", 80, H - 64);
+      ctx.fillStyle = C.brass; ctx.fillRect(80 + ctx.measureText("FIRAS RIDENE").width + 8, H - 72, 8, 8);
+      ctx.fillStyle = C.muted; font(ctx, 400, 22, '"IBM Plex Mono"');
+      var site = "firasridene.tech";
+      ctx.fillText(site, W - 80 - ctx.measureText(site).width, H - 66);
+      return cv;
+    }
+
+    $("saveImg").addEventListener("click", function () {
+      var btn = this, t = T[lang];
+      btn.disabled = true;
+      btn.textContent = t.saving;
+      Promise.all([
+        document.fonts.load('800 40px "Archivo"'), document.fonts.load('400 20px "Instrument Sans"'),
+        document.fonts.load('400 20px "IBM Plex Mono"'), document.fonts.load('500 20px "IBM Plex Mono"')
+      ]).catch(function () {}).then(function () {
+        var cv = drawTicket();
+        var name = t.file + (guests[0] ? "-" + guests[0].toLowerCase().replace(/\s+/g, "-") : "") + ".png";
+        cv.toBlob(function (blob) {
+          var file = new File([blob], name, { type: "image/png" });
+          var phone = matchMedia("(pointer: coarse)").matches;
+          if (phone && navigator.canShare && navigator.canShare({ files: [file] })) {
+            /* on phones this opens the share sheet, which has "Save image" */
+            return navigator.share({ files: [file], title: t.title }).catch(function () {}).then(done);
+          }
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = name;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+          $("note").textContent = t.saved;
+          done();
+        }, "image/png");
+      });
+      function done() { btn.disabled = false; btn.textContent = T[lang].saveImg; }
     });
 
     /* ---------- add to calendar (once a date is set) ---------- */
@@ -616,7 +908,7 @@
       var url = location.origin + "/pfe/";
       if (navigator.share) { navigator.share({ title: document.title, url: url }).catch(function () {}); return; }
       navigator.clipboard.writeText(url).then(function () {
-        $("note").textContent = T[document.documentElement.lang].copied;
+        $("note").textContent = T[lang].copied;
       }, function () { $("note").textContent = url; });
     });
   })();
