@@ -1,51 +1,265 @@
 # Firas Ridene
 
-> AI engineer based in Tunis, Tunisia, specialized in generative AI and multi-agent systems. Builds voice agents, automation pipelines, and multi-agent platforms that ship to production.
+> Firas Ridene: AI Engineer based in Tunis, Tunisia, specialized in Generative AI & Multi-Agent Systems. Builds multi-agent systems, real-time voice agents, and AI automation pipelines that ship to production.
 
-Firas Ridene is a computer science engineering student at Esprit (Tunis) and an AI engineer building agent systems that do real work: voice agents that answer phones, an agent team that ships code, and pipelines that cut manual prospecting time by up to 80%. He designs multi-agent systems end-to-end and picks the stack per problem, not per habit.
+I'm an AI engineer and computer science engineering student at Esprit in Tunis, specialized in generative AI and multi-agent systems. I design intelligent assistants and automation systems that reduce manual work and improve decision-making.
+
+I continuously explore new tools and frameworks to build the right stack per use case, always prioritizing the most relevant solution over a familiar one.
+
+I build agent systems that do real work. Voice agents that answer phones. An agent team that ships code. Pipelines that cut manual prospecting by 80%. I design multi-agent systems end-to-end and pick the stack per problem, not per habit.
+
+## Key facts
+
+- Name: Firas Ridene
+- Role: AI Engineer (Generative AI & Multi-Agent Systems)
+- Location: Tunis, Tunisia
+- Availability: Open to opportunities
+- Languages: Arabic (native), English (fluent), French (fluent)
+- Education: Engineering Degree in Computer Science, Esprit: School of Engineering (2023 – present); Mathematics & Physics, Integrated Preparatory Cycle, Esprit (2020 – 2023)
+- Shipped projects: 16 · Certifications: 22
+- Last updated: 2026-09-28
 
 ## Contact
 
+- Website: https://firasridene.tech/
 - Email: firas.ridene@outlook.com
 - GitHub: https://github.com/RideneFiras
 - LinkedIn: https://www.linkedin.com/in/firas-ridene
-- Website: https://firasridene.tech
+- YouTube (project demos): https://youtube.com/playlist?list=PLRjr8ZSeOB_w&si=cJURnWFpjs_r5p9U
+- Resume (PDF): https://firasridene.tech/assets/Firas-Ridene-Resume.pdf
 
 ## Experience
 
-- Freelance Software Engineer — B2B SaaS startup, Paris (remote), Mar 2026–present: contributes to a multi-tenant AI sales-outreach platform; built an AI agent system that autonomously qualifies prospects and generates personalized outreach at scale.
-- End-of-Studies Intern — Agile4UX, Feb–Jul 2026: designed a multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp, with real-time voice, knowledge retrieval, and human handoff at sub-second latency.
-- AI Automation Intern — Agile4ux, 2025: designed a multi-agent system to research, qualify, and analyze prospects; cut manual prospecting time by ~80%.
-- Data Platform Development Intern — Designet, 2024: built a lead-generation platform from Google Maps data with filterable criteria and CSV export.
+### AI & Software Engineer · Freelance / Self-Employed (Mai - Present)
 
-## Selected projects
+- Delivered AI automation and fullstack solutions for clients across marketing, sales, finance, and insurance sectors.
+- Translated business needs into technical solutions, working directly with non-technical stakeholders and explaining AI systems in plain terms.
+- Owned projects end-to-end in full autonomy, from specification through development and deployment.
+- Stack: Python, React, FastAPI, Supabase, Docker, Azure, CrewAI, Latenode, n8n, Vercel
 
-- VocaFlow — multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp. https://github.com/RideneFiras/Vocaflow
-- 8-Agent Dev Team — a full software team staffed by 8 specialized Claude Code agents (PM, Frontend, Backend, AI, DevOps, QA, Test, Docs); shipped 170+ GitHub issues and 726 automated tests across a ~40,000-line codebase in about 4 weeks. https://github.com/RideneFiras/ClaudeCodeTeam
-- Multi-Agent Prospecting System — agents that research, qualify, and analyze prospects, then write the outreach and the reports.
-- Content Creation Automation — automated research, generation, and publication of Facebook content, with a human checkpoint before anything ships.
-- Recruitment Automation System — four interconnected pipelines covering candidate intake, AI scoring, ATS sync, and lead generation.
-- TT Assistant — multilingual (Arabic, French, English, Tunisian dialect) voice + text chatbot for Tunisie Telecom; 3rd place at the AI for CSR Hackathon. https://github.com/RideneFiras/ChatbotTT
-- Airline Customer Service Assistant — GenAI capstone (Kaggle x Google): structured-dialogue assistant with RAG over a dedicated knowledge base. https://github.com/RideneFiras/KagglexGoogle
-- Pedagog'IA — social platform for Tunisian teachers with AI generation of fiches, quizzes, and exercises. https://github.com/RideneFiras/PedagogIA
-- 5G Throughput Prediction — MLOps pipeline comparing 300+ models on Azure ML, explainable with SHAP, monitored with Elasticsearch/Kibana. https://github.com/RideneFiras/QosMLOPS
-- Industrial Anomaly Detection — CNN autoencoder trained only on defect-free images, flags visual defects by reconstruction error; cut manual inspection time by 70%. https://github.com/RideneFiras/Anomaly_detection
-- Odoo Integrations — Odoo CRM wired into a multi-agent prospecting system, plus a facial-recognition attendance module.
-- LeadGenMAP — platform that generates qualified leads from Google Maps with filterable criteria and CSV export. https://github.com/RideneFiras/LeadGenMAP
-- n8n Workflow Library — public collection of the n8n workflows behind his automation work, packaged for reuse. https://github.com/RideneFiras/Myn8nWorkflows
+### End-of-Studies Intern · Agile4UX (Feb – Jul 2026)
+
+- Designed a multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp.
+- Built real-time voice agents with knowledge retrieval, data collection, and human handoff at sub-second latency.
+- Enabled businesses to offer 24/7 customer engagement without added headcount, handling inquiries, bookings, and support.
+- Stack: React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure
+
+### AI Automation Intern · Agile4ux (2025)
+
+- Analyzed marketing and sales processes to find repetitive tasks worth automating.
+- Designed a multi-agent system to research, qualify, and analyze prospects, generating strategic reports.
+- Cut manual prospecting time by ~80%; automated report delivery and CRM integration.
+- Stack: Python, FastAPI, OpenAI, CrewAI, Latenode, Presenton
+
+### Data Platform Development Intern · Designet (2024)
+
+- Built a platform generating leads from Google Maps with filterable criteria and CSV export.
+- Reduced research time and improved prospect quality through automated extraction and filtering.
+- Stack: Google Maps API, SerperAPI, FastAPI, Next.js, Docker
+
+## Projects
+
+### VocaFlow
+
+Multi-tenant platform for building and deploying AI voice agents across phone, chat, and WhatsApp. (voice AI · SaaS)
+
+- Designed a multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp.
+- Built real-time voice agents with knowledge retrieval, data collection, and human handoff at sub-second latency.
+- Enabled businesses to offer 24/7 customer engagement without added headcount, handling inquiries, bookings, and support.
+- Stack: React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure
+- Details: https://firasridene.tech/#vocaflow
+
+### 8-Agent Dev Team
+
+A full software team staffed by Claude Code agents, running complete sprint workflows solo. (AI-assisted development)
+
+- Built a team of 8 specialized Claude Code agents (PM, Frontend, Backend, AI, DevOps, QA, Test, Docs) coordinated through Notion and GitHub.
+- Ran full sprint workflows solo, from backlog planning to PR review and merge.
+- Shipped 170+ GitHub issues and 726 automated tests across a ~40,000 line codebase in about 4 weeks.
+- Stack: Claude Code, Notion MCP, GitHub CLI, Playwright MCP
+- Details: https://firasridene.tech/#claude-code-team
+- Source: https://github.com/RideneFiras/ClaudeCodeTeam
+
+### Multi-Agent Prospecting System
+
+Agents that research, qualify, and analyze prospects, then write the outreach and the reports. (multi-agent automation)
+
+- Designed a multi-agent system to research, qualify, and analyze prospects, generating strategic reports.
+- Built specialized agents for opportunity analysis, competitor research, and personalized outreach generation.
+- Reduced manual prospecting time by ~80% and automated report delivery and CRM integration.
+- Stack: CrewAI, LangChain, FastAPI, Latenode
+- Details: https://firasridene.tech/#prospecting-system
+
+### Content Creation Automation
+
+Automated research, generation, and publication of Facebook content, with a human checkpoint before anything ships. (agent orchestration)
+
+- Built a platform automating research, generation, and publication of Facebook content across objectives.
+- Orchestrated specialized agents per source (news, websites, documents) with email validation before publishing.
+- Implemented automated comment moderation and intelligent responses based on a knowledge base.
+- Stack: Python, n8n, MCP, Meta Developer, Tavily, ChromaDB
+- Details: https://firasridene.tech/#content-automation
+
+### Recruitment Automation System
+
+Four interconnected pipelines covering candidate intake, AI scoring, ATS sync, and lead generation. (automation)
+
+- Built four interconnected pipelines covering candidate intake, AI scoring, ATS synchronization, and lead generation.
+- Scored candidates against job requirements using weighted signals, generating clear reasoning behind every shortlist decision and triggering automated shortlist emails and Telegram alerts.
+- Synced candidate data automatically across the ATS, kanban board, and public job board, keeping every system up to date in real time.
+- Stack: n8n, Make, REST APIs, Webhooks, Telegram, Notion
+- Details: https://firasridene.tech/#recruitment-automation
+
+### Airline Customer Service Assistant
+
+GenAI capstone (Kaggle × Google): structured-dialogue assistant with RAG over a dedicated knowledge base. (conversational AI)
+
+- Designed a conversational assistant that collects customer information through structured dialogue.
+- Reduced repetitive customer support tasks by automating the handling of frequent inquiries.
+- Integrated an intelligent search engine to provide contextualized responses from a dedicated knowledge base.
+- Stack: Python, LangChain, ChromaDB, RAG, Gradio, Gemini
+- Details: https://firasridene.tech/#airline-assistant
+- Source: https://github.com/RideneFiras/KagglexGoogle
+
+### Pedagog'IA
+
+Social platform for Tunisian teachers with AI generation of fiches, quizzes, and exercises. (EdTech · GenAI)
+
+- Built a social platform for Tunisian teachers to share resources, combined with an AI feature generating fiches, quizzes, and exercises.
+- Implemented an AI credits system, admin panel, and full social feed feature set.
+- Designed the AI generation flow around subject, level, and chapter inputs for fast lesson prep.
+- Stack: Next.js, FastAPI, Supabase, pgvector, GitHub Models (gpt-4o-mini)
+- Details: https://firasridene.tech/#pedagogia
+- Source: https://github.com/RideneFiras/PedagogIA
+
+### TT Assistant
+
+Multilingual voice + text chatbot for Tunisie Telecom. 3rd place at the AI for CSR Hackathon. (conversational AI)
+
+- Built an inclusive multilingual chatbot for Tunisie Telecom supporting Arabic, French, English, and Tunisian dialect.
+- Enabled both voice and text interaction using Whisper for speech and GPT-4o for responses.
+- Won 3rd place at the AI for CSR Hackathon.
+- Stack: GPT-4o, Whisper, LangChain, FastAPI, n8n, Telegram
+- Details: https://firasridene.tech/#tt-assistant
+- Source: https://github.com/RideneFiras/ChatbotTT
+
+### 5G Throughput Prediction
+
+Full MLOps pipeline comparing 300+ models on Azure ML, explainable and monitored in production. (MLOps)
+
+- Built a full MLOps pipeline predicting 5G network throughput, comparing 300+ models via Azure ML.
+- Added explainability with SHAP and GPT-4o to make model decisions interpretable for non-technical stakeholders.
+- Deployed the pipeline in Docker with monitoring through Elasticsearch and Kibana.
+- Stack: Azure ML, FastAPI, Docker, Elasticsearch, Kibana, SHAP, MLflow, GitHub Actions
+- Details: https://firasridene.tech/#5g-throughput
+- Source: https://github.com/RideneFiras/QosMLOPS
+
+### Industrial Anomaly Detection
+
+CNN autoencoder trained only on defect-free screws flags visual defects by reconstruction error. (computer vision)
+
+- Built a CNN autoencoder trained only on defect-free images to flag visual defects through reconstruction error.
+- Delivered real-time inspection with confidence scoring for production line use.
+- Reduced manual inspection time by 70%.
+- Stack: TensorFlow, FastAPI, OpenCV, TailwindCSS
+- Details: https://firasridene.tech/#anomaly-detection
+- Source: https://github.com/RideneFiras/Anomaly_detection
+
+### Odoo Integrations
+
+Odoo CRM wired into a multi-agent prospecting system, plus a facial-recognition attendance module. (integrations)
+
+- Integrated Odoo CRM into a multi-agent AI prospecting system for automated lead and pipeline updates.
+- Built a facial recognition attendance system integrated with Odoo's attendance module.
+- Stack: Odoo, Python, OpenCV
+- Details: https://firasridene.tech/#odoo-integrations
+
+### LeadGenMAP
+
+Platform that generates qualified leads from Google Maps with filterable criteria and CSV export. (lead generation)
+
+- Built a platform that generates leads from Google Maps with filterable search criteria and CSV export.
+- Reduced research time and improved prospect quality through automated extraction and filtering.
+- Stack: Google Maps API, SerperAPI, FastAPI, Next.js, Docker
+- Details: https://firasridene.tech/#leadgenmap
+- Source: https://github.com/RideneFiras/LeadGenMAP
+
+### n8n Workflow Library
+
+Public collection of the n8n workflows behind my automation work, packaged for reuse. (automation)
+
+- Open-sourced production workflows including Facebook sales conversation automation and a hiring agent.
+- Includes facial recognition and tender processing flows built as reusable n8n templates.
+- Stack: n8n, Webhooks, REST APIs
+- Details: https://firasridene.tech/#n8n-workflows
+- Source: https://github.com/RideneFiras/Myn8nWorkflows
+
+### Churn Prediction & Billing Analysis, Telecom Subscriber Data
+
+A predictive analytics project uncovering key churn drivers and revenue patterns across 20K telecom subscribers to power targeted retention strategies. (Data science)
+
+- Analyzed 20k subscriber records to uncover churn drivers, retention dynamics, and revenue patterns.
+- Built cohort and monthly churn analysis, identifying early-tenure churn segmented by technology and acquisition channel.
+- Linked billing patterns to retention behavior and proposed a churn prediction framework to prioritize retention actions.
+- Stack: Python, Pandas, NumPy, Matplotlib
+- Details: https://firasridene.tech/#churn-prediction-billing-analysis-telecom-subscriber-data
+
+### Store Support Agent
+
+AI customer support agent for e-commerce that checks real inventory before promising availability, and resists prompt-injection attempts to override its own rules. (AI Automation)
+
+- Built a multi-agent support system where an orchestrator dispatches to RAG, inventory, and order-capture subagents, syncing live across Notion and Google Sheets.
+- Handled the overselling edge case deterministically, refusing to confirm stock that's already pending on another order.
+- Defended against prompt injection with no discount/price tools in the system, a pre-filter guard, and a structured-output schema as a final backstop, tested against a set of adversarial prompts.
+- Stack: n8n, Notion, Google Sheets, Supabase, pgvector, Claude, Next.js, Vercel
+- Details: https://firasridene.tech/#store-support-agent
+- Source: https://github.com/RideneFiras/MultiAppHackathon
+- Demo: https://youtu.be/t3_HilAUTEQ
+
+### ChronoWorks
+
+Unified platform for freelancers to manage clients, projects, time, tasks, leave, and invoices in one linked system. (SaaS · freelance ops)
+
+- Designed a linked data model where logging time on a task feeds project status, leave-adjusted totals, and client invoices automatically.
+- Built a locked invoicing system with gapless numbering and immutable issued invoices, enforced with Postgres triggers and row-level security.
+- Implemented tax-profile logic for Tunisia and France, covering VAT, matricule fiscal, stamp duty, and reverse charge.
+- Stack: Next.js, TypeScript, Supabase, PostgreSQL, Tailwind CSS, dnd-kit, Vercel
+- Details: https://firasridene.tech/#chronoworks
+- Source: https://github.com/RideneFiras/ChronoWorks
 
 ## Skills
 
 - Generative AI & Agents: LLMs, RAG, LangChain, CrewAI, MCP, Claude Code, Transformers
 - ML & MLOps: PyTorch, TensorFlow, Scikit-learn, MLflow, Azure ML Studio, SHAP, GitHub Actions
-- Development & Data: Python, JavaScript (Node.js), Java (Spring Boot), FastAPI, REST APIs, Pandas, SQL, NoSQL
+- Development & Data: Python, JS (Node.js), Java (Spring Boot), FastAPI, REST APIs, Pandas, SQL, NoSQL
 - Infra & Automation: Docker, Render, Git/GitHub, Elasticsearch, Kibana, n8n, Latenode
-
-## Education
-
-- Esprit: School of Engineering, Tunis — Engineering Degree in Computer Science, 2023–present
-- Esprit Integrated Preparatory Cycle, Tunis — Mathematics & Physics, 2020–2023
 
 ## Certifications
 
-22 certifications, including: AI Security & GenAI Red Teaming (ESPRIT), Multi AI Agent Systems with crewAI (CrewAI), Microsoft Azure AI Essentials Professional Certificate (Microsoft), Machine Learning in Production (DeepLearning.AI), Building RAG Agents with LLMs (NVIDIA), Building AI Agents with Multimodal Models (NVIDIA), 5-Day Gen AI Intensive (Kaggle), Agentic AI for Enterprise (ESPRIT), Data Engineering & MLOps (ESPRIT), AWS Academy Graduate: Cloud Foundations (AWS), and others across AI/ML, cloud, and networking.
+- AI Security & GenAI Red Teaming (ESPRIT)
+- Attendance Hashgraph Developer (Hedera)
+- AWS Academy Graduate: Cloud Foundations (Amazon Web Services)
+- Applications of AI for Anomaly Detection (NVIDIA)
+- Building Generative AI-Powered Applications with Python (IBM)
+- Multi AI Agent Systems with crewAI (CrewAI)
+- Microsoft Azure AI Essentials Professional Certificate (Microsoft)
+- Building AI Agents with Multimodal Models (NVIDIA)
+- Generative AI with Diffusion Models (NVIDIA)
+- Machine Learning in Production (DeepLearning.AI)
+- Building LLM Applications With Prompt Engineering (NVIDIA)
+- Introduction to Transformer-Based Natural Language Processing (NVIDIA)
+- 5-Day Gen AI Intensive (Kaggle)
+- Building RAG Agents with LLMs (NVIDIA)
+- Machine Learning Explainability (Kaggle)
+- Fundamentals of Deep Learning (NVIDIA)
+- GitHub Foundations (GitHub)
+- CCNA: Switching, Routing, and Wireless Essentials (Cisco)
+- Hands-on with Explainable AI Tools & Techniques (ESPRIT)
+- Artificial Intelligence Fundamentals with Capstone Project (IBM)
+- Agentic AI for Enterprise (ESPRIT)
+- Data Engineering & MLOps (ESPRIT)
+
+## Optional
+
+- [Legal notice, terms of service & privacy policy (French)](https://firasridene.tech/legal/)
+- [Website source code](https://github.com/RideneFiras/RideneFiras.github.io)

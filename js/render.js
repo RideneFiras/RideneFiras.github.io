@@ -59,7 +59,7 @@
     return projects
       .map(
         (p, i) => `
-    <article class="case rv${i < 2 ? " wide" : ""}" data-tags="${esc(p.tags.join(" "))}">
+    <article class="case rv${i < 2 ? " wide" : ""}"${p.id ? ` id="${esc(p.id)}"` : ""} data-tags="${esc(p.tags.join(" "))}">
       <span class="eyebrow">${esc(p.domain)}</span>
       <h3>${esc(p.title)}</h3>
       <p class="desc">${esc(p.oneliner)}</p>
