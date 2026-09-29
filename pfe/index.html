@@ -394,11 +394,8 @@
       <h1 class="inv-title"><span id="h1a">Vous êtes</span><span class="outline" id="h1b">invité·e</span></h1>
       <p class="inv-lead" id="lead"></p>
 
-      <!-- ============ FILL IN WHEN CONFIRMED ============
-           data-date  YYYY-MM-DD      data-start / data-end  HH:MM
-           data-bloc  e.g. E          data-salle             e.g. 204
-           Empty values show as "to be announced" slots.     -->
-      <div class="ticket-wrap" id="event" data-date="" data-start="" data-end="" data-bloc="" data-salle="">
+      <!-- date, time, bloc and salle come from data/pfe.json, edited in the admin ("pfe event" tab) -->
+      <div class="ticket-wrap" id="event">
         <div class="ticket" id="ticket">
           <article class="piece t-main">
             <div class="t-row">
@@ -578,7 +575,8 @@
     var plural = guests.length > 1;
     var tu = guests.length === 1; /* friends & family: "tu" for one named guest, "vous" otherwise */
 
-    var ev = $("event").dataset;
+    /* event details: filled from data/pfe.json once it loads; empty = "to be announced" */
+    var ev = { date: "", start: "", end: "", bloc: "", salle: "" };
 
     /* ---------- copy ---------- */
     var invitedFR = plural ? (g === "f" ? "invitées" : "invités") : (g === "f" ? "invitée" : g === "m" ? "invité" : "invité·e");
@@ -667,10 +665,21 @@
       s.textContent = placeholder;
       el.appendChild(s);
     };
-    var start = ev.date ? new Date(ev.date + "T" + (ev.start || "09:00") + ":00") : null;
+    var start = null, daysLeft = -1;
+    function setEvent(d) {
+      var str = function (v, max) { return typeof v === "string" ? v.trim().slice(0, max) : ""; };
+      var hm = function (v) { v = str(v, 5); return /^\d{1,2}:\d{2}$/.test(v) ? v.padStart(5, "0") : ""; };
+      ev = {
+        date: /^\d{4}-\d{2}-\d{2}$/.test(str(d.date, 10)) ? d.date.trim() : "",
+        start: hm(d.start), end: hm(d.end),
+        bloc: str(d.bloc, 20), salle: str(d.salle, 20)
+      };
+      start = ev.date ? new Date(ev.date + "T" + (ev.start || "09:00") + ":00+01:00") : null; /* Tunis time */
+      if (start && isNaN(start)) { start = null; ev.date = ""; }
+      daysLeft = start ? Math.round((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000) : -1;
+    }
     var fmtDate = function (t) { return start && start.toLocaleDateString(t.locale, { weekday: "long", day: "numeric", month: "long" }); };
     var fmtTime = function (l) { return ev.start && (l === "fr" ? ev.start.replace(":", "h") : ev.start); };
-    var daysLeft = start ? Math.round((new Date(ev.date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000) : -1;
 
     function render(l) {
       lang = l;
@@ -948,24 +957,32 @@
     });
 
     /* ---------- add to calendar (once a date is set) ---------- */
-    if (start) {
-      var end = ev.end ? new Date(ev.date + "T" + ev.end + ":00") : new Date(start.getTime() + 90 * 60000);
-      var stamp = function (d) { return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); };
-      var where = "ESPRIT Ghazela" + (ev.bloc ? "\\, Bloc " + ev.bloc : "") + (ev.salle ? "\\, Salle " + ev.salle : "") + "\\, Pôle Technologique El Ghazela\\, Ariana";
-      var ics = [
-        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//firasridene.tech//PFE//FR", "BEGIN:VEVENT",
-        "UID:pfe-" + ev.date + "@firasridene.tech",
-        "DTSTAMP:" + stamp(new Date()),
-        "DTSTART:" + stamp(start), "DTEND:" + stamp(end),
-        "SUMMARY:Soutenance PFE · Firas Ridene",
-        "LOCATION:" + where,
-        "END:VEVENT", "END:VCALENDAR"
-      ].join("\r\n");
-      var cal = $("addCal");
-      cal.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
-      cal.download = "soutenance-firas-ridene.ics";
-      cal.removeAttribute("aria-disabled");
+    function setupCal() {
+      if (start) {
+        var end = ev.end ? new Date(ev.date + "T" + ev.end + ":00+01:00") : new Date(start.getTime() + 90 * 60000);
+        var stamp = function (d) { return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); };
+        var where = "ESPRIT Ghazela" + (ev.bloc ? "\\, Bloc " + ev.bloc : "") + (ev.salle ? "\\, Salle " + ev.salle : "") + "\\, Pôle Technologique El Ghazela\\, Ariana";
+        var ics = [
+          "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//firasridene.tech//PFE//FR", "BEGIN:VEVENT",
+          "UID:pfe-" + ev.date + "@firasridene.tech",
+          "DTSTAMP:" + stamp(new Date()),
+          "DTSTART:" + stamp(start), "DTEND:" + stamp(end),
+          "SUMMARY:Soutenance PFE · Firas Ridene",
+          "LOCATION:" + where,
+          "END:VEVENT", "END:VCALENDAR"
+        ].join("\r\n");
+        var cal = $("addCal");
+        cal.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+        cal.download = "soutenance-firas-ridene.ics";
+        cal.removeAttribute("aria-disabled");
+      }
     }
+
+    /* ---------- load the event details ---------- */
+    fetch("/data/pfe.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d) { setEvent(d); render(lang); setupCal(); } })
+      .catch(function () {});
 
     /* ---------- share: always the plain link, never someone's personal one ---------- */
     $("share").addEventListener("click", function () {
