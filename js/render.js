@@ -55,10 +55,12 @@
   const TAG_ORDER = ["agents", "voice", "automation", "ml", "product"];
   const TAG_LABELS = { agents: "agents", voice: "voice & chat", automation: "automation", ml: "ml & data", product: "product" };
 
-  function workGridHTML(projects) {
+  /* caseIds: ids of projects that have a generated /work/<id>/ case-study page */
+  function workGridHTML(projects, caseIds = []) {
     return projects
+      .map((p, i) => [p, i, caseIds.includes(p.id)])
       .map(
-        (p, i) => `
+        ([p, i, hasCase]) => `
     <article class="case rv${i < 2 ? " wide" : ""}"${p.id ? ` id="${esc(p.id)}"` : ""} data-tags="${esc(p.tags.join(" "))}">
       <span class="eyebrow">${esc(p.domain)}</span>
       <h3>${esc(p.title)}</h3>
@@ -66,8 +68,9 @@
       <ul class="points">${p.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
       ${chips(p.stack)}
       ${
-        p.github || p.demo
+        hasCase || p.github || p.demo
           ? `<div class="links">
+              ${hasCase ? `<a href="/work/${esc(p.id)}/">case study →</a>` : ""}
               ${p.github ? `<a href="${esc(p.github)}" ${EXT}>source ↗</a>` : ""}
               ${p.demo ? `<a href="${esc(p.demo)}" ${EXT}>demo ↗</a>` : ""}
             </div>`

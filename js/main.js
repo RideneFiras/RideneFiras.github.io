@@ -62,8 +62,8 @@ function renderMarquee() {
 
 /* ---------------- work: all projects + filters ---------------- */
 
-function renderWork(projects) {
-  $("#workGrid").innerHTML = workGridHTML(projects);
+function renderWork(projects, caseStudies) {
+  $("#workGrid").innerHTML = workGridHTML(projects, caseStudies.map((c) => c.id));
 
   const bar = $("#filters");
   bar.innerHTML = filtersHTML(projects);
@@ -257,7 +257,7 @@ function initNav() {
 (async function init() {
   initTheme();
   try {
-    const [site, profile, projects, experience, skills, education, certs] = await Promise.all([
+    const [site, profile, projects, experience, skills, education, certs, caseStudies] = await Promise.all([
       loadJSON("data/site.json"),
       loadJSON("data/profile.json"),
       loadJSON("data/projects.json"),
@@ -265,12 +265,14 @@ function initNav() {
       loadJSON("data/skills.json"),
       loadJSON("data/education.json"),
       loadJSON("data/certifications.json"),
+      /* only used to link cards to their case study; never worth failing the page over */
+      loadJSON("data/case-studies.json").catch(() => []),
     ]);
 
     renderChrome(site);
     renderHero(profile, site);
     renderMarquee();
-    renderWork(projects);
+    renderWork(projects, caseStudies);
     renderExperience(experience, skills);
     renderAbout(profile, site, education, certs);
     initSpotlight();

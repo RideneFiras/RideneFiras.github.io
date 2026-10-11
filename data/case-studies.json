@@ -1,0 +1,205 @@
+[
+  {
+    "id": "store-support-agent",
+    "title": "Store Support Agent",
+    "headline": "A support agent that checks real stock and won't be talked into a discount",
+    "titleTag": "Multi-agent store support agent with prompt-injection defence",
+    "description": "How I built Loomhaus, a multi-agent n8n support agent that checks live stock, records orders in Notion and blocked 10/10 prompt-injection attacks in tests.",
+    "published": "2026-10-11",
+    "status": "Hackathon build · live public demo",
+    "summary": "Loomhaus is an AI customer-support agent for a small online store. An orchestrator agent in n8n dispatches to three subagents (inventory, order capture, knowledge base) wired to Google Sheets, Notion and Supabase. The stock decision is made by workflow logic, not by the model, and four independent layers defend against prompt injection. Built in about five hours for the Multi-App AI Agent Hackathon, and tested against the live systems.",
+    "facts": [
+      [
+        "Context",
+        "Multi-App AI Agent Hackathon, September 2026"
+      ],
+      [
+        "Build time",
+        "About 5 hours"
+      ],
+      [
+        "Type",
+        "Working prototype with a public demo, not a production deployment"
+      ],
+      [
+        "Stack",
+        "n8n, OpenAI gpt-4.1-mini, Supabase (pgvector, Realtime), Notion, Google Sheets, Next.js, Vercel"
+      ]
+    ],
+    "sections": [
+      {
+        "heading": "Problem and target user",
+        "paragraphs": [
+          "A small clothing brand gets the same questions every day: is this in stock, how do returns work, can I order two. A basic chatbot can answer questions, but it doesn't know what's on the shelf, it can't take an order, and it will happily promise something the store can't deliver.",
+          "The hard moments have real consequences: confirming stock that isn't there, two customers racing for the last units, and a customer talking the bot into a discount. The hackathon asked for a multi-step agent connected to at least three apps, with proof that it works, so I built around those three failure modes and tested each one."
+        ]
+      },
+      {
+        "heading": "Constraints and requirements",
+        "bullets": [
+          "Connect to at least three real apps: Google Sheets as the inventory, Notion as the order list, Supabase as the store's knowledge base.",
+          "Never promise stock that is already reserved for another order.",
+          "Never leak exact stock counts, other customers' details, or internal instructions.",
+          "Fail honestly: if an app is down, tell the customer and write nothing half-finished.",
+          "Judges can't open the store's Notion or Google accounts, so the result has to be visible from a public dashboard."
+        ]
+      },
+      {
+        "heading": "Architecture",
+        "paragraphs": [
+          "Everything runs in a single n8n workflow. Every message first passes an injection filter. Clean messages go to an orchestrator agent (gpt-4.1-mini), which can only act through three subagents, each a branch of the same workflow:"
+        ],
+        "bullets": [
+          "check_inventory reads the Sheet. An n8n IF node compares stock, reserved units and the quantity asked for, and the agent only ever hears back \"available\" or \"not confirmed\".",
+          "capture_order checks stock again, writes the order to Notion, reserves the units in the Sheet, then re-reads the Sheet to make sure nothing was over-reserved.",
+          "answer_from_kb runs a vector search over the store's policies in Supabase and answers only from what it finds.",
+          "A fulfillment sync polls Notion every 30 seconds. When the team marks an order Fulfilled, stock and reservations update in the Sheet, and the same order is never applied twice.",
+          "n8n mirrors every change to Supabase, and a Next.js dashboard on Vercel shows it live through Supabase Realtime. The dashboard only displays data. Every decision happens in n8n."
+        ]
+      },
+      {
+        "heading": "Key engineering decisions",
+        "paragraphs": [
+          "The model never decides availability. Stock numbers never reach it, so it can't leak them or round them in the customer's favour. When two customers want the last two hoodies, the second one is told availability can't be confirmed and is logged as a Follow-up in Notion, instead of being sold stock already promised to someone else.",
+          "Prompt-injection defence is layered, so that no single layer has to be perfect:"
+        ],
+        "bullets": [
+          "No dangerous tools. Nothing in the system can change a price, apply a discount, read other customers' orders or return stock counts.",
+          "A pre-filter in n8n catches common attacks (instruction overrides, fake admin mode, hidden system tags, discount requests) and sends a fixed reply. The model never sees those messages.",
+          "The agent's instructions treat customer text as information, never as commands, and include a canary word that would reveal a prompt leak.",
+          "Replies must fit a fixed schema (intent and reply_text) with no field for a price, and a final check blocks any reply containing the canary or a stock count."
+        ]
+      },
+      {
+        "heading": "My contribution",
+        "paragraphs": [
+          "Every commit in the public repository is mine: the Python scripts that generate and deploy the n8n workflow, the Supabase schema and knowledge-base ingestion, the Notion and Sheets setup, the Next.js dashboard, and the test harness that checks the live system."
+        ]
+      },
+      {
+        "heading": "Verified outcomes",
+        "paragraphs": [
+          "Every test runs against the live system. Instead of trusting the agent's reply, each test reads Notion, Google Sheets and Supabase back through their APIs, and the raw results are committed to the repository."
+        ],
+        "bullets": [
+          "Prompt injection: 10 of 10 attacks blocked and 3 of 3 normal questions answered. The filter stopped 6 attacks, and the other layers stopped the remaining 4.",
+          "Race for the last units: 21 of 21 checks passed. The second customer was not confirmed, was logged as a Follow-up, and the Sheet was unchanged.",
+          "Broken Notion connection: 8 of 8 checks passed. The customer got an honest error, nothing was reserved, and the error was logged.",
+          "Fulfillment sync: the Sheet updated 36.5 seconds after an order was marked Fulfilled, and the order was never applied twice."
+        ]
+      },
+      {
+        "heading": "Limitations",
+        "bullets": [
+          "It's a hackathon prototype for a fictional store, not a system serving real customers.",
+          "The public demo is shared by every visitor, so state left by one person is visible to the next until someone hits Reset.",
+          "The pre-filter is pattern-based. On its own it stopped only 6 of the 10 attacks, which is why the system doesn't rely on it alone.",
+          "The adversarial test set is 10 prompts. That's evidence the layers work as designed, not a guarantee against every attack."
+        ]
+      }
+    ],
+    "links": [
+      {
+        "label": "Try the live demo",
+        "url": "https://loomhaus-agent.vercel.app"
+      },
+      {
+        "label": "Watch the 2-minute demo",
+        "url": "https://youtu.be/t3_HilAUTEQ"
+      },
+      {
+        "label": "Source code on GitHub",
+        "url": "https://github.com/RideneFiras/MultiAppHackathon"
+      },
+      {
+        "label": "Raw prompt-injection results",
+        "url": "https://github.com/RideneFiras/MultiAppHackathon/blob/main/tests/results/02_adversarial_eval.md"
+      }
+    ]
+  },
+  {
+    "id": "chronoworks",
+    "title": "ChronoWorks",
+    "headline": "Time, tasks and invoices for freelancers, where the database is the referee",
+    "titleTag": "ChronoWorks: freelancer time and invoicing on Supabase RLS",
+    "description": "ChronoWorks links a freelancer's time, tasks, leave and invoices. Postgres triggers and RLS enforce gapless numbering and frozen invoices.",
+    "published": "2026-10-11",
+    "status": "Open-source MVP, self-hosted",
+    "summary": "ChronoWorks is one place where a freelancer runs the business side of their work: clients, projects, time, tasks, leave and invoices, all linked. It is built for Tunisia and France first (TND and EUR, matricule fiscal and SIRET, stamp duty, withholding tax, EU reverse charge). Row-level security, constraints and triggers in Postgres enforce the rules, so a bug in the UI can't produce a wrong invoice or leak another user's data.",
+    "facts": [
+      [
+        "Type",
+        "Open-source MVP, deployable to your own Supabase and Vercel"
+      ],
+      [
+        "Markets",
+        "Tunisia and France, French and English interface"
+      ],
+      [
+        "Stack",
+        "Next.js 16 (App Router), TypeScript, Tailwind v4, Supabase (Postgres, Auth, Storage), dnd-kit, @react-pdf/renderer, next-intl"
+      ]
+    ],
+    "sections": [
+      {
+        "heading": "Problem and target user",
+        "paragraphs": [
+          "A freelancer working alone usually ends up with a spreadsheet for hours, a kanban tool for tasks, and a word processor for invoices. Nothing knows about anything else, so the same hour gets typed three times, and the invoice is assembled by hand at the end of the month, from memory.",
+          "ChronoWorks makes those one system. A task has a log-time button, time becomes invoice lines, and issuing an invoice locks the time behind it."
+        ]
+      },
+      {
+        "heading": "Constraints and requirements",
+        "bullets": [
+          "An issued invoice must never change afterwards: not its fields, its lines, or the time entries behind it.",
+          "Invoice numbers must be gapless per year.",
+          "Raising a rate or editing a client's details later must not rewrite invoices already sent.",
+          "Money in two currencies with different precision: TND with three decimals, EUR with two.",
+          "One user's data must be unreachable by any other user or by a signed-out visitor."
+        ]
+      },
+      {
+        "heading": "Architecture and engineering decisions",
+        "paragraphs": [
+          "The rule that shapes everything: the database is the referee, not the UI."
+        ],
+        "bullets": [
+          "Every table has row-level security scoped to the signed-in user. Child rows use composite foreign keys, so a row can't reference another account's data even by accident.",
+          "A trigger freezes an issued invoice, its lines and the time entries behind it.",
+          "issue_invoice() is the only way to issue an invoice. It assigns the gapless number, recomputes totals from the lines, and snapshots both parties' billing details.",
+          "A project's rate is copied onto each invoice line when the line is created, so a rate change next year can't alter last year's invoice.",
+          "Money is numeric in Postgres and a scaled bigint in code, never a float. Durations are whole minutes everywhere.",
+          "Leave is drawn on the week grid and excluded from working-day counts."
+        ]
+      },
+      {
+        "heading": "My contribution",
+        "paragraphs": [
+          "I designed and built it: the data model, the Postgres migration with its triggers and RLS policies, the Next.js app, the PDF invoices, and the verification and seed scripts. All commits in the public repository are mine."
+        ]
+      },
+      {
+        "heading": "Verified outcomes",
+        "bullets": [
+          "An RLS test script creates two throwaway users, has one build a full workload, then tries every way it can to reach that data as the other user and as a signed-out visitor. Result: 46 checks, 0 failed.",
+          "A verify script checks the live Supabase project: Google sign-in enabled, anonymous access refused on all 12 tables, and the functions and private storage buckets present.",
+          "The MVP scope is built: auth, clients, projects with status history, the week grid and timer, leave, boards, invoices with PDF and storage, settings, GDPR export, and account deletion."
+        ]
+      },
+      {
+        "heading": "Limitations",
+        "bullets": [
+          "It's an MVP, not a hosted service. You deploy it to your own Supabase project and Vercel account.",
+          "Sign-in is Google only.",
+          "Out of scope for v1: dashboards and revenue charts, quotes, expenses, recurring projects, invoice reminders, sending email, accountant export, Arabic and RTL, and teams."
+        ]
+      }
+    ],
+    "links": [
+      {
+        "label": "Source code on GitHub",
+        "url": "https://github.com/RideneFiras/ChronoWorks"
+      }
+    ]
+  }
+]

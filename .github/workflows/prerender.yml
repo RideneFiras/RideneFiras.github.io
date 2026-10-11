@@ -24,17 +24,17 @@ jobs:
         with:
           node-version: 20
 
-      - name: Regenerate index.html, llms.txt and sitemap.xml from data/*.json
+      - name: Regenerate index.html, llms.txt, sitemap.xml and work/ from data/*.json
         run: node scripts/prerender.js
 
       - name: Commit if changed
         run: |
-          if git diff --quiet -- index.html llms.txt sitemap.xml; then
+          if git diff --quiet -- index.html llms.txt sitemap.xml work && [ -z "$(git ls-files --others --exclude-standard work)" ]; then
             echo "No content changes, skipping commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html llms.txt sitemap.xml
+          git add -A index.html llms.txt sitemap.xml work
           git commit -m "chore: prerender index.html from data/*.json [skip ci]"
           git push

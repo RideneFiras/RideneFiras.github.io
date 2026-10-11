@@ -2,7 +2,7 @@
 
 > Firas Ridene: AI Engineer based in Tunis, Tunisia, specialized in Generative AI & Multi-Agent Systems. Builds multi-agent systems, real-time voice agents, and AI automation pipelines that ship to production.
 
-I'm an AI engineer and computer science engineering student at Esprit in Tunis, specialized in generative AI and multi-agent systems. I design intelligent assistants and automation systems that reduce manual work and improve decision-making.
+I'm an AI engineer based in Tunis, specialized in generative AI and multi-agent systems. I design intelligent assistants and automation systems that reduce manual work and improve decision-making.
 
 I continuously explore new tools and frameworks to build the right stack per use case, always prioritizing the most relevant solution over a familiar one.
 
@@ -15,9 +15,9 @@ I build agent systems that do real work. Voice agents that answer phones. An age
 - Location: Tunis, Tunisia
 - Availability: Open to opportunities
 - Languages: Arabic (native), English (fluent), French (fluent)
-- Education: Engineering Degree in Computer Science, Esprit: School of Engineering (2023 – present); Mathematics & Physics, Integrated Preparatory Cycle, Esprit (2020 – 2023)
+- Education: Engineering Degree in Computer Science, Esprit: School of Engineering (2023 – Oct 2026); Mathematics & Physics, Integrated Preparatory Cycle, Esprit (2020 – 2023)
 - Shipped projects: 16 · Certifications: 22
-- Last updated: 2026-09-28
+- Last updated: 2026-10-10
 
 ## Contact
 
@@ -25,7 +25,9 @@ I build agent systems that do real work. Voice agents that answer phones. An age
 - Email: firas.ridene@outlook.com
 - GitHub: https://github.com/RideneFiras
 - LinkedIn: https://www.linkedin.com/in/firas-ridene
-- YouTube (project demos): https://youtube.com/playlist?list=PLRjr8ZSeOB_w&si=cJURnWFpjs_r5p9U
+- YouTube channel: https://www.youtube.com/@FirasRidene
+- YouTube (project demos playlist): https://youtube.com/playlist?list=PLRjr8ZSeOB_w&si=cJURnWFpjs_r5p9U
+- Kaggle: https://www.kaggle.com/firasridene
 - Resume (PDF): https://firasridene.tech/assets/Firas-Ridene-Resume.pdf
 
 ## Experience
@@ -37,25 +39,44 @@ I build agent systems that do real work. Voice agents that answer phones. An age
 - Owned projects end-to-end in full autonomy, from specification through development and deployment.
 - Stack: Python, React, FastAPI, Supabase, Docker, Azure, CrewAI, Latenode, n8n, Vercel
 
-### End-of-Studies Intern · Agile4UX (Feb – Jul 2026)
+### AI Engineer (end-of-studies internship) · Agile4UX (Feb – Jul 2026)
 
 - Designed a multi-tenant platform where users build and deploy AI voice agents across phone, chat, and WhatsApp.
 - Built real-time voice agents with knowledge retrieval, data collection, and human handoff at sub-second latency.
 - Enabled businesses to offer 24/7 customer engagement without added headcount, handling inquiries, bookings, and support.
 - Stack: React, FastAPI, Supabase, OpenAI Realtime API, Twilio, Stripe, Redis, Docker, Azure
 
-### AI Automation Intern · Agile4ux (2025)
+### AI Automation Engineer (internship) · Agile4ux (2025)
 
 - Analyzed marketing and sales processes to find repetitive tasks worth automating.
 - Designed a multi-agent system to research, qualify, and analyze prospects, generating strategic reports.
 - Cut manual prospecting time by ~80%; automated report delivery and CRM integration.
 - Stack: Python, FastAPI, OpenAI, CrewAI, Latenode, Presenton
 
-### Data Platform Development Intern · Designet (2024)
+### Data Platform Engineer (internship) · Designet (2024)
 
 - Built a platform generating leads from Google Maps with filterable criteria and CSV export.
 - Reduced research time and improved prospect quality through automated extraction and filtering.
 - Stack: Google Maps API, SerperAPI, FastAPI, Next.js, Docker
+
+## Case studies
+
+### [Store Support Agent: A support agent that checks real stock and won't be talked into a discount](https://firasridene.tech/work/store-support-agent/)
+
+Loomhaus is an AI customer-support agent for a small online store. An orchestrator agent in n8n dispatches to three subagents (inventory, order capture, knowledge base) wired to Google Sheets, Notion and Supabase. The stock decision is made by workflow logic, not by the model, and four independent layers defend against prompt injection. Built in about five hours for the Multi-App AI Agent Hackathon, and tested against the live systems.
+
+- Status: Hackathon build · live public demo
+- Try the live demo: https://loomhaus-agent.vercel.app
+- Watch the 2-minute demo: https://youtu.be/t3_HilAUTEQ
+- Source code on GitHub: https://github.com/RideneFiras/MultiAppHackathon
+- Raw prompt-injection results: https://github.com/RideneFiras/MultiAppHackathon/blob/main/tests/results/02_adversarial_eval.md
+
+### [ChronoWorks: Time, tasks and invoices for freelancers, where the database is the referee](https://firasridene.tech/work/chronoworks/)
+
+ChronoWorks is one place where a freelancer runs the business side of their work: clients, projects, time, tasks, leave and invoices, all linked. It is built for Tunisia and France first (TND and EUR, matricule fiscal and SIRET, stamp duty, withholding tax, EU reverse charge). Row-level security, constraints and triggers in Postgres enforce the rules, so a bug in the UI can't produce a wrong invoice or leak another user's data.
+
+- Status: Open-source MVP, self-hosted
+- Source code on GitHub: https://github.com/RideneFiras/ChronoWorks
 
 ## Projects
 
@@ -212,7 +233,7 @@ AI customer support agent for e-commerce that checks real inventory before promi
 - Handled the overselling edge case deterministically, refusing to confirm stock that's already pending on another order.
 - Defended against prompt injection with no discount/price tools in the system, a pre-filter guard, and a structured-output schema as a final backstop, tested against a set of adversarial prompts.
 - Stack: n8n, Notion, Google Sheets, Supabase, pgvector, Claude, Next.js, Vercel
-- Details: https://firasridene.tech/#store-support-agent
+- Case study: https://firasridene.tech/work/store-support-agent/
 - Source: https://github.com/RideneFiras/MultiAppHackathon
 - Demo: https://youtu.be/t3_HilAUTEQ
 
@@ -224,7 +245,7 @@ Unified platform for freelancers to manage clients, projects, time, tasks, leave
 - Built a locked invoicing system with gapless numbering and immutable issued invoices, enforced with Postgres triggers and row-level security.
 - Implemented tax-profile logic for Tunisia and France, covering VAT, matricule fiscal, stamp duty, and reverse charge.
 - Stack: Next.js, TypeScript, Supabase, PostgreSQL, Tailwind CSS, dnd-kit, Vercel
-- Details: https://firasridene.tech/#chronoworks
+- Case study: https://firasridene.tech/work/chronoworks/
 - Source: https://github.com/RideneFiras/ChronoWorks
 
 ## Skills

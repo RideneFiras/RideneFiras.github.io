@@ -5,7 +5,8 @@
      client-side on load, via js/render.js which both share)
    - the JSON-LD structured data in index.html's <head>
    - llms.txt, the plain-text summary read by AI assistants and answer engines
-   - the homepage <lastmod> in sitemap.xml, bumped only when the content above changed */
+   - one static case-study page per entry in data/case-studies.json, at work/<id>/index.html
+   - sitemap.xml, where each page's <lastmod> is bumped only when that page's content changed */
 
 const fs = require("fs");
 const path = require("path");
@@ -23,6 +24,14 @@ const experience = readJSON("data/experience.json");
 const skills = readJSON("data/skills.json");
 const education = readJSON("data/education.json");
 const certs = readJSON("data/certifications.json");
+const caseStudies = readJSON("data/case-studies.json");
+
+const caseIds = caseStudies.map((c) => c.id);
+for (const id of caseIds) {
+  if (!projects.some((p) => p.id === id)) throw new Error(`data/case-studies.json: no project with id "${id}"`);
+}
+const caseUrl = (id) => `${SITE_URL}/work/${id}/`;
+const projectUrl = (p) => (caseIds.includes(p.id) ? caseUrl(p.id) : `${SITE_URL}/#${p.id}`);
 
 const splitList = (s) => s.split(",").map((x) => x.trim()).filter(Boolean);
 const abs = (p) => (/^https?:/.test(p) ? p : `${SITE_URL}/${p.replace(/^\//, "")}`);
@@ -53,7 +62,6 @@ function jsonLd(lastmod) {
       mainEntity: { "@id": PERSON },
       about: { "@id": PERSON },
       dateModified: lastmod,
-      hasPart: { "@id": `${SITE_URL}/#work` },
     },
     {
       "@type": "Person",
@@ -96,12 +104,15 @@ function jsonLd(lastmod) {
         credentialCategory: "certificate",
         recognizedBy: { "@type": "Organization", name: c.issuer },
       })),
-      sameAs: [site.links.github, site.links.linkedin, site.links.youtube].filter(Boolean),
+      /* profiles only: the YouTube playlist linked in the UI is not a profile, the channel is */
+      sameAs: [site.links.github, site.links.linkedin, site.links.youtubeChannel, site.links.kaggle].filter(Boolean),
     },
     {
       "@type": "ItemList",
       "@id": `${SITE_URL}/#work`,
       name: `Projects by ${site.name}`,
+      /* hasPart on the ProfilePage would need a CreativeWork; an ItemList links back this way */
+      mainEntityOfPage: { "@id": `${SITE_URL}/#profilepage` },
       numberOfItems: projects.length,
       itemListElement: projects.map((p, i) => ({
         "@type": "ListItem",
@@ -109,7 +120,7 @@ function jsonLd(lastmod) {
         item: {
           "@type": p.github ? "SoftwareSourceCode" : "CreativeWork",
           name: p.title,
-          url: `${SITE_URL}/#${p.id}`,
+          url: projectUrl(p),
           description: p.oneliner,
           genre: p.domain,
           keywords: splitList(p.stack).join(", "),
@@ -153,7 +164,9 @@ function llmsTxt(lastmod) {
   L.push(`- Email: ${links.email}`);
   L.push(`- GitHub: ${links.github}`);
   L.push(`- LinkedIn: ${links.linkedin}`);
-  if (links.youtube) L.push(`- YouTube (project demos): ${links.youtube}`);
+  if (links.youtubeChannel) L.push(`- YouTube channel: ${links.youtubeChannel}`);
+  if (links.youtube) L.push(`- YouTube (project demos playlist): ${links.youtube}`);
+  if (links.kaggle) L.push(`- Kaggle: ${links.kaggle}`);
   L.push(`- Resume (PDF): ${abs(site.resume)}`, "");
 
   L.push("## Experience", "");
@@ -164,13 +177,22 @@ function llmsTxt(lastmod) {
     L.push("");
   }
 
+  L.push("## Case studies", "");
+  for (const c of caseStudies) {
+    L.push(`### [${c.title}: ${c.headline}](${caseUrl(c.id)})`, "");
+    L.push(`${c.summary}`, "");
+    L.push(`- Status: ${c.status}`);
+    L.push(...c.links.map((l) => `- ${l.label}: ${l.url}`));
+    L.push("");
+  }
+
   L.push("## Projects", "");
   for (const p of projects) {
     L.push(`### ${p.title}`, "");
     L.push(`${p.oneliner} (${p.domain})`, "");
     L.push(...p.bullets.map((b) => `- ${b}`));
     L.push(`- Stack: ${splitList(p.stack).join(", ")}`);
-    L.push(`- Details: ${SITE_URL}/#${p.id}`);
+    L.push(`- ${caseIds.includes(p.id) ? "Case study" : "Details"}: ${projectUrl(p)}`);
     if (p.github) L.push(`- Source: ${p.github}`);
     if (p.demo) L.push(`- Demo: ${p.demo}`);
     L.push("");
@@ -202,7 +224,7 @@ const staticRegions = {
   aboutText: Render.aboutTextHTML(profile, site, education),
   certs: Render.certsHTML(certs),
   filters: Render.filtersHTML(projects),
-  workGrid: Render.workGridHTML(projects),
+  workGrid: Render.workGridHTML(projects, caseIds),
   expList: Render.expListHTML(experience),
   skills: Render.skillsHTML(skills),
 };
@@ -219,25 +241,209 @@ function buildIndex(html, lastmod) {
   return html;
 }
 
-const HOME_LASTMOD = /(<loc>https:\/\/firasridene\.tech\/<\/loc>\s*<lastmod>)([\d-]+)(<\/lastmod>)/;
-const oldIndex = readText("index.html");
-const oldLlms = fs.existsSync(path.join(ROOT, "llms.txt")) ? readText("llms.txt") : "";
+/* ---------- case-study pages ---------- */
+
+const FAVICON = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232553C4'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23B7802F'/%3E%3Cpath d='M18 46V18h14' stroke='%23F5F4EF' stroke-width='6' fill='none'/%3E%3Cpath d='M18 32h11' stroke='%23F5F4EF' stroke-width='6'/%3E%3C/svg%3E`;
+
+function caseLd(c, lastmod) {
+  const url = caseUrl(c.id);
+  const project = projects.find((p) => p.id === c.id);
+  const graph = [
+    {
+      "@type": "Article",
+      "@id": `${url}#article`,
+      headline: `${c.title}: ${c.headline}`,
+      description: c.description,
+      url,
+      mainEntityOfPage: url,
+      image: `${SITE_URL}/assets/og.png`,
+      inLanguage: "en",
+      datePublished: c.published,
+      dateModified: lastmod,
+      author: { "@type": "Person", "@id": `${SITE_URL}/#person`, name: site.name, url: `${SITE_URL}/` },
+      publisher: { "@type": "Person", "@id": `${SITE_URL}/#person`, name: site.name, url: `${SITE_URL}/` },
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      about: {
+        "@type": project.github ? "SoftwareSourceCode" : "CreativeWork",
+        name: c.title,
+        description: project.oneliner,
+        ...(project.github ? { codeRepository: project.github } : {}),
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: site.name, item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 2, name: "Work", item: `${SITE_URL}/#work` },
+        { "@type": "ListItem", position: 3, name: c.title, item: url },
+      ],
+    },
+  ];
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
+}
+
+function casePage(c, lastmod) {
+  const e = Render.esc;
+  const url = caseUrl(c.id);
+  const title = `${c.titleTag || `${c.title} case study`} · ${site.name}`;
+  const ogDesc = `${c.headline}. A case study by ${site.name}, ${site.role} (${site.focus}).`;
+  const section = (s) =>
+    `\n        <h2>${e(s.heading)}</h2>` +
+    (s.paragraphs || []).map((p) => `\n        <p>${e(p)}</p>`).join("") +
+    (s.bullets ? `\n        <ul>${s.bullets.map((b) => `\n          <li>${e(b)}</li>`).join("")}\n        </ul>` : "");
+  return `<!DOCTYPE html>
+<!-- generated by scripts/prerender.js from data/case-studies.json: edit the data, not this file -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${e(title)}</title>
+  <meta name="description" content="${e(c.description)}">
+  <meta name="author" content="${e(site.name)}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <link rel="canonical" href="${url}">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="${e(site.name)}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="${e(`${c.title}: ${c.headline}`)}">
+  <meta property="og:description" content="${e(ogDesc)}">
+  <meta property="og:url" content="${url}">
+  <meta property="og:image" content="${SITE_URL}/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${e(`${site.name}, AI engineer: I build agent systems that do real work.`)}">
+  <meta property="article:author" content="${SITE_URL}/">
+  <meta property="article:published_time" content="${c.published}">
+  <meta property="article:modified_time" content="${lastmod}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${e(`${c.title}: ${c.headline}`)}">
+  <meta name="twitter:description" content="${e(ogDesc)}">
+  <meta name="twitter:image" content="${SITE_URL}/assets/og.png">
+  <meta name="theme-color" content="#f5f4ef">
+
+  <script type="application/ld+json">
+${caseLd(c, lastmod)}
+  </script>
+
+  <link rel="icon" href="${FAVICON}">
+  <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+  <link rel="preload" href="/assets/fonts/archivo-vf.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/instrument-sans-vf.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="spot" aria-hidden="true"></div>
+
+  <main class="cs-main">
+    <article class="cs-article">
+      <nav aria-label="Breadcrumb"><a class="cs-back" href="/#work">&larr; all work</a></nav>
+
+      <h1 class="cs-title"><span class="sec-label">case study</span>${e(c.title)}</h1>
+      <p class="cs-headline">${e(c.headline)}.</p>
+      <p class="cs-status">${e(c.status)} · by <a href="/">${e(site.name)}</a></p>
+
+      <div class="cs-body">
+        <p class="cs-summary">${e(c.summary)}</p>
+        <dl class="cs-facts">${c.facts.map(([k, v]) => `\n          <dt>${e(k)}</dt><dd>${e(v)}</dd>`).join("")}
+        </dl>
+${c.sections.map(section).join("\n")}
+
+        <h2>Source and demo</h2>
+        <ul class="cs-links">${c.links.map((l) => `\n          <li><a href="${e(l.url)}" ${Render.EXT}>${e(l.label)} ↗</a></li>`).join("")}
+        </ul>
+
+        <div class="cs-cta">
+          <p>Want something like this for your business, or hiring for an AI engineering role? I'm ${e(site.name)}, ${e(site.role)} in ${e(site.location)}, focused on ${e(site.focus)}.</p>
+          <div class="hero-cta">
+            <a class="btn" href="/#contact">Get in touch</a>
+            <a class="btn ghost" href="/${e(site.resume)}" ${Render.EXT}>Resume (PDF)</a>
+            <a class="btn ghost" href="/#work">More projects</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="cs-footer">
+    <span>© <span id="year"></span> ${e(site.name)}</span>
+    <span><a href="/">portfolio</a></span>
+    <span><a href="/legal/">legal</a></span>
+  </footer>
+
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
+`;
+}
+
+/* ---------- sitemap ---------- */
+
+function sitemapXml(pages) {
+  const url = (p) => `  <url>
+    <loc>${p.loc}</loc>
+    <lastmod>${p.lastmod}</lastmod>${p.image ? `
+    <image:image>
+      <image:loc>${p.image}</image:loc>
+    </image:image>` : ""}
+  </url>`;
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${pages.map(url).join("\n")}
+</urlset>
+`;
+}
+
+/* ---------- build ---------- */
+
+const today = new Date().toISOString().slice(0, 10);
+const readIfExists = (p) => (fs.existsSync(path.join(ROOT, p)) ? readText(p) : "");
+const writeFile = (p, content) => {
+  fs.mkdirSync(path.dirname(path.join(ROOT, p)), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, p), content);
+};
+
 const oldSitemap = readText("sitemap.xml");
-if (!HOME_LASTMOD.test(oldSitemap)) throw new Error("No homepage <lastmod> found in sitemap.xml");
-const prevLastmod = oldSitemap.match(HOME_LASTMOD)[2];
+const prevLastmod = {};
+for (const m of oldSitemap.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([\d-]+)<\/lastmod>/g)) prevLastmod[m[1]] = m[2];
+if (!prevLastmod[`${SITE_URL}/`]) throw new Error("No homepage <lastmod> found in sitemap.xml");
 
 /* render with the previous date first: if nothing changed, keep it, so the
    sitemap only claims a modification when the content really moved */
-let lastmod = prevLastmod;
-let index = buildIndex(oldIndex, lastmod);
-let llms = llmsTxt(lastmod);
-if (index !== oldIndex || llms !== oldLlms) {
-  lastmod = new Date().toISOString().slice(0, 10);
-  index = buildIndex(oldIndex, lastmod);
-  llms = llmsTxt(lastmod);
+function stableBuild(loc, render, files) {
+  const olds = files.map(readIfExists);
+  let lastmod = prevLastmod[loc] || today;
+  let out = render(lastmod);
+  if (out.some((o, i) => o !== olds[i])) {
+    lastmod = today;
+    out = render(lastmod);
+  }
+  files.forEach((f, i) => writeFile(f, out[i]));
+  return lastmod;
 }
 
-fs.writeFileSync(path.join(ROOT, "index.html"), index);
-fs.writeFileSync(path.join(ROOT, "llms.txt"), llms);
-fs.writeFileSync(path.join(ROOT, "sitemap.xml"), oldSitemap.replace(HOME_LASTMOD, `$1${lastmod}$3`));
-console.log(`Prerendered index.html, llms.txt and sitemap.xml from data/*.json (lastmod ${lastmod})`);
+const oldIndex = readText("index.html");
+const homeLastmod = stableBuild(`${SITE_URL}/`, (d) => [buildIndex(oldIndex, d), llmsTxt(d)], ["index.html", "llms.txt"]);
+
+const pages = [
+  { loc: `${SITE_URL}/`, lastmod: homeLastmod, image: `${SITE_URL}/assets/firas.jpg` },
+  ...caseStudies.map((c) => ({
+    loc: caseUrl(c.id),
+    lastmod: stableBuild(caseUrl(c.id), (d) => [casePage(c, d)], [`work/${c.id}/index.html`]),
+  })),
+  /* hand-written page: keep its date, edit it here or in sitemap.xml when legal/ changes */
+  { loc: `${SITE_URL}/legal/`, lastmod: prevLastmod[`${SITE_URL}/legal/`] || today },
+];
+
+/* drop pages of case studies that were removed from the data */
+const workDir = path.join(ROOT, "work");
+if (fs.existsSync(workDir)) {
+  for (const d of fs.readdirSync(workDir)) {
+    if (!caseIds.includes(d)) fs.rmSync(path.join(workDir, d), { recursive: true });
+  }
+}
+
+writeFile("sitemap.xml", sitemapXml(pages));
+console.log(`Prerendered index.html, llms.txt, ${caseStudies.length} case studies and sitemap.xml (home lastmod ${homeLastmod})`);
