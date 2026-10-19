@@ -205,6 +205,7 @@ function llmsTxt(lastmod) {
   L.push(...certs.list.map((c) => `- ${c.name} (${c.issuer})`), "");
 
   L.push("## Optional", "");
+  L.push(`- [Book a call (15-min introduction or 30-min AI & automation discussion)](${SITE_URL}/book/)`);
   L.push(`- [Legal notice, terms of service & privacy policy (French)](${SITE_URL}/legal/)`);
   L.push(`- [Website source code](https://github.com/RideneFiras/RideneFiras.github.io)`);
   return L.join("\n") + "\n";
@@ -435,6 +436,7 @@ const pages = [
   })),
   /* hand-written page: keep its date, edit it here or in sitemap.xml when legal/ changes */
   { loc: `${SITE_URL}/legal/`, lastmod: prevLastmod[`${SITE_URL}/legal/`] || today },
+  { loc: `${SITE_URL}/book/`, lastmod: prevLastmod[`${SITE_URL}/book/`] || today },
 ];
 
 /* drop pages of case studies that were removed from the data */

@@ -17,7 +17,7 @@ I build agent systems that do real work. Voice agents that answer phones. An age
 - Languages: Arabic (native), English (fluent), French (fluent)
 - Education: Engineering Degree in Computer Science, Esprit: School of Engineering (2023 – Oct 2026); Mathematics & Physics, Integrated Preparatory Cycle, Esprit (2020 – 2023)
 - Shipped projects: 16 · Certifications: 22
-- Last updated: 2026-10-10
+- Last updated: 2026-10-19
 
 ## Contact
 
@@ -282,5 +282,6 @@ Unified platform for freelancers to manage clients, projects, time, tasks, leave
 
 ## Optional
 
+- [Book a call (15-min introduction or 30-min AI & automation discussion)](https://firasridene.tech/book/)
 - [Legal notice, terms of service & privacy policy (French)](https://firasridene.tech/legal/)
 - [Website source code](https://github.com/RideneFiras/RideneFiras.github.io)

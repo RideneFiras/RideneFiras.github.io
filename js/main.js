@@ -256,6 +256,7 @@ function initNav() {
 
 (async function init() {
   initTheme();
+  initBooking(); /* static markup, so it works even if the data fetch fails */
   try {
     const [site, profile, projects, experience, skills, education, certs, caseStudies] = await Promise.all([
       loadJSON("data/site.json"),

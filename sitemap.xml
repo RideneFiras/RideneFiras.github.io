@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://firasridene.tech/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-19</lastmod>
     <image:image>
       <image:loc>https://firasridene.tech/assets/firas.jpg</image:loc>
     </image:image>
@@ -19,5 +19,9 @@
   <url>
     <loc>https://firasridene.tech/legal/</loc>
     <lastmod>2026-08-27</lastmod>
+  </url>
+  <url>
+    <loc>https://firasridene.tech/book/</loc>
+    <lastmod>2026-10-19</lastmod>
   </url>
 </urlset>
