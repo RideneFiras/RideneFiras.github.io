@@ -2,9 +2,11 @@
 
 > Firas Ridene: AI Engineer based in Tunis, Tunisia, specialized in Generative AI & Multi-Agent Systems. Builds multi-agent systems, real-time voice agents, and AI automation pipelines that ship to production.
 
-I'm an AI engineer based in Tunis, specialized in generative AI and multi-agent systems. I design intelligent assistants and automation systems that reduce manual work and improve decision-making.
+I'm an AI engineer in Tunis. I build generative AI and multi-agent systems, and I also handle the work around them: talking with the people who'll use the system, finding where their process actually loses time, and turning that into something that ships.
 
-I continuously explore new tools and frameworks to build the right stack per use case, always prioritizing the most relevant solution over a familiar one.
+That's what I've been doing so far. I built a multi-agent prospecting system that cut manual research by ~80%. VocaFlow is a voice agent platform that handles inquiries, bookings and support across phone, chat and WhatsApp without extra headcount. As a freelancer, I build AI and full-stack solutions for clients in marketing, sales, finance and insurance.
+
+I explain every trade-off in plain terms to whoever has to approve it, technical or not.
 
 I build agent systems that do real work. Voice agents that answer phones. An agent team that ships code. Pipelines that cut manual prospecting by 80%. I design multi-agent systems end-to-end and pick the stack per problem, not per habit.
 
@@ -17,7 +19,7 @@ I build agent systems that do real work. Voice agents that answer phones. An age
 - Languages: Arabic (native), English (fluent), French (fluent)
 - Education: Engineering Degree in Computer Science, Esprit: School of Engineering (2023 – Oct 2026); Mathematics & Physics, Integrated Preparatory Cycle, Esprit (2020 – 2023)
 - Shipped projects: 16 · Certifications: 22
-- Last updated: 2026-10-19
+- Last updated: 2026-10-20
 
 ## Contact
 
@@ -32,7 +34,7 @@ I build agent systems that do real work. Voice agents that answer phones. An age
 
 ## Experience
 
-### AI & Software Engineer · Freelance / Self-Employed (Mai - Present)
+### AI & Software Engineer · Freelance / Self-Employed (May 2026 – Present)
 
 - Delivered AI automation and fullstack solutions for clients across marketing, sales, finance, and insurance sectors.
 - Translated business needs into technical solutions, working directly with non-technical stakeholders and explaining AI systems in plain terms.

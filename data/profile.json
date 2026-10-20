@@ -5,7 +5,8 @@
     "sub": "Voice agents that answer phones. An agent team that ships code. Pipelines that cut manual prospecting by 80%. I design multi-agent systems end-to-end and pick the stack per problem, not per habit."
   },
   "about": [
-    "I'm an AI engineer based in Tunis, specialized in generative AI and multi-agent systems. I design intelligent assistants and automation systems that reduce manual work and improve decision-making.",
-    "I continuously explore new tools and frameworks to build the right stack per use case, always prioritizing the most relevant solution over a familiar one."
+    "I'm an AI engineer in Tunis. I build generative AI and multi-agent systems, and I also handle the work around them: talking with the people who'll use the system, finding where their process actually loses time, and turning that into something that ships.",
+    "That's what I've been doing so far. I built a multi-agent prospecting system that cut manual research by ~80%. VocaFlow is a voice agent platform that handles inquiries, bookings and support across phone, chat and WhatsApp without extra headcount. As a freelancer, I build AI and full-stack solutions for clients in marketing, sales, finance and insurance.",
+    "I explain every trade-off in plain terms to whoever has to approve it, technical or not."
   ]
 }
