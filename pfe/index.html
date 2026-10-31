@@ -12,10 +12,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Firas Ridene">
   <meta property="og:title" content="🎟️ Invitation · Soutenance de PFE de Firas Ridene">
-  <meta property="og:description" content="Tu es invité·e à la soutenance de mon projet de fin d'études, à ESPRIT Ghazela.">
-  <meta property="og:image" content="https://firasridene.tech/assets/og.png">
+  <meta property="og:description" content="Vendredi 6 novembre à 14h00, ESPRIT Ghazela, Bloc G, Salle 201. Tu es invité·e à la soutenance de mon projet de fin d'études.">
+  <!-- og:image and this date are static: crawlers don't run the page's script, so they don't follow data/pfe.json -->
+  <meta property="og:image" content="https://firasridene.tech/assets/og-pfe.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Billet d'invitation à la soutenance de PFE de Firas Ridene, vendredi 6 novembre à 14h00, ESPRIT Ghazela, Bloc G, Salle 201">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232553C4'/%3E%3Ccircle cx='46' cy='20' r='5' fill='%23B7802F'/%3E%3Cpath d='M18 46V18h14' stroke='%23F5F4EF' stroke-width='6' fill='none'/%3E%3Cpath d='M18 32h11' stroke='%23F5F4EF' stroke-width='6'/%3E%3C/svg%3E">
@@ -205,18 +207,6 @@
       text-transform: uppercase;
       color: var(--accent);
     }
-    .stamp {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--brass);
-      border: 1.5px solid var(--brass);
-      border-radius: 6px;
-      padding: 0.22rem 0.6rem;
-      transform: rotate(-3deg);
-    }
 
     .guest { margin: 1.5rem 0 1.4rem; }
     .k {
@@ -400,7 +390,6 @@
           <article class="piece t-main">
             <div class="t-row">
               <span class="t-kicker" data-t="kicker">ESPRIT · Soutenance PFE</span>
-              <span class="stamp" id="stamp">Entrée · 1</span>
             </div>
 
             <div class="guest">
@@ -454,7 +443,7 @@
       </div>
 
       <div class="actions">
-        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=ESPRIT+El+Ghazela+Ariana" target="_blank" rel="noopener" data-t="directions">Itinéraire ↗</a>
+        <a class="btn" href="https://maps.app.goo.gl/QZno8c57bmJ7tbrr5" target="_blank" rel="noopener" data-t="directions">Itinéraire ↗</a>
         <button class="btn ghost" id="saveImg" type="button" data-t="saveImg">Enregistrer le billet</button>
         <a class="btn ghost" id="addCal" href="#" aria-disabled="true" data-t="addCal">Ajouter au calendrier</a>
         <button class="btn ghost" id="share" type="button" data-t="share">Partager</button>
@@ -589,7 +578,6 @@
         lead: (tu ? "J'ai le plaisir de t'inviter" : "J'ai le plaisir de vous inviter") +
           " à la soutenance de mon <b>projet de fin d'études</b>, la dernière étape de mon diplôme d'ingénieur en informatique à <b>ESPRIT</b>.",
         kicker: "ESPRIT · Soutenance PFE",
-        stamp: "Entrée · " + Math.max(1, guests.length),
         guestK: invitedFR.charAt(0).toUpperCase() + invitedFR.slice(1),
         guestV: full || "Invité·e d'honneur",
         projectK: "Projet",
@@ -614,7 +602,6 @@
         h1b: greet ? "you're invited" : "invited",
         lead: "I'd love for you to come to the defense of my <b>end-of-studies project</b>, the last step of my computer engineering degree at <b>ESPRIT</b>.",
         kicker: "ESPRIT · Graduation defense",
-        stamp: "Admit " + (["one", "one", "two", "three", "four"][guests.length] || guests.length),
         guestK: plural ? "Guests" : "Guest",
         guestV: full || "Guest of honour",
         projectK: "Project",
@@ -693,7 +680,6 @@
       $("h1a").textContent = t.h1a;
       $("h1b").textContent = t.h1b;
       $("lead").innerHTML = t.lead; /* fixed copy only, guest names never go through innerHTML */
-      $("stamp").textContent = t.stamp;
       $("guestK").textContent = t.guestK;
       $("guestV").textContent = t.guestV;
       $("stubGuestK").textContent = t.guestK;
@@ -860,16 +846,9 @@
       ctx.restore();
 
       var L = X + P, CW = TW - 2 * P, y = Y;
-      /* kicker + stamp */
+      /* kicker */
       ctx.fillStyle = C.blue; font(ctx, 500, 22, '"IBM Plex Mono"');
       spaced(ctx, t.kicker.toUpperCase(), L, y + 84, 4);
-      ctx.save();
-      font(ctx, 500, 22, '"IBM Plex Mono"');
-      var st = t.stamp.toUpperCase(), sw = ctx.measureText(st).width + st.length * 3 + 34;
-      ctx.translate(X + TW - P - sw / 2, y + 76); ctx.rotate(-0.05);
-      ctx.strokeStyle = C.brass; ctx.lineWidth = 2.5; rr(ctx, -sw / 2, -24, sw, 46, 9); ctx.stroke();
-      ctx.fillStyle = C.brass; spaced(ctx, st, -sw / 2 + 17, 7, 3);
-      ctx.restore();
 
       /* guest */
       ctx.fillStyle = C.muted; font(ctx, 400, 20, '"IBM Plex Mono"'); spaced(ctx, t.guestK.toUpperCase(), L, y + 170, 4);
