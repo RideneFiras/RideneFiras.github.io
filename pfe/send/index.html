@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FR · send invites</title>
-  <!-- private page: opened from the "Send list to phone" link in the admin, never listed anywhere -->
+  <!-- private page: opened from the phone link in the admin, never listed anywhere -->
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#f5f4ef">
@@ -34,7 +34,7 @@
       color: var(--text);
       max-width: 560px;
       margin: 0 auto;
-      padding: 1.1rem 16px calc(2.4rem + env(safe-area-inset-bottom));
+      padding: 1.1rem 16px calc(5rem + env(safe-area-inset-bottom));
     }
     header {
       position: sticky;
@@ -42,6 +42,10 @@
       z-index: 1;
       background: var(--bg);
       padding: 0.4rem 0 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
     }
     h1 { font-size: 1.05rem; }
     #progress { color: var(--muted); font-size: 0.86rem; }
@@ -52,7 +56,6 @@
       padding: 0.85rem;
       margin-bottom: 0.7rem;
     }
-    .guest.done { opacity: 0.55; }
     .top { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; margin-bottom: 0.65rem; }
     .name { font-weight: 500; overflow-wrap: anywhere; }
     .flags { flex: none; color: var(--muted); font-size: 0.74rem; }
@@ -65,14 +68,16 @@
       border: 1px solid var(--blue);
       background: var(--blue);
       color: #fff;
-      flex: 1;
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
     button:active { background: var(--blue-deep); }
-    button.ghost { background: transparent; color: var(--text); border-color: var(--line); flex: 0 0 auto; padding: 0 1rem; }
-    .guest.done button.copy { background: transparent; color: var(--ok); border-color: var(--ok); }
+    button.copy { flex: 1; min-width: 0; }
+    button.copy.did { background: transparent; color: var(--ok); border-color: var(--ok); }
+    button.ghost { background: transparent; color: var(--text); border-color: var(--line); padding: 0 0.8rem; }
+    button.sent { color: var(--ok); border-color: var(--ok); }
+    #refresh { min-height: 40px; font-size: 0.82rem; flex: none; }
     .manual { display: none; margin-top: 0.6rem; }
     .manual.on { display: block; }
     .manual p { color: var(--err); font-size: 0.8rem; margin-bottom: 0.3rem; }
@@ -86,76 +91,82 @@
       border-radius: 8px;
       padding: 0.55rem;
     }
-    .empty { color: var(--muted); }
+    .status { color: var(--muted); padding: 0.6rem 0; }
+    .status.err { color: var(--err); }
+    details { margin-top: 1.2rem; color: var(--muted); }
+    summary { cursor: pointer; padding: 0.6rem 0; }
+    .done { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; padding: 0.4rem 0; border-top: 1px solid var(--line); }
+    .done button { min-height: 40px; font-size: 0.82rem; flex: none; }
+    #toast {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      max-width: 528px;
+      margin: 0 auto;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 12px;
+      padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+    }
+    #toast.on { display: flex; }
+    #toast span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.86rem; }
+    #toast button { background: transparent; border-color: transparent; color: var(--bg); text-decoration: underline; flex: none; padding: 0 0.7rem; min-height: 44px; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Send invites</h1>
-    <p id="progress"></p>
+    <div>
+      <h1>Send invites</h1>
+      <p id="progress"></p>
+    </div>
+    <button class="ghost" id="refresh" type="button">Refresh</button>
   </header>
   <main id="list"></main>
+  <details id="doneWrap" hidden>
+    <summary id="doneTitle"></summary>
+    <div id="doneList"></div>
+  </details>
+  <div id="toast" role="status"><span id="toastText"></span><button type="button" id="undo">Undo</button></div>
 
   <script>
   (function () {
     "use strict";
-    /* #<code>.<code>… where each code is what follows # in a guest's short link.
-       same decoder as pfe/index.html and admin.html: it hides names, it is not encryption */
-    var B62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    var SYM = " abcdefghijklmnopqrstuvwxyz,-'";
-    var ACC = "éèêëàâäîïôöûüùçñÿœæáíóúãõåøß";
-    var ESC = 31, CP = 31;
-    var key = function (i, n) { return (i * 7 + n * 13 + 5) % 31; };
-    var mod = function (a, m) { return ((a % m) + m) % m; };
-    function decode(code) {
-      var v = BigInt(0), s = [], d = [], out = "";
-      for (var i = 0; i < code.length; i++) {
-        var k = B62.indexOf(code[i]);
-        if (k < 0) return null;
-        v = v * BigInt(62) + BigInt(k);
-      }
-      while (v > BigInt(0)) {
-        var x = Number(v % BigInt(32));
-        if (!x) return null;
-        s.push(x); v = v / BigInt(32);
-      }
-      var n = s.length, prev = 0;
-      for (var j = 0; j < n; j++) { d.push(mod(s[j] - 1 - prev - key(j, n), 31) + 1); prev = s[j] - 1; }
-      for (var p = 0; p < n; p++) {
-        if (d[p] !== ESC) { out += SYM[d[p] - 1] || ""; continue; }
-        var t = d[++p];
-        if (t === CP) { out += String.fromCodePoint((d[p + 1] - 1) + (d[p + 2] - 1) * 31 + (d[p + 3] - 1) * 961); p += 3; }
-        else out += ACC[t - 1] || "";
-      }
-      return out;
-    }
-    var title = function (s) {
-      return s.replace(/(^|[\s,-])(\p{L})/gu, function (m, a, b) { return a + b.toLocaleUpperCase(); }).replace(/,\s*/g, ", ");
-    };
+    var $ = function (id) { return document.getElementById(id); };
+    /* the key sits in the link (#k=…) so "open in Safari" and bookmarks keep it; it is never sent to the server.
+       data/pfe-guests.json is written by the admin, as AES-GCM over [{ name, flags, link }] */
+    var KEY_STORE = "pfe_key", SENT_STORE = "pfe_sent";
+    var read = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+    var write = function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} };
 
-    var STORE = "pfe_sent";
+    var fromHash = /^#k=([A-Za-z0-9_-]{43})$/.exec(location.hash);
+    var key = fromHash ? fromHash[1] : read(KEY_STORE);
+    if (fromHash) write(KEY_STORE, key);
+
     var sent = {};
-    try { sent = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) {}
-    var remember = function () { try { localStorage.setItem(STORE, JSON.stringify(sent)); } catch (e) {} };
+    try { sent = JSON.parse(read(SENT_STORE)) || {}; } catch (e) {}
+    var guests = [], lastSent = null, toastTimer = null, loading = false;
 
-    var guests = location.hash.slice(1).split(".").filter(function (c) {
-      return /^[0-5][0-9A-Za-z]{1,80}$/.test(c);
-    }).map(function (c) {
-      var name = decode(c.slice(1));
-      var gender = ["", "F", "M"][c[0] % 3];
-      return name && { code: c, name: title(name), flags: [gender, c[0] >= 3 ? "EN" : "FR"].filter(Boolean).join(" · "), link: location.origin + "/pfe/#" + c };
-    }).filter(Boolean);
-
-    var list = document.getElementById("list");
-    function progress() {
-      var done = guests.filter(function (g) { return sent[g.code]; }).length;
-      document.getElementById("progress").textContent = done + " / " + guests.length + " copied";
+    var bytes = function (b64) {
+      var bin = atob(b64.replace(/-/g, "+").replace(/_/g, "/")), out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    };
+    function open(file) {
+      return crypto.subtle.importKey("raw", bytes(key), "AES-GCM", false, ["decrypt"])
+        .then(function (k) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: bytes(file.i) }, k, bytes(file.c)); })
+        .then(function (pt) { return JSON.parse(new TextDecoder().decode(pt)); });
     }
-    if (!guests.length) {
+    function status(text, bad) {
+      $("list").textContent = "";
       var p = document.createElement("p");
-      p.className = "empty";
-      p.textContent = "No guests in this link. In the admin, open pfe invites and use Send list to phone.";
-      list.appendChild(p);
+      p.className = "status" + (bad ? " err" : "");
+      p.textContent = text;
+      $("list").appendChild(p);
     }
 
     /* in-app browsers can refuse the clipboard API, so fall back to the older way, then to selecting by hand */
@@ -179,16 +190,33 @@
       return Promise.resolve(legacyCopy(text));
     }
 
-    guests.forEach(function (g) {
+    function setSent(g, on) {
+      if (on) sent[g.link] = 1; else delete sent[g.link];
+      write(SENT_STORE, JSON.stringify(sent));
+      render();
+    }
+    function toast(g) {
+      lastSent = g;
+      $("toastText").textContent = g.name + " sent";
+      $("toast").classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { $("toast").classList.remove("on"); }, 5000);
+    }
+    $("undo").addEventListener("click", function () {
+      $("toast").classList.remove("on");
+      if (lastSent) setSent(lastSent, false);
+    });
+
+    function card(g) {
       var row = document.createElement("article");
       row.className = "guest";
       var top = document.createElement("div"); top.className = "top";
       var name = document.createElement("span"); name.className = "name"; name.textContent = g.name;
-      var flags = document.createElement("span"); flags.className = "flags"; flags.textContent = g.flags;
+      var flags = document.createElement("span"); flags.className = "flags"; flags.textContent = g.flags || "";
       top.appendChild(name); top.appendChild(flags);
 
       var acts = document.createElement("div"); acts.className = "acts";
-      var btn = document.createElement("button"); btn.type = "button"; btn.className = "copy";
+      var btn = document.createElement("button"); btn.type = "button"; btn.className = "copy"; btn.textContent = "Copy link";
       acts.appendChild(btn);
 
       var manual = document.createElement("div"); manual.className = "manual";
@@ -196,33 +224,77 @@
       var field = document.createElement("input"); field.readOnly = true; field.value = g.link;
       manual.appendChild(hint); manual.appendChild(field);
 
-      function mark() {
-        row.classList.toggle("done", !!sent[g.code]);
-        btn.textContent = sent[g.code] ? "Copied ✓" : "Copy link";
-        progress();
-      }
       btn.addEventListener("click", function () {
         copy(g.link).then(function (ok) {
           manual.classList.toggle("on", !ok);
           if (!ok) return;
-          sent[g.code] = 1; remember(); mark();
+          btn.textContent = "Copied ✓";
+          btn.classList.add("did");
           if (navigator.vibrate) navigator.vibrate(12);
         });
       });
       if (navigator.share) {
         var share = document.createElement("button");
         share.type = "button"; share.className = "ghost"; share.textContent = "Share";
-        share.addEventListener("click", function () {
-          navigator.share({ url: g.link }).then(function () { sent[g.code] = 1; remember(); mark(); }, function () {});
-        });
+        share.addEventListener("click", function () { navigator.share({ url: g.link }).catch(function () {}); });
         acts.appendChild(share);
       }
+      var done = document.createElement("button");
+      done.type = "button"; done.className = "ghost sent"; done.textContent = "Sent";
+      done.addEventListener("click", function () { setSent(g, true); toast(g); });
+      acts.appendChild(done);
 
       row.appendChild(top); row.appendChild(acts); row.appendChild(manual);
-      list.appendChild(row);
-      mark();
-    });
-    progress();
+      return row;
+    }
+
+    function render() {
+      var todo = guests.filter(function (g) { return !sent[g.link]; });
+      var done = guests.filter(function (g) { return sent[g.link]; });
+      $("progress").textContent = done.length + " / " + guests.length + " sent";
+      $("list").textContent = "";
+      if (!guests.length) status("No guests yet. Keep some in the admin, they appear here about a minute later.");
+      else if (!todo.length) status("Everyone has been sent their invite.");
+      todo.forEach(function (g) { $("list").appendChild(card(g)); });
+
+      $("doneWrap").hidden = !done.length;
+      $("doneTitle").textContent = "Sent (" + done.length + ")";
+      $("doneList").textContent = "";
+      done.forEach(function (g) {
+        var row = document.createElement("div"); row.className = "done";
+        var n = document.createElement("span"); n.textContent = g.name;
+        var back = document.createElement("button");
+        back.type = "button"; back.className = "ghost"; back.textContent = "Move back";
+        back.addEventListener("click", function () { setSent(g, false); });
+        row.appendChild(n); row.appendChild(back);
+        $("doneList").appendChild(row);
+      });
+    }
+
+    function load() {
+      if (!key) { status("This phone is not connected. In the admin, use Copy phone link and open that link here.", true); return; }
+      if (loading) return;
+      loading = true;
+      fetch("/data/pfe-guests.json?t=" + Date.now(), { cache: "no-store" })
+        .then(function (r) {
+          if (r.status === 404) return null;
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .then(function (file) { return file ? open(file) : []; })
+        .then(function (list) { guests = list; render(); })
+        .catch(function (e) {
+          if (guests.length) return; /* keep what is on screen if a refresh fails */
+          status(e.name === "OperationError"
+            ? "This link no longer matches the list. In the admin, use Copy phone link again."
+            : "Could not load the guests. Check the connection and press Refresh.", true);
+        })
+        .finally(function () { loading = false; });
+    }
+    $("refresh").addEventListener("click", load);
+    /* coming back from Messenger picks up guests added on the laptop */
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) load(); });
+    load();
   })();
   </script>
 </body>

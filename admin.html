@@ -193,7 +193,8 @@
       </div>
       <p class="msg" id="invOut"></p>
       <div id="invList"></div>
-      <p class="note">The list stays on this device only. It is never saved to GitHub, because the repository is public. To send from your phone: Send list to phone, paste that link in your own chat, then open it on the phone. Make a new one after adding guests.</p>
+      <p class="msg" id="invSynced"></p>
+      <p class="note">Kept guests are saved to GitHub encrypted, because the repository is public. To send from your phone: Copy phone link, paste it in your own chat and open it on the phone once. Keep that link private, it is what unlocks the list.</p>
     </div>
 
     <div class="row">
@@ -704,13 +705,60 @@
       return '<div class="inv-item"><b>' + esc(it.name) + "</b><span>" + esc(it.flags) + "</span>" +
         '<button class="ghost mini" data-inv="copy" data-i="' + i + '">copy link</button>' +
         '<button class="ghost mini" data-inv="del" data-i="' + i + '">✕</button></div>';
-    }).join("") + '<div class="row"><button data-inv="phone">Send list to phone</button></div>' : "";
+    }).join("") + '<div class="row"><button class="ghost" data-inv="phone">Copy phone link</button></div>' : "";
   }
-  /* one link holding every kept guest, opened on the phone: /pfe/send/#<code>.<code>… */
-  function phoneLink(list) {
-    return "https://firasridene.tech/pfe/send/#" + list.map(function (it) {
-      return it.link.split("#")[1];
-    }).filter(Boolean).join(".");
+
+  /* ---------- guest sync ----------
+     the repository is public, so the list only reaches GitHub encrypted, with a random key that
+     stays on this device and in the phone link. /pfe/send/ reads data/pfe-guests.json with that key. */
+  var KEY_STORE = "pfe_sync_key";
+  var syncTimer = null, syncing = false, syncAgain = false;
+  function syncKey() {
+    var k = null;
+    try { k = localStorage.getItem(KEY_STORE); } catch (e) {}
+    if (k) return k;
+    k = bufToB64(crypto.getRandomValues(new Uint8Array(32))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    try { localStorage.setItem(KEY_STORE, k); } catch (e) {}
+    return k;
+  }
+  function sealGuests(list, k) {
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    return crypto.subtle.importKey("raw", b64ToBuf(k.replace(/-/g, "+").replace(/_/g, "/")), "AES-GCM", false, ["encrypt"])
+      .then(function (key) {
+        return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, new TextEncoder().encode(JSON.stringify(list)));
+      })
+      .then(function (ct) { return JSON.stringify({ i: bufToB64(iv), c: bufToB64(ct) }) + "\n"; });
+  }
+  function invSync() { clearTimeout(syncTimer); syncTimer = setTimeout(pushGuests, 1200); }
+  function pushGuests() {
+    if (syncing) { syncAgain = true; return; }
+    syncing = true;
+    msg($("#invSynced"), "Saving for the phone...", "");
+    var list = invLoad().map(function (it) { return { name: it.name, flags: it.flags, link: it.link }; });
+    fetch(apiPath("pfe-guests"), { headers: headers(), cache: "no-store" })
+      .then(function (r) {
+        if (r.status === 404) return {};
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (cur) {
+        return sealGuests(list, syncKey()).then(function (body) {
+          return fetch(apiPath("pfe-guests"), {
+            method: "PUT",
+            headers: headers(),
+            body: JSON.stringify({ message: "content: update pfe guests via admin", content: b64encodeText(body), sha: cur.sha })
+          });
+        });
+      })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        msg($("#invSynced"), "Saved. On the phone in about a minute.", "ok");
+      })
+      .catch(function (e) { msg($("#invSynced"), "Not saved for the phone: " + (e.message || e), "err"); })
+      .finally(function () {
+        syncing = false;
+        if (syncAgain) { syncAgain = false; pushGuests(); }
+      });
   }
   function copy(text, label) {
     navigator.clipboard.writeText(text).then(function () { msg($("#invOut"), label + " copied.", "ok"); },
@@ -737,15 +785,20 @@
     list.unshift({ name: name, flags: [inv.g ? inv.g.toUpperCase() : "", inv.l.toUpperCase()].filter(Boolean).join(" · "), link: $("#invShort").value, readable: $("#invLink").value });
     invSaveList(list);
     renderInvList();
-    msg($("#invOut"), "Kept on this device.", "ok");
+    invSync();
+    msg($("#invOut"), name + " kept.", "ok");
+    $("#invName").value = "";
+    buildInvite();
+    $("#invName").focus();
   });
+  $("#invName").addEventListener("keydown", function (e) { if (e.key === "Enter") $("#invKeep").click(); });
   $("#invList").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-inv]");
     if (!b) return;
     var list = invLoad(), i = Number(b.dataset.i);
-    if (b.dataset.inv === "phone") copy(phoneLink(list), "Phone list");
+    if (b.dataset.inv === "phone") { copy("https://firasridene.tech/pfe/send/#k=" + syncKey(), "Phone link"); invSync(); }
     if (b.dataset.inv === "copy") copy(list[i].link, "Link");
-    if (b.dataset.inv === "del") { list.splice(i, 1); invSaveList(list); renderInvList(); }
+    if (b.dataset.inv === "del") { list.splice(i, 1); invSaveList(list); renderInvList(); invSync(); }
   });
 
   /* ---------- boot ---------- */
