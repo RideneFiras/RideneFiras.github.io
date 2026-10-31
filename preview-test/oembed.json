@@ -1,0 +1,15 @@
+{
+  "type": "video",
+  "version": "1.0",
+  "provider_name": "Firas Ridene",
+  "provider_url": "https://firasridene.tech/",
+  "title": "Soutenance de PFE de Firas Ridene",
+  "author_name": "Firas Ridene",
+  "author_url": "https://firasridene.tech/",
+  "thumbnail_url": "https://firasridene.tech/assets/og-pfe.png",
+  "thumbnail_width": 1200,
+  "thumbnail_height": 630,
+  "width": 1280,
+  "height": 720,
+  "html": "<iframe src=\"https://firasridene.tech/preview-test/player.html\" width=\"1280\" height=\"720\" frameborder=\"0\" allowfullscreen></iframe>"
+}
