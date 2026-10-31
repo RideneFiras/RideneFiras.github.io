@@ -193,7 +193,7 @@
       </div>
       <p class="msg" id="invOut"></p>
       <div id="invList"></div>
-      <p class="note">The list stays on this device only. It is never saved to GitHub, because the repository is public.</p>
+      <p class="note">The list stays on this device only. It is never saved to GitHub, because the repository is public. To send from your phone: Send list to phone, paste that link in your own chat, then open it on the phone. Make a new one after adding guests.</p>
     </div>
 
     <div class="row">
@@ -704,7 +704,13 @@
       return '<div class="inv-item"><b>' + esc(it.name) + "</b><span>" + esc(it.flags) + "</span>" +
         '<button class="ghost mini" data-inv="copy" data-i="' + i + '">copy link</button>' +
         '<button class="ghost mini" data-inv="del" data-i="' + i + '">✕</button></div>';
-    }).join("") : "";
+    }).join("") + '<div class="row"><button data-inv="phone">Send list to phone</button></div>' : "";
+  }
+  /* one link holding every kept guest, opened on the phone: /pfe/send/#<code>.<code>… */
+  function phoneLink(list) {
+    return "https://firasridene.tech/pfe/send/#" + list.map(function (it) {
+      return it.link.split("#")[1];
+    }).filter(Boolean).join(".");
   }
   function copy(text, label) {
     navigator.clipboard.writeText(text).then(function () { msg($("#invOut"), label + " copied.", "ok"); },
@@ -737,6 +743,7 @@
     var b = e.target.closest("button[data-inv]");
     if (!b) return;
     var list = invLoad(), i = Number(b.dataset.i);
+    if (b.dataset.inv === "phone") copy(phoneLink(list), "Phone list");
     if (b.dataset.inv === "copy") copy(list[i].link, "Link");
     if (b.dataset.inv === "del") { list.splice(i, 1); invSaveList(list); renderInvList(); }
   });
